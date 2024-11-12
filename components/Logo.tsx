@@ -1,11 +1,15 @@
-import { CircleIcon } from "lucide-react";
+import Image from "next/image";
 
 const Logo = () => {
     return (
-        <div className="flex items-center">
-            <CircleIcon className="h-6 w-6 text-blue-500" />
-            <span className="ml-2 text-xl font-semibold text-gray-900">METRIK</span>
-        </div>
+        <Image
+            src="/logo.svg"
+            alt="Metrik Logo"
+            width={50}
+            height={12}
+            className="h-8 w-auto"
+            priority
+        />
     );
 };
 
