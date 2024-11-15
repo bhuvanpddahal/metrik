@@ -56,23 +56,22 @@ const AuthForm = () => {
                     name="email"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel className="ml-2">Email</FormLabel>
+                            <FormLabel>Email</FormLabel>
                             <FormControl>
                                 <Input
                                     {...field}
                                     type="email"
                                     placeholder="Enter your email"
-                                    className="rounded-full"
                                     disabled={isPending}
                                 />
                             </FormControl>
-                            <FormMessage className="ml-2" />
+                            <FormMessage />
                         </FormItem>
                     )}
                 />
                 <Button
                     type="submit"
-                    className="w-full rounded-full"
+                    className="w-full"
                     isLoading={isPending}
                 >
                     {isPending ? "Signing in" : "Sign in"}

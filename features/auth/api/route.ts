@@ -68,6 +68,6 @@ function getAuthConfig(_c: Context): AuthConfig {
 
 const app = new Hono()
     .use("*", initAuthConfig(getAuthConfig))
-    .use("*", authHandler());
+    .use("/auth/*", authHandler());
 
 export default app;

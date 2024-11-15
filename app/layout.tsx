@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 import "./globals.css";
+import Toasters from "@/components/Toasters";
 import Providers from "@/components/Providers";
 import { Fustat } from "./fonts";
-import { Toaster } from "@/components/ui/Toaster";
 
 export const metadata: Metadata = {
     title: "Metrik",
@@ -21,7 +21,7 @@ export default function RootLayout({
                 <Providers>
                     {children}
                 </Providers>
-                <Toaster />
+                <Toasters />
             </body>
         </html>
     );

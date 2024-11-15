@@ -9,7 +9,7 @@ const SocialButton = () => {
     return (
         <Button
             variant="outline"
-            className="w-full rounded-full"
+            className="w-full"
             onClick={() => signIn("google", { redirectTo: "/dashboard" })}
         >
             <FcGoogle className="size-3" />
