@@ -3,10 +3,22 @@
 import { toast } from "sonner";
 import { CopyIcon } from "lucide-react";
 
+import { scriptSrc } from "../constants";
 import { Button } from "@/components/ui/Button";
+import { useVerifyScriptInstallation } from "../hooks/useVerifyScriptInstallation";
 
-const InstallScript = () => {
-    const script = `<script defer data-website-id="67348c26778d29d220359dba" data-domain="example.com" src="https://datafa.st/js/script.js"></script>`;
+interface InstallScriptProps {
+    websiteId: string;
+    domain: string;
+}
+
+const InstallScript = ({
+    websiteId,
+    domain
+}: InstallScriptProps) => {
+    const script =
+        `<script defer data-website-id="${websiteId}" data-domain="${domain}" src="${scriptSrc}"></script>`;
+    const { mutate: verifyInstallation, isPending } = useVerifyScriptInstallation();
 
     const handleCopy = () => {
         navigator.clipboard.writeText(script)
@@ -29,8 +41,12 @@ const InstallScript = () => {
                     <CopyIcon className="size-4" />
                 </Button>
             </div>
-            <Button className="w-full mt-6">
-                Verify installation
+            <Button
+                className="w-full mt-6"
+                onClick={() => verifyInstallation({ param: { websiteId } })}
+                isLoading={isPending}
+            >
+                {isPending ? "Verifying installation" : "Verify installation"}
             </Button>
         </div>
     );

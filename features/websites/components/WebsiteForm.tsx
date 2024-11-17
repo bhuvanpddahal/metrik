@@ -24,13 +24,15 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { useAddWebsite } from "../hooks/useAddWebsite";
 import { AddSitePayload, addSiteSchema } from "../schemas";
+import { useAddWebsiteSearchParams } from "../hooks/useAddWebsiteSearchParams";
 
 const WebsiteForm = () => {
     const { mutate: addWebsite, isPending } = useAddWebsite();
+    const { websiteId, domain, timezone } = useAddWebsiteSearchParams();
 
     const form = useForm<AddSitePayload>({
         resolver: zodResolver(addSiteSchema),
-        defaultValues: { domain: "", timezone: "Etc/GMT+12" }
+        defaultValues: { websiteId, domain, timezone: timezone || "Etc/GMT+12" }
     });
 
     const onSubmit = (payload: AddSitePayload) => {
@@ -73,12 +75,12 @@ const WebsiteForm = () => {
                         <FormItem>
                             <FormLabel>Timezone</FormLabel>
                             <Select
-                                onValueChange={field.onChange}
                                 defaultValue={field.value}
+                                onValueChange={field.onChange}
                                 disabled={isPending}
                             >
                                 <FormControl>
-                                    <SelectTrigger>
+                                    <SelectTrigger className="shadow-none">
                                         <SelectValue placeholder="Select a timezone" />
                                     </SelectTrigger>
                                 </FormControl>
@@ -100,7 +102,7 @@ const WebsiteForm = () => {
                     className="w-full"
                     isLoading={isPending}
                 >
-                    {false ? "Adding website" : "Add website"}
+                    {isPending ? "Adding website" : "Add website"}
                 </Button>
             </form>
         </Form>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import "./globals.css";
 import Toasters from "@/components/Toasters";
@@ -19,7 +20,9 @@ export default function RootLayout({
         <html lang="en">
             <body className={`${Fustat.className} antialiased`}>
                 <Providers>
-                    {children}
+                    <NuqsAdapter>
+                        {children}
+                    </NuqsAdapter>
                 </Providers>
                 <Toasters />
             </body>
