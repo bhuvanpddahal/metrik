@@ -8,6 +8,7 @@ import {
 import { relations } from "drizzle-orm";
 
 import { UserTable } from "./users";
+import { PageViewTable } from "./page-views";
 
 export const WebsiteTable = pgTable(
     "websites",
@@ -34,10 +35,11 @@ export const WebsiteTable = pgTable(
 
 export const websiteRelations = relations(
     WebsiteTable,
-    ({ one }) => ({
+    ({ one, many }) => ({
         user: one(UserTable, {
             fields: [WebsiteTable.userId],
             references: [UserTable.id]
-        })
+        }),
+        pageViews: many(PageViewTable)
     })
 );

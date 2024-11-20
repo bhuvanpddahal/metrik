@@ -2,12 +2,14 @@ import { Hono } from "hono";
 import { handle } from "hono/vercel";
 
 import authRouter from "@/features/auth/api/route";
+import eventsRouter from "@/features/events/api/route";
 import websitesRouter from "@/features/websites/api/route";
 
 const app = new Hono().basePath("/api");
 
 const routes = app
     .route("/", authRouter)
+    .route("/events", eventsRouter)
     .route("/websites", websitesRouter);
 
 export const GET = handle(app);
