@@ -1,10 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { IoLogOut } from "react-icons/io5";
+import { signOut } from "@hono/auth-js/react";
 import { IoMdSettings } from "react-icons/io";
 import { FaMoneyBills } from "react-icons/fa6";
 import { ArrowUpRightIcon } from "lucide-react";
 
+import UserAccountNavLoader from "./skeletons/UserAccountNavLoader";
 import {
     Avatar,
     AvatarFallback,
@@ -24,7 +27,7 @@ import { useAuth } from "@/features/auth/hooks/useAuth";
 const UserAccountNav = () => {
     const { user, isLoggedIn } = useAuth();
 
-    if (!isLoggedIn) return null;
+    if (!isLoggedIn) return <UserAccountNavLoader />
 
     return (
         <DropdownMenu>
@@ -37,12 +40,14 @@ const UserAccountNav = () => {
                         </AvatarFallback>
                     </Avatar>
                     <span className="text-sm font-medium">
-                        {user.name ?? user.email}
+                        {user.name ?? user.email.split("@")[0]}
                     </span>
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[13rem]">
-                <DropdownMenuLabel className="truncate">{user.email}</DropdownMenuLabel>
+                <DropdownMenuLabel className="truncate">
+                    {user.email}
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                     <Link href="/settings" className="flex items-center gap-x-2">
@@ -68,6 +73,14 @@ const UserAccountNav = () => {
                         Support
                         <ArrowUpRightIcon className="size-3" />
                     </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                    className="justify-between"
+                    onClick={() => signOut()}
+                >
+                    Log out
+                    <IoLogOut className="size-3" />
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

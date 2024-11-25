@@ -98,7 +98,6 @@
     async function trackPageView(callback) {
         const pageData = await getPageData();
         pageData.type = "pageview";
-        console.log("Inside trackPageView", pageData);
         sendEventData(pageData, callback);
     }
 

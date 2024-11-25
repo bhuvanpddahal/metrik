@@ -1,7 +1,9 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { FaGlobeAmericas } from "react-icons/fa";
 
+import PageViewsChart from "./PageViewsChart";
 import {
     Card,
     CardContent,
@@ -15,23 +17,43 @@ import {
     AvatarImage
 } from "@/components/ui/Avatar";
 
-const WebsiteCard = () => {
+interface WebsiteCardProps {
+    id: string;
+    domain: string;
+    chartData?: {
+        pageViews: number;
+        date: string;
+    }[];
+    visitorsCount: number;
+}
+
+const WebsiteCard = ({
+    id,
+    domain,
+    chartData,
+    visitorsCount
+}: WebsiteCardProps) => {
+    const router = useRouter();
+
     return (
-        <Card className="cursor-pointer hover:shadow-lg">
-            <CardHeader className="flex-row gap-x-2">
+        <Card
+            className="cursor-pointer hover:shadow-lg"
+            onClick={() => router.push(`/dashboard/${id}`)}
+        >
+            <CardHeader className="flex-row gap-x-3 pb-3">
                 <Avatar>
-                    <AvatarImage src={""} />
+                    <AvatarImage src={`https://icons.duckduckgo.com/ip3/${domain}.ico`} />
                     <AvatarFallback>
                         <FaGlobeAmericas className="size-4 text-muted-foreground" />
                     </AvatarFallback>
                 </Avatar>
-                <CardTitle>example.com</CardTitle>
+                <CardTitle>{domain}</CardTitle>
             </CardHeader>
-            <CardContent>
-                <p>Chart</p>
+            <CardContent className="pb-3">
+                <PageViewsChart chartData={chartData} />
             </CardContent>
             <CardFooter>
-                <p><strong>2</strong> visitors</p>
+                <p><strong>{visitorsCount}</strong> {visitorsCount === 1 ? "visitor" : "visitors"}</p>
             </CardFooter>
         </Card>
     );

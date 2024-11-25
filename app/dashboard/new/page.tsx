@@ -6,7 +6,7 @@ import {
     CardTitle
 } from "@/components/ui/Card";
 import WebsiteForm from "@/features/websites/components/WebsiteForm";
-import InstallScript from "@/features/websites/components/InstallScript";
+import InstallScriptCard from "@/features/websites/components/InstallScriptCard";
 
 interface NewWebsitePageProps {
     searchParams: {
@@ -40,8 +40,10 @@ const NewWebsitePage = ({
             </CardHeader>
             <CardContent className="py-6">
                 {step === "script"
-                    ? <InstallScript websiteId={websiteId} domain={domain} />
-                    : <WebsiteForm />
+                    ? <InstallScriptCard
+                        websiteId={websiteId}
+                        domain={domain}
+                    /> : <WebsiteForm />
                 }
             </CardContent>
         </Card>

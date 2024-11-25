@@ -7,15 +7,15 @@ import { scriptSrc } from "../constants";
 import { Button } from "@/components/ui/Button";
 import { useVerifyScriptInstallation } from "../hooks/useVerifyScriptInstallation";
 
-interface InstallScriptProps {
+interface InstallScriptCardProps {
     websiteId: string;
     domain: string;
 }
 
-const InstallScript = ({
+const InstallScriptCard = ({
     websiteId,
     domain
-}: InstallScriptProps) => {
+}: InstallScriptCardProps) => {
     const script =
         `<script defer data-website-id="${websiteId}" data-domain="${domain}" src="${scriptSrc}"></script>`;
     const { mutate: verifyInstallation, isPending } = useVerifyScriptInstallation();
@@ -52,4 +52,4 @@ const InstallScript = ({
     );
 };
 
-export default InstallScript;
+export default InstallScriptCard;

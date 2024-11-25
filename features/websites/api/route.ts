@@ -1,13 +1,25 @@
+import {
+    and,
+    count,
+    countDistinct,
+    desc,
+    eq,
+    gte,
+    inArray,
+    sql
+} from "drizzle-orm";
 import { z } from "zod";
 import { Hono } from "hono";
-import { and, eq } from "drizzle-orm";
+import { subDays } from "date-fns";
 import { verifyAuth } from "@hono/auth-js";
 import { zValidator } from "@hono/zod-validator";
 
 import { db } from "@/drizzle/db";
 import { addSiteSchema } from "../schemas";
 import { WebsiteTable } from "@/drizzle/schema/websites";
+import { PageViewTable } from "@/drizzle/schema/page-views";
 import { hasInstalledScript as hasInstalledScriptFn } from "../queries";
+import { sqlDate } from "../constants";
 
 const app = new Hono()
     .post(
@@ -91,6 +103,82 @@ const app = new Hono()
             if (!hasInstalledScript) return c.json({ error: "Script doesn't exist" }, 404);
 
             return c.json({ data: { success: "Script installation verified" } });
+        }
+    )
+    .get(
+        "/",
+        verifyAuth(),
+        async (c) => {
+            const authUser = c.get("authUser");
+            const userId = authUser.session.user.id;
+
+            const currentDate = new Date();
+            const startDate = subDays(currentDate, 1);
+
+            const websites = await db
+                .select({
+                    id: WebsiteTable.id,
+                    domain: WebsiteTable.domain,
+                    visitorsCount: countDistinct(PageViewTable.visitorId)
+                })
+                .from(WebsiteTable)
+                .leftJoin(
+                    PageViewTable,
+                    eq(PageViewTable.websiteId, WebsiteTable.id)
+                )
+                .where(and(
+                    eq(WebsiteTable.userId, userId),
+                    gte(PageViewTable.timestamp, startDate)
+                ))
+                .groupBy(WebsiteTable.id)
+                .orderBy(desc(WebsiteTable.addedAt));
+
+            const websiteIds = websites.map((website) => website.id);
+
+            const [{ visitorsCount }] = await db
+                .select({
+                    visitorsCount: countDistinct(PageViewTable.visitorId)
+                })
+                .from(PageViewTable)
+                .where(and(
+                    inArray(PageViewTable.websiteId, websiteIds),
+                    gte(PageViewTable.timestamp, startDate)
+                ));
+
+            const allWebsitesChartData = await Promise.all(
+                websiteIds.map(async (websiteId) => {
+                    const chartData = await db
+                        .select({
+                            pageViews: count(PageViewTable),
+                            date: sql<string>`${sql.raw("series")}`.inlineParams()
+                        })
+                        .from(
+                            sql`GENERATE_SERIES(${startDate}, ${currentDate}, '1 hour'::interval) as series`
+                        )
+                        .leftJoin(PageViewTable, ({ date }) => and(
+                            eq(PageViewTable.websiteId, websiteIds[0]),
+                            gte(PageViewTable.timestamp, startDate),
+                            eq(sqlDate.extractDate(PageViewTable.timestamp), sqlDate.extractDate(date)),
+                            eq(sqlDate.extractHour(PageViewTable.timestamp), sqlDate.extractHour(date))
+                        ))
+                        .groupBy(({ date }) => date)
+                        .orderBy(({ date }) => date);
+
+                    return {
+                        websiteId,
+                        chartData
+                    };
+                })
+            );
+
+            const websitesWithChartData = websites.map((website) => {
+                const websiteChartData = allWebsitesChartData.find(
+                    (chartData) => chartData.websiteId === website.id
+                );
+                return { ...website, chartData: websiteChartData?.chartData };
+            });
+
+            return c.json({ data: { websites: websitesWithChartData, visitorsCount } });
         }
     );
 

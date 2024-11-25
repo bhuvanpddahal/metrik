@@ -30,12 +30,11 @@ export const useAddWebsite = () => {
         },
         onSuccess: ({ data }, { json }) => {
             toast.success(json.websiteId ? "Website updated" : "Website added");
-            // TODO: Invalidate related queries
-            // queryClient.invalidateQueries({ queryKey: ["websites"] });
             setStep("script");
             setWebsiteId(data.id);
             setDomain(json.domain);
             setTimezone(json.timezone);
+            queryClient.invalidateQueries({ queryKey: ["websites"] });
         },
         onError: (error) => {
             toast.error(error.message);

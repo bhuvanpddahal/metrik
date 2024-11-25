@@ -24,9 +24,9 @@ const app = new Hono()
                 sessionId
             } = c.req.valid("json");
 
-            if (!href.includes(domain)) {
-                return c.json({ error: "Domain mismatch" }, 400);
-            }
+            // if (!href.includes(domain)) {
+            //     return c.json({ error: "Domain mismatch" }, 400);
+            // }
 
             const userAgent = c.req.header("User-Agent");
             const parser = new UAParser(userAgent);
