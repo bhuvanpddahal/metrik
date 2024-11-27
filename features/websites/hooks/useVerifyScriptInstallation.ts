@@ -18,7 +18,7 @@ export const useVerifyScriptInstallation = () => {
     >({
         mutationFn: async ({ param }) => {
             const response = await client.api.websites[":websiteId"]["verify-script"].$get({ param });
-            if (!response.ok) throw new Error("Script doesn't exist");
+            if (!response.ok) throw new Error("Looks like the script is not installed, please try again.");
 
             return await response.json();
         },

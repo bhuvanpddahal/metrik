@@ -1,8 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { FaGlobeAmericas } from "react-icons/fa";
 
+import WebsiteAvatar from "./WebsiteAvatar";
 import PageViewsChart from "./PageViewsChart";
 import {
     Card,
@@ -11,11 +11,6 @@ import {
     CardHeader,
     CardTitle
 } from "@/components/ui/Card";
-import {
-    Avatar,
-    AvatarFallback,
-    AvatarImage
-} from "@/components/ui/Avatar";
 
 interface WebsiteCardProps {
     id: string;
@@ -41,12 +36,7 @@ const WebsiteCard = ({
             onClick={() => router.push(`/dashboard/${id}`)}
         >
             <CardHeader className="flex-row gap-x-3 pb-3">
-                <Avatar>
-                    <AvatarImage src={`https://icons.duckduckgo.com/ip3/${domain}.ico`} />
-                    <AvatarFallback>
-                        <FaGlobeAmericas className="size-4 text-muted-foreground" />
-                    </AvatarFallback>
-                </Avatar>
+                <WebsiteAvatar domain={domain} />
                 <CardTitle>{domain}</CardTitle>
             </CardHeader>
             <CardContent className="pb-3">

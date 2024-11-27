@@ -15,11 +15,11 @@ import { verifyAuth } from "@hono/auth-js";
 import { zValidator } from "@hono/zod-validator";
 
 import { db } from "@/drizzle/db";
+import { sqlDate } from "../constants";
 import { addSiteSchema } from "../schemas";
 import { WebsiteTable } from "@/drizzle/schema/websites";
 import { PageViewTable } from "@/drizzle/schema/page-views";
 import { hasInstalledScript as hasInstalledScriptFn } from "../queries";
-import { sqlDate } from "../constants";
 
 const app = new Hono()
     .post(

@@ -3,27 +3,27 @@ import { CheckIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface PingDotProps {
-    color?: "primary" | "secondary";
+    color?: string;
     type?: "muted" | "active" | "checked";
 }
 
 const PingDot = ({
-    color = "primary",
+    color = "hsl(var(--primary))",
     type = "muted"
 }: PingDotProps) => {
-    const bgColor = color === "primary" ? "bg-primary" : "bg-secondary";
-
     return (
-        <div className={cn(
-            "relative size-2 bg-border flex items-center justify-center rounded-full",
-            type !== "muted" && bgColor,
-            type === "checked" && "size-3"
-        )}>
+        <div
+            className={cn(
+                "relative size-2 flex items-center justify-center rounded-full",
+                type === "checked" && "size-3"
+            )}
+            style={{ backgroundColor: type !== "muted" ? color : "hsl(var(--border))" }}
+        >
             {type === "active" && (
-                <span className={cn(
-                    "shrink-0 size-3 bg-primary rounded-full animate-ping",
-                    bgColor
-                )} />
+                <span
+                    className="shrink-0 size-3 rounded-full animate-ping"
+                    style={{ backgroundColor: color }}
+                />
             )}
             {type === "checked" && (
                 <CheckIcon className="size-2.5 text-background stroke-2" />
