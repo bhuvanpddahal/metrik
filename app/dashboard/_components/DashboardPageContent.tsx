@@ -13,7 +13,7 @@ const DashboardPageContent = () => {
     const router = useRouter();
     const { isLoading, data } = useGetWebsites();
 
-    if (isLoading) return (
+    if (true) return (
         <div className="container py-4">
             <DashboardTitleLoader />
             <WebsitesListLoader />

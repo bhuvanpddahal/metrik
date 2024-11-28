@@ -1,5 +1,6 @@
 "use client";
 
+import Error from "@/components/Error";
 import WebsiteDetailsTitle from "./WebsiteDetailsTitle";
 import DevicesCard from "@/features/websites/components/DevicesCard";
 import AddGoalsCard from "@/features/websites/components/AddGoalsCard";
@@ -11,6 +12,7 @@ import WebsiteOverviewCard from "@/features/websites/components/WebsiteOverviewC
 import AddGoalsCardLoader from "@/features/websites/components/skeletons/AddGoalsCardLoader";
 import DistributionCardLoader from "@/features/websites/components/skeletons/DistributionCardLoader";
 import WebsiteOverviewCardLoader from "@/features/websites/components/skeletons/WebsiteOverviewCardLoader";
+import { useGetWebsite } from "@/features/websites/hooks/useGetWebsite";
 
 interface WebsiteDetailsPageContentProps {
     websiteId: string;
@@ -19,23 +21,33 @@ interface WebsiteDetailsPageContentProps {
 const WebsiteDetailsPageContent = (
     { websiteId }: WebsiteDetailsPageContentProps
 ) => {
-    return (
+    const { isLoading, data } = useGetWebsite(websiteId);
+
+    if (isLoading) return (
         <div className="container pt-6 pb-12">
             <WebsiteDetailsTitleLoader />
-            {/* <WebsiteDetailsTitle /> */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                 <WebsiteOverviewCardLoader />
-                {/* <WebsiteOverviewCard /> */}
                 <DistributionCardLoader name="Referrer" />
                 <DistributionCardLoader name="Page" />
                 <DistributionCardLoader name="Country" />
                 <DistributionCardLoader name="Device" />
-                {/* <ReferrerSitesCard />
+                <AddGoalsCardLoader />
+            </div>
+        </div>
+    );
+    if (!data) return <Error message="Unexpected happened while trying to fetch website" />
+
+    return (
+        <div className="container pt-6 pb-12">
+            <WebsiteDetailsTitle />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                <WebsiteOverviewCard />
+                <ReferrerSitesCard />
                 <TopPagesCard />
                 <CountriesCard />
-                <DevicesCard /> */}
-                <AddGoalsCardLoader />
-                {/* <AddGoalsCard /> */}
+                <DevicesCard />
+                <AddGoalsCard />
             </div>
         </div>
     );

@@ -1,3 +1,5 @@
+import WebsiteForm from "@/features/websites/components/WebsiteForm";
+import InstallScriptCard from "@/features/websites/components/InstallScriptCard";
 import {
     Card,
     CardContent,
@@ -5,8 +7,6 @@ import {
     CardHeader,
     CardTitle
 } from "@/components/ui/Card";
-import WebsiteForm from "@/features/websites/components/WebsiteForm";
-import InstallScriptCard from "@/features/websites/components/InstallScriptCard";
 
 interface NewWebsitePageProps {
     searchParams: {

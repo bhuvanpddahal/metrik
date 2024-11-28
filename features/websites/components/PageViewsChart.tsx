@@ -11,7 +11,7 @@ interface PageViewsChartProps {
 
 const chartConfig = {
     pageViews: {
-        color: "hsl(var(--chart-1))"
+        color: "hsl(var(--chart-2))"
     }
 } satisfies ChartConfig;
 

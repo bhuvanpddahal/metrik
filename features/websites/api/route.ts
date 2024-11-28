@@ -180,6 +180,24 @@ const app = new Hono()
 
             return c.json({ data: { websites: websitesWithChartData, visitorsCount } });
         }
+    )
+    .get(
+        "/:websiteId",
+        verifyAuth(),
+        zValidator("param", z.object({ websiteId: z.string() })),
+        async (c) => {
+            const authUser = c.get("authUser");
+            const userId = authUser.session.user.id;
+            const { websiteId } = c.req.valid("param");
+
+            const website = await db.query.WebsiteTable.findFirst({
+                where: ({ id }, { eq }) => eq(id, websiteId)
+            });
+            if (!website) return c.json({ error: "Website not found" }, 404);
+            if (website.userId !== userId) return c.json({ error: "Unpermitted" }, 403);
+
+            return c.json({ data: { success: true } });
+        }
     );
 
 export default app;

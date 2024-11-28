@@ -21,8 +21,8 @@ const WebsiteDetailsTitle = () => {
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline">
-                            <div className="flex items-center gap-x-1">
-                                <WebsiteAvatar domain="google.com" className="border-none" />
+                            <div className="flex items-center gap-x-2">
+                                <WebsiteAvatar domain="google.com" className="size-6 border-none" />
                                 <p className="font-semibold leading-none tracking-tight">google.com</p>
                             </div>
                             <ChevronDownIcon className="size-4" />

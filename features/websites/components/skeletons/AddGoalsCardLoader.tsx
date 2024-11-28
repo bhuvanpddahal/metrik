@@ -1,12 +1,8 @@
 import { ChevronDownIcon } from "lucide-react";
 
-import {
-    Card,
-    CardContent,
-    CardHeader
-} from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Skeleton } from "@/components/ui/Skeleton";
+import { Card, CardHeader } from "@/components/ui/Card";
 
 const AddGoalsCardLoader = () => {
     return (
@@ -17,7 +13,7 @@ const AddGoalsCardLoader = () => {
                     <ChevronDownIcon className="size-4" />
                 </Button>
             </CardHeader>
-            <Skeleton className="h-96" />
+            <Skeleton className="h-96 rounded-none" />
         </Card >
     );
 };

@@ -25,7 +25,7 @@ const DistributionCardLoader = (
                 </Button>
             </CardHeader>
             <CardContent className="px-0 pt-5">
-                <Skeleton className="h-[21rem] w-full" />
+                <Skeleton className="h-[21rem] w-full rounded-none" />
             </CardContent>
             <CardFooter className="justify-center">
                 <div className="flex items-center gap-x-1 text-muted-foreground cursor-default">

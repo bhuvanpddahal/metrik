@@ -11,8 +11,8 @@ const Logo = ({ className = "" }: LogoProps) => {
         <Image
             src="/logo.svg"
             alt="Metrik Logo"
-            width={50}
-            height={12}
+            width={108}
+            height={24}
             className={cn("h-8 w-auto", className)}
             priority
         />
