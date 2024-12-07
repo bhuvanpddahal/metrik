@@ -2,13 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 
 import { client } from "@/lib/rpc";
 
-export const useGetWebsite = (websiteId: string) => {
+export const useGetWebsiteDomain = (websiteId: string) => {
     const query = useQuery({
-        queryKey: ["websites", websiteId],
+        queryKey: ["websites", websiteId, "domain"],
         queryFn: async () => {
-            const response = await client.api.websites[":websiteId"].$get({ param: { websiteId } });
+            const response = await client.api.websites[":websiteId"].domain.$get({ param: { websiteId } });
             if (!response.ok) {
-                throw new Error("Failed to fetch website");
+                throw new Error("Failed to fetch website domain");
             }
 
             const { data } = await response.json();

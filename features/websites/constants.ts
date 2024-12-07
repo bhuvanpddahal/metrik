@@ -1,6 +1,30 @@
-import { subDays } from "date-fns";
-import { SQL, sql } from "drizzle-orm";
+import {
+    endOfDay,
+    endOfMonth,
+    endOfWeek,
+    endOfYear,
+    startOfDay,
+    startOfMonth,
+    startOfWeek,
+    startOfYear,
+    subDays,
+    subMonths,
+    subWeeks,
+    subYears
+} from "date-fns";
+import { sql } from "drizzle-orm";
 
+import {
+    formatDateToDayMonth,
+    formatDateToMonthYear,
+    formatTimeToAmPm,
+    generateJoinClauseForNow,
+    generateJoinClauseForWeekOrMonth,
+    generateJoinClauseForYear,
+    generateSqlSeriesForNow,
+    generateSqlSeriesForWeeksOrMonth,
+    generateSqlSeriesForYear
+} from "./utils";
 import { env } from "@/constants/env/client";
 
 export const timezones = {
@@ -10,55 +34,147 @@ export const timezones = {
 
 export const scriptSrc = `${env.NEXT_PUBLIC_APP_URL}/js/script.js`;
 
-export const CHART_INTERVALS = {
+const currentDate = new Date();
+
+export const NOW_CHART_INTERVALS = {
     today: {
-        dateFormatter: (date: Date) => dateFormatter.format(date),
-        startDate: subDays(new Date(), 1),
+        startDate: startOfDay(currentDate),
+        endDate: endOfDay(currentDate),
         label: "Today",
-        sql: sql`GENERATE_SERIES(current_date - 1, current_date, '1 hour'::interval) as series`,
-        dateGrouper: (col: SQL | SQL.Aliased) =>
-            sql<string>`DATE(${col})`.inlineParams()
+        get sql() { return generateSqlSeriesForNow(this.startDate, this.endDate); },
+        joinClause: generateJoinClauseForNow,
+        dateFormatter: formatTimeToAmPm
+    },
+    last24Hours: {
+        startDate: subDays(currentDate, 1),
+        endDate: currentDate,
+        label: "Last 24 Hours",
+        get sql() { return generateSqlSeriesForNow(this.startDate, this.endDate); },
+        joinClause: generateJoinClauseForNow,
+        dateFormatter: formatTimeToAmPm
+    },
+    yesterday: {
+        startDate: startOfDay(subDays(currentDate, 1)),
+        endDate: endOfDay(subDays(currentDate, 1)),
+        label: "Yesterday",
+        get sql() { return generateSqlSeriesForNow(this.startDate, this.endDate); },
+        joinClause: generateJoinClauseForNow,
+        dateFormatter: formatTimeToAmPm
+    }
+} as const;
+
+export const WEEK_CHART_INTERVALS = {
+    thisWeek: {
+        startDate: startOfWeek(currentDate),
+        endDate: endOfWeek(currentDate),
+        label: "This Week",
+        get sql() { return generateSqlSeriesForWeeksOrMonth(this.startDate, this.endDate); },
+        joinClause: generateJoinClauseForWeekOrMonth,
+        dateFormatter: formatDateToDayMonth
     },
     last7Days: {
-        dateFormatter: (date: Date) => dateFormatter.format(date),
-        startDate: subDays(new Date(), 7),
+        startDate: subWeeks(currentDate, 1),
+        endDate: currentDate,
         label: "Last 7 Days",
-        sql: sql`GENERATE_SERIES(current_date - 7, current_date, '1 day'::interval) as series`,
-        dateGrouper: (col: SQL | SQL.Aliased) =>
-            sql<string>`DATE(${col})`.inlineParams()
+        get sql() { return generateSqlSeriesForWeeksOrMonth(this.startDate, this.endDate); },
+        joinClause: generateJoinClauseForWeekOrMonth,
+        dateFormatter: formatDateToDayMonth
+    },
+    lastWeek: {
+        startDate: startOfWeek(subWeeks(currentDate, 1)),
+        endDate: endOfWeek(subWeeks(currentDate, 1)),
+        label: "Last Week",
+        get sql() { return generateSqlSeriesForWeeksOrMonth(this.startDate, this.endDate); },
+        joinClause: generateJoinClauseForWeekOrMonth,
+        dateFormatter: formatDateToDayMonth
+    }
+} as const;
+
+export const MONTH_CHART_INTERVALS = {
+    thisMonth: {
+        startDate: startOfMonth(currentDate),
+        endDate: endOfMonth(currentDate),
+        label: "This Month",
+        get sql() { return generateSqlSeriesForWeeksOrMonth(this.startDate, this.endDate); },
+        joinClause: generateJoinClauseForWeekOrMonth,
+        dateFormatter: formatDateToDayMonth
     },
     last30Days: {
-        dateFormatter: (date: Date) => dateFormatter.format(date),
-        startDate: subDays(new Date(), 30),
+        startDate: subDays(currentDate, 30),
+        endDate: currentDate,
         label: "Last 30 Days",
-        sql: sql`GENERATE_SERIES(current_date - 30, current_date, '1 day'::interval) as series`,
-        dateGrouper: (col: SQL | SQL.Aliased) =>
-            sql<string>`DATE(${col})`.inlineParams()
+        get sql() { return generateSqlSeriesForWeeksOrMonth(this.startDate, this.endDate); },
+        joinClause: generateJoinClauseForWeekOrMonth,
+        dateFormatter: formatDateToDayMonth
     },
-    last365Days: {
-        dateFormatter: (date: Date) => monthFormatter.format(date),
-        startDate: subDays(new Date(), 365),
-        label: "Last 365 Days",
-        sql: sql`GENERATE_SERIES(DATE_TRUNC('month', current_date - 365), DATE_TRUNC('month', current_date), '1 month'::interval) as series`,
-        dateGrouper: (col: SQL | SQL.Aliased) =>
-            sql<string>`DATE_TRUNC('month', ${col})`.inlineParams()
+    lastMonth: {
+        startDate: startOfMonth(subMonths(currentDate, 1)),
+        endDate: endOfMonth(subMonths(currentDate, 1)),
+        label: "Last Month",
+        get sql() { return generateSqlSeriesForWeeksOrMonth(this.startDate, this.endDate); },
+        joinClause: generateJoinClauseForWeekOrMonth,
+        dateFormatter: formatDateToDayMonth
     }
-};
+} as const;
+
+export const YEAR_CHART_INTERVALS = {
+    thisYear: {
+        startDate: startOfYear(currentDate),
+        endDate: endOfYear(currentDate),
+        label: "This Year",
+        get sql() { return generateSqlSeriesForYear(this.startDate, this.endDate); },
+        joinClause: generateJoinClauseForYear,
+        dateFormatter: formatDateToMonthYear
+    },
+    last12Months: {
+        startDate: subMonths(currentDate, 12),
+        endDate: currentDate,
+        label: "Last 12 Months",
+        get sql() { return generateSqlSeriesForYear(this.startDate, this.endDate); },
+        joinClause: generateJoinClauseForYear,
+        dateFormatter: formatDateToMonthYear
+    },
+    lastYear: {
+        startDate: startOfYear(subYears(currentDate, 1)),
+        endDate: endOfYear(subYears(currentDate, 1)),
+        label: "Last Year",
+        get sql() { return generateSqlSeriesForYear(this.startDate, this.endDate); },
+        joinClause: generateJoinClauseForYear,
+        dateFormatter: formatDateToMonthYear
+    }
+} as const;
+
+export const ALL_TIME_CHART_INTERVAL = {
+    startDate: undefined,
+    endDate: currentDate,
+    label: "All Time",
+    sql: undefined,
+    joinClause: undefined,
+    dateFormatter: undefined
+} as const;
+
+export const OVERVIEW_CHART_INTERVALS = {
+    ...NOW_CHART_INTERVALS,
+    ...WEEK_CHART_INTERVALS,
+    ...MONTH_CHART_INTERVALS,
+    ...YEAR_CHART_INTERVALS,
+    allTime: ALL_TIME_CHART_INTERVAL
+} as const;
+
+export type OverviewChartIntervalKey = keyof typeof OVERVIEW_CHART_INTERVALS;
+export const overviewChartIntervalsKeys = Object.keys(OVERVIEW_CHART_INTERVALS) as OverviewChartIntervalKey[];
 
 export const sqlDate = {
     extractDate: (col: any) =>
         sql<string>`DATE(${col})`.inlineParams(),
     extractHour: (col: any) =>
-        sql<number>`DATE_PART('hour', ${col})`.inlineParams()
+        sql<number>`DATE_PART('hour', ${col})`.inlineParams(),
+    extractWeek: (col: any) =>
+        sql<number>`DATE_PART('week', ${col})`.inlineParams(),
+    extractMonth: (col: any) =>
+        sql<number>`DATE_PART('month', ${col})`.inlineParams(),
+    extractQuarter: (col: any) =>
+        sql<number>`DATE_PART('quarter', ${col})`.inlineParams(),
+    extractYear: (col: any) =>
+        sql<number>`DATE_PART('year', ${col})`.inlineParams()
 };
-
-const dateFormatter = new Intl.DateTimeFormat(undefined, {
-    dateStyle: "short",
-    timeZone: "UTC"
-});
-
-const monthFormatter = new Intl.DateTimeFormat(undefined, {
-    year: "2-digit",
-    month: "short",
-    timeZone: "UTC"
-});

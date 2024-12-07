@@ -2,7 +2,8 @@ import {
     Area,
     AreaChart,
     CartesianGrid,
-    XAxis
+    XAxis,
+    YAxis
 } from "recharts";
 
 import {
@@ -11,24 +12,39 @@ import {
     ChartTooltip,
     ChartTooltipContent
 } from "@/components/ui/Chart";
+import { OVERVIEW_CHART_INTERVALS } from "../constants";
+import { getDateFormatterFromDateDiff } from "../utils";
+import { useWebsiteDetailsSearchParams } from "../hooks/useWebsiteDetailsSearchParams";
 
-const chartData = [
-    { month: "January", views: 80 },
-    { month: "February", views: 200 },
-    { month: "March", views: 120 },
-    { month: "April", views: 190 },
-    { month: "May", views: 130 },
-    { month: "June", views: 140 }
-];
+interface WebsiteOverviewChartPorps {
+    startDate: string;
+    endDate: string;
+    chartData: {
+        pageViews: number;
+        date: string;
+    }[];
+}
 
 const chartConfig = {
-    views: {
+    pageViews: {
         label: "Views",
         color: "hsl(var(--chart-1))"
     }
 } satisfies ChartConfig;
 
-const WebsiteOverviewChart = () => {
+const WebsiteOverviewChart = ({
+    startDate,
+    endDate,
+    chartData
+}: WebsiteOverviewChartPorps) => {
+    const { interval } = useWebsiteDetailsSearchParams();
+
+    let formatter = OVERVIEW_CHART_INTERVALS[interval].dateFormatter;
+
+    if (interval === "allTime") {
+        formatter = getDateFormatterFromDateDiff(startDate, endDate);
+    }
+
     return (
         <ChartContainer config={chartConfig} className="h-96 w-full">
             <AreaChart
@@ -41,33 +57,47 @@ const WebsiteOverviewChart = () => {
             >
                 <CartesianGrid vertical={false} />
                 <XAxis
-                    dataKey="month"
+                    dataKey="date"
+                    type="category"
                     tickLine={false}
                     axisLine={false}
                     tickMargin={8}
-                    tickFormatter={(value) => value.slice(0, 3)}
+                    minTickGap={32}
+                    tickFormatter={formatter}
                 />
-                <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+                <YAxis
+                    dataKey="pageViews"
+                    type="number"
+                    tickLine={false}
+                    axisLine={{ strokeWidth: 0.15 }}
+                    tickMargin={8}
+                    width={20}
+                    tickFormatter={(value) => Number.isInteger(value) ? value : ""}
+                />
+                <ChartTooltip
+                    cursor={false}
+                    content={<ChartTooltipContent labelFormatter={formatter} />}
+                />
                 <defs>
                     <linearGradient id="fillviews" x1="0" y1="0" x2="0" y2="1">
                         <stop
                             offset="5%"
-                            stopColor="var(--color-views)"
+                            stopColor="var(--color-pageViews)"
                             stopOpacity={0.8}
                         />
                         <stop
                             offset="95%"
-                            stopColor="var(--color-views)"
+                            stopColor="var(--color-pageViews)"
                             stopOpacity={0.1}
                         />
                     </linearGradient>
                 </defs>
                 <Area
-                    dataKey="views"
-                    type="natural"
+                    dataKey="pageViews"
+                    type="monotone"
                     fill="url(#fillviews)"
                     fillOpacity={0.4}
-                    stroke="var(--color-views)"
+                    stroke="var(--color-pageViews)"
                     stackId="a"
                 />
             </AreaChart>

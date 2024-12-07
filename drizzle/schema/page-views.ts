@@ -21,7 +21,7 @@ export const PageViewTable = pgTable("page_views", {
     region: text("region").notNull(),
     city: text("city").notNull(),
     browser: text("browser").notNull(),
-    opearatingSystem: text("operating_system").notNull(),
+    operatingSystem: text("operating_system").notNull(),
     device: text("device").notNull(),
     screenResolution: text("screen_resolution").notNull(),
     timestamp: timestamp("timestamp", { withTimezone: true })

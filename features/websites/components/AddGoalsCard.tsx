@@ -1,5 +1,8 @@
+"use client";
+
 import { ChevronDownIcon, PlusIcon } from "lucide-react";
 
+import AddGoalsCardLoader from "./skeletons/AddGoalsCardLoader";
 import {
     Card,
     CardContent,
@@ -12,8 +15,24 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/DropdownMenu";
 import { Button } from "@/components/ui/Button";
+import { useGetWebsiteData } from "../hooks/useGetWebsiteData";
+import { useGetWebsiteDomain } from "../hooks/useGetWebsiteDomain";
+import { useWebsiteDetailsSearchParams } from "../hooks/useWebsiteDetailsSearchParams";
 
-const AddGoalsCard = () => {
+interface AddGoalsCardProps {
+    websiteId: string;
+}
+
+const AddGoalsCard = (
+    { websiteId }: AddGoalsCardProps
+) => {
+    const { interval } = useWebsiteDetailsSearchParams();
+    const { isError } = useGetWebsiteData(websiteId, interval);
+    const { isInitialLoading } = useGetWebsiteDomain(websiteId);
+
+    if (isInitialLoading) return <AddGoalsCardLoader />
+    if (isError) return null;
+
     return (
         <Card className="md:col-span-2">
             <CardHeader className="p-1 border-b">
@@ -21,7 +40,7 @@ const AddGoalsCard = () => {
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="w-fit pr-2 font-semibold">
                             Goal
-                            <ChevronDownIcon className="size-4" />
+                            <ChevronDownIcon className="size-4 text-muted-foreground" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">

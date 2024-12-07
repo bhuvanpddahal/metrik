@@ -30,7 +30,7 @@ const PageViewsChart = (
             >
                 <Line
                     dataKey="pageViews"
-                    type="natural"
+                    type="monotone"
                     stroke="var(--color-pageViews)"
                     strokeWidth={2}
                     dot={false}

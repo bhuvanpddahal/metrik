@@ -6,6 +6,8 @@ import {
     eq,
     gte,
     inArray,
+    lte,
+    SQL,
     sql
 } from "drizzle-orm";
 import { z } from "zod";
@@ -14,12 +16,24 @@ import { subDays } from "date-fns";
 import { verifyAuth } from "@hono/auth-js";
 import { zValidator } from "@hono/zod-validator";
 
+import {
+    generateJoinClauseFromDateDiff,
+    generateSqlSeriesFromDateDiff
+} from "../utils";
+import {
+    getChartData,
+    getWebsiteById,
+    hasInstalledScript as hasInstalledScriptFn
+} from "../queries";
+import {
+    OVERVIEW_CHART_INTERVALS,
+    overviewChartIntervalsKeys,
+    sqlDate
+} from "../constants";
 import { db } from "@/drizzle/db";
-import { sqlDate } from "../constants";
 import { addSiteSchema } from "../schemas";
 import { WebsiteTable } from "@/drizzle/schema/websites";
 import { PageViewTable } from "@/drizzle/schema/page-views";
-import { hasInstalledScript as hasInstalledScriptFn } from "../queries";
 
 const app = new Hono()
     .post(
@@ -182,7 +196,7 @@ const app = new Hono()
         }
     )
     .get(
-        "/:websiteId",
+        "/:websiteId/domain",
         verifyAuth(),
         zValidator("param", z.object({ websiteId: z.string() })),
         async (c) => {
@@ -190,13 +204,102 @@ const app = new Hono()
             const userId = authUser.session.user.id;
             const { websiteId } = c.req.valid("param");
 
-            const website = await db.query.WebsiteTable.findFirst({
-                where: ({ id }, { eq }) => eq(id, websiteId)
-            });
+            const website = await getWebsiteById(websiteId);
             if (!website) return c.json({ error: "Website not found" }, 404);
-            if (website.userId !== userId) return c.json({ error: "Unpermitted" }, 403);
+            if (website.userId !== userId) return c.json({ error: "Permission denied" }, 403);
 
-            return c.json({ data: { success: true } });
+            return c.json({ data: { domain: website.domain } });
+        }
+    )
+    .get(
+        "/:websiteId",
+        verifyAuth(),
+        zValidator("param", z.object({ websiteId: z.string() })),
+        zValidator("query", z.object({
+            interval: z.enum([overviewChartIntervalsKeys[0], ...overviewChartIntervalsKeys.slice(1)])
+        })),
+        async (c) => {
+            const authUser = c.get("authUser");
+            const userId = authUser.session.user.id;
+            const { websiteId } = c.req.valid("param");
+            const { interval } = c.req.valid("query");
+
+            const website = await getWebsiteById(websiteId);
+            if (!website) return c.json({ error: "Website not found" }, 404);
+            if (website.userId !== userId) return c.json({ error: "Permission denied" }, 403);
+
+            const intervalObj = OVERVIEW_CHART_INTERVALS[interval];
+            let startDate: Date;
+            const endDate = intervalObj.endDate;
+            let intervalSql: SQL<unknown>;
+            let joinClause: (timestamp: any, date: SQL<string>) => SQL<unknown> | undefined;
+
+            if (interval === "allTime") {
+                startDate = website.addedAt;
+                intervalSql = generateSqlSeriesFromDateDiff(startDate, endDate);
+                joinClause = generateJoinClauseFromDateDiff(startDate, endDate);
+            } else {
+                startDate = intervalObj.startDate!;
+                intervalSql = intervalObj.sql!;
+                joinClause = intervalObj.joinClause!;
+            }
+
+            const whereClause = and(
+                eq(PageViewTable.websiteId, websiteId),
+                gte(PageViewTable.timestamp, startDate),
+                lte(PageViewTable.timestamp, endDate)
+            );
+
+            const [{ visitorsCount }] = await db
+                .select({
+                    visitorsCount: countDistinct(PageViewTable.visitorId)
+                })
+                .from(PageViewTable)
+                .where(whereClause);
+
+            const pageViews = db.$with("pageViews").as(
+                db
+                    .select()
+                    .from(PageViewTable)
+                    .where(whereClause)
+            );
+
+            const overviewChartData = await db
+                .with(pageViews)
+                .select({
+                    pageViews: count(pageViews),
+                    date: sql<string>`${sql.raw("series")}`.inlineParams()
+                })
+                .from(intervalSql)
+                .leftJoin(pageViews, ({ date }) => joinClause(pageViews.timestamp, date))
+                .groupBy(({ date }) => date)
+                .orderBy(({ date }) => date);
+
+            const referrerChartData = await getChartData(pageViews, "referrer");
+            const pageChartData = await getChartData(pageViews, "page");
+            const countryChartData = await getChartData(pageViews, "country");
+            const regionChartData = await getChartData(pageViews, "region");
+            const cityChartData = await getChartData(pageViews, "city");
+            const deviceChartData = await getChartData(pageViews, "device");
+            const browserChartData = await getChartData(pageViews, "browser");
+            const operatingSystemChartData = await getChartData(pageViews, "operatingSystem");
+
+            return c.json({
+                data: {
+                    startDate,
+                    endDate,
+                    visitorsCount,
+                    overviewChartData,
+                    referrerChartData,
+                    pageChartData,
+                    countryChartData,
+                    regionChartData,
+                    cityChartData,
+                    deviceChartData,
+                    browserChartData,
+                    operatingSystemChartData
+                }
+            });
         }
     );
 

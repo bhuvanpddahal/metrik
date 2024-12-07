@@ -9,29 +9,24 @@ import {
     ChartTooltipContent
 } from "@/components/ui/Chart";
 
-const chartData = [
-    { page: "/", views: 305 },
-    { page: "/dashboard", views: 237 },
-    { page: "/signin", views: 228 },
-    { page: "/settings", views: 214 },
-    { page: "/support", views: 209 },
-    { page: "/terms", views: 204 },
-    { page: "/events", views: 186 },
-    { page: "/goals", views: 73 },
-    {}, {}
-];
-
 const chartConfig = {
-    views: {
-        label: "Views",
+    totalVisitors: {
+        label: "Visitors",
         color: "hsl(var(--chart-3))"
-    },
-    label: {
-        color: "hsl(var(--card))"
     }
 } satisfies ChartConfig;
 
-const DistributionChart = () => {
+interface DistributionChartProps {
+    chartData: { [x: string]: string | number | null; }[];
+    dataKey: string;
+    labelFormatter?: (value: string | null) => string;
+}
+
+const DistributionChart = ({
+    chartData,
+    dataKey,
+    labelFormatter
+}: DistributionChartProps) => {
     return (
         <ChartContainer config={chartConfig} className="h-[21rem] w-full">
             <BarChart
@@ -39,44 +34,47 @@ const DistributionChart = () => {
                 data={chartData}
                 layout="vertical"
                 margin={{
-                    right: 0,
+                    right: 40,
                     left: 0
                 }}
+                barSize={30}
+                barGap={2}
             >
                 <YAxis
-                    dataKey="page"
+                    dataKey={dataKey}
                     type="category"
                     tickLine={false}
                     tickMargin={10}
                     axisLine={false}
-                    tickFormatter={(value) => value.slice(0, 3)}
                     hide
                 />
-                <XAxis dataKey="views" type="number" hide />
+                <XAxis dataKey="totalVisitors" type="number" hide />
                 <ChartTooltip content={
                     <ChartTooltipContent
                         indicator="dot"
                         color="hsl(var(--primary))"
+                        labelFormatter={labelFormatter}
                     />
                 } />
                 <Bar
-                    dataKey="views"
+                    dataKey="totalVisitors"
                     layout="vertical"
-                    fill="var(--color-views)"
+                    fill="var(--color-totalVisitors)"
                     radius={[0, 4, 4, 0]}
                 >
                     <LabelList
-                        dataKey="page"
+                        dataKey={dataKey}
                         position="insideLeft"
                         offset={18}
-                        className="fill-foreground"
+                        className="fill-foreground truncate"
                         fontSize={14}
                         fontWeight={500}
+                        formatter={labelFormatter}
                     />
                     <LabelList
-                        dataKey="views"
+                        dataKey="totalVisitors"
                         position="right"
-                        offset={8}
+                        offset={18}
                         className="fill-foreground"
                         fontSize={14}
                         fontWeight={600}

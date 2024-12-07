@@ -7,12 +7,8 @@ import { IoMdSettings } from "react-icons/io";
 import { FaMoneyBills } from "react-icons/fa6";
 import { ArrowUpRightIcon } from "lucide-react";
 
+import UserAvatar from "./UserAvatar";
 import UserAccountNavLoader from "./skeletons/UserAccountNavLoader";
-import {
-    Avatar,
-    AvatarFallback,
-    AvatarImage
-} from "@/components/ui/Avatar";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -33,20 +29,16 @@ const UserAccountNav = () => {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost">
-                    <Avatar>
-                        <AvatarImage src={user.image || ""} />
-                        <AvatarFallback>
-                            {user.name?.charAt(0) ?? user.email.charAt(0) ?? "U"}
-                        </AvatarFallback>
-                    </Avatar>
+                    <UserAvatar />
                     <span className="text-sm font-medium">
                         {user.name ?? user.email.split("@")[0]}
                     </span>
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[13rem]">
-                <DropdownMenuLabel className="truncate">
-                    {user.email}
+                <DropdownMenuLabel className="bg-primary/10 flex flex-col items-center gap-y-2 py-2 -m-1">
+                    <UserAvatar />
+                    <p className="truncate">{user.email}</p>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>

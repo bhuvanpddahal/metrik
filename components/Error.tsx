@@ -2,16 +2,19 @@ import Image from "next/image";
 import { RefreshCcwIcon } from "lucide-react";
 
 import { Button } from "./ui/Button";
+import { cn } from "@/lib/utils";
 
 interface ErrorProps {
     message?: string;
+    className?: string;
 }
 
 const Error = ({
-    message = "Something went wrong"
+    message = "Something went wrong",
+    className = ""
 }: ErrorProps) => {
     return (
-        <div className="flex flex-col items-center px-5 py-20">
+        <div className={cn("flex flex-col items-center px-5 py-20", className)}>
             <Image
                 src="/error.svg"
                 alt="Error"

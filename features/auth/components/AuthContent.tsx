@@ -11,8 +11,8 @@ const AuthContent = () => {
         <div className="min-w-96 space-y-8">
             <header>
                 <Image
-                    src="/icon.png"
-                    alt="Metrik Icon"
+                    src="/icon.svg"
+                    alt="Metrik Logo"
                     width={30}
                     height={30}
                     className="mx-auto"

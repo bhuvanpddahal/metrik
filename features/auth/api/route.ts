@@ -3,7 +3,7 @@ import Nodemailer from "@auth/core/providers/nodemailer";
 import { eq } from "drizzle-orm";
 import { Context, Hono } from "hono";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { AuthConfig, authHandler, initAuthConfig } from "@hono/auth-js";
+import { type AuthConfig, authHandler, initAuthConfig } from "@hono/auth-js";
 
 import { db } from "@/drizzle/db";
 import { env } from "@/constants/env/server";

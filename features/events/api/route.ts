@@ -24,9 +24,9 @@ const app = new Hono()
                 sessionId
             } = c.req.valid("json");
 
-            // if (!href.includes(domain)) {
-            //     return c.json({ error: "Domain mismatch" }, 400);
-            // }
+            if (!href.includes(domain)) {
+                return c.json({ error: "Domain mismatch" }, 400);
+            }
 
             const userAgent = c.req.header("User-Agent");
             const parser = new UAParser(userAgent);
@@ -43,7 +43,7 @@ const app = new Hono()
                     region: location.region,
                     city: location.city,
                     browser: result.browser.name ?? "Unknown",
-                    opearatingSystem: result.os.name ?? "Unknown",
+                    operatingSystem: result.os.name ?? "Unknown",
                     device: result.device.type ?? "desktop",
                     screenResolution: `${viewport.width} x ${viewport.height}`,
                     timestamp: new Date(timestamp)
