@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import timezones from "../timezones.json";
 import {
     Form,
     FormControl,
@@ -19,7 +20,6 @@ import {
     SelectTrigger,
     SelectValue
 } from "@/components/ui/Select";
-import { timezones } from "../constants";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { useAddWebsite } from "../hooks/useAddWebsite";

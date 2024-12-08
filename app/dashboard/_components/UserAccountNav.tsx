@@ -28,7 +28,7 @@ const UserAccountNav = () => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost">
+                <Button variant="ghost" className="hover:bg-gray-200">
                     <UserAvatar />
                     <span className="text-sm font-medium">
                         {user.name ?? user.email.split("@")[0]}

@@ -29,18 +29,24 @@ const DistributionDetailsModal = () => {
                     </DialogClose>
                 </DialogHeader>
                 <ScrollArea className="max-h-[29.5rem]">
-                    <ul className="py-4">
-                        {data.map((row, index) => (
-                            <li key={index} className="min-h-11 flex items-center justify-between gap-x-3 px-6 py-3 even:bg-muted">
-                                <div className="text-sm font-medium">
-                                    {row[dataKey]}
-                                </div>
-                                <div className="text-sm font-semibold">
-                                    {row.totalVisitors}
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
+                    {data.length ? (
+                        <ul className="py-4">
+                            {data.map((row, index) => (
+                                <li key={index} className="min-h-11 flex items-center justify-between gap-x-3 px-6 py-3 even:bg-muted">
+                                    <div className="text-sm font-medium">
+                                        {row[dataKey]}
+                                    </div>
+                                    <div className="text-sm font-semibold">
+                                        {row.totalVisitors}
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <div className="text-muted-foreground text-sm font-medium text-center py-16">
+                            No data to show
+                        </div>
+                    )}
                 </ScrollArea>
             </DialogContent>
         </Dialog>

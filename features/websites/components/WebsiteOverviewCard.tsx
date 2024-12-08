@@ -1,3 +1,4 @@
+import PerformanceIndicator from "./PerformanceIndicator";
 import WebsiteOverviewChart from "./WebsiteOverviewChart";
 import PingDot from "@/features/websites/components/PingDot";
 import {
@@ -27,10 +28,11 @@ const WebsiteOverviewCard = ({
     return (
         <Card className="md:col-span-2">
             <ScrollArea className="max-w-full">
-                <CardHeader className="flex-row gap-x-6 pb-4">
+                <CardHeader className="group flex-row gap-x-6 pb-2">
                     <div className="shrink-0 space-y-2 mt-1.5">
                         <div className="text-sm text-muted-foreground font-medium">Visitors</div>
                         <div className="text-xl md:text-[1.65rem] font-bold">{visitorsCount}</div>
+                        <PerformanceIndicator changeInPercentage={20} />
                     </div>
                     <Separator orientation="vertical" className="shrink-0 min-h-14" />
                     <div className="shrink-0 space-y-2">
@@ -46,6 +48,7 @@ const WebsiteOverviewCard = ({
                     <div className="shrink-0 space-y-2">
                         <div className="text-sm text-muted-foreground font-medium">Session time</div>
                         <div className="text-xl md:text-[1.65rem] font-bold">1m 8s</div>
+                        <PerformanceIndicator changeInPercentage={-15} />
                     </div>
                     <Separator orientation="vertical" className="shrink-0 min-h-14" />
                     <div className="shrink-0 space-y-2">
@@ -58,7 +61,7 @@ const WebsiteOverviewCard = ({
                 </CardHeader>
                 <ScrollBar orientation="horizontal" />
             </ScrollArea>
-            <CardContent className="pt-4">
+            <CardContent className="pt-2.5">
                 <WebsiteOverviewChart
                     startDate={startDate}
                     endDate={endDate}

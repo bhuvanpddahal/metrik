@@ -70,7 +70,7 @@ const WebsiteOverviewChart = ({
                     type="number"
                     tickLine={false}
                     axisLine={{ strokeWidth: 0.15 }}
-                    tickMargin={8}
+                    tickMargin={5}
                     width={20}
                     tickFormatter={(value) => Number.isInteger(value) ? value : ""}
                 />

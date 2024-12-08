@@ -57,7 +57,7 @@
 
         const location = await getUserLocation();
         if (!location) {
-            console.warn("Failed to fetch location");
+            console.warn("Metrik: Failed to fetch location");
             return;
         }
 
@@ -136,10 +136,10 @@
 
         xhr.onload = function () {
             if (xhr.status === 200) {
-                console.log("Event data sent successfully");
+                console.log("Metrik: Event data sent successfully");
                 setCookie(SESSION_COOKIE, generateUuid(), 1 / 48);
             } else {
-                console.error("Error sending event data:", xhr.status);
+                console.error("Metrik: Error sending event data:", xhr.status);
             }
 
             if (callback) {

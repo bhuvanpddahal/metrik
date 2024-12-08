@@ -12,10 +12,11 @@ const WebsiteOverviewCardLoader = () => {
     return (
         <Card className="md:col-span-2">
             <ScrollArea className="max-w-full">
-                <CardHeader className="flex-row gap-x-6 pb-4">
+                <CardHeader className="flex-row gap-x-6 pb-2">
                     <div className="shrink-0 space-y-2 mt-1.5">
                         <div className="text-sm text-muted-foreground font-medium">Visitors</div>
                         <Skeleton className="h-7 w-10" />
+                        <div className="h-3" />
                     </div>
                     <Separator orientation="vertical" className="shrink-0 min-h-14" />
                     <div className="shrink-0 space-y-2">
@@ -43,7 +44,7 @@ const WebsiteOverviewCardLoader = () => {
                 </CardHeader>
                 <ScrollBar orientation="horizontal" />
             </ScrollArea>
-            <CardContent className="pt-4">
+            <CardContent className="pt-2.5">
                 <Skeleton className="h-96 w-full rounded-sm" />
             </CardContent>
         </Card>
