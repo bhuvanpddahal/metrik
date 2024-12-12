@@ -7,6 +7,7 @@ import {
 import { relations } from "drizzle-orm";
 
 import { WebsiteTable } from "./websites";
+import { SessionTable } from "./sessions";
 
 export const PageViewTable = pgTable("page_views", {
     id: uuid("id").primaryKey().defaultRandom(),
@@ -34,6 +35,10 @@ export const pageViewRelations = relations(
         website: one(WebsiteTable, {
             fields: [PageViewTable.websiteId],
             references: [WebsiteTable.id]
+        }),
+        session: one(SessionTable, {
+            fields: [PageViewTable.sessionId],
+            references: [SessionTable.id]
         })
     })
 );

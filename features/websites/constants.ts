@@ -33,6 +33,7 @@ const currentDate = new Date();
 
 export const NOW_CHART_INTERVALS = {
     today: {
+        prevStartDate: undefined,
         startDate: startOfDay(currentDate),
         endDate: endOfDay(currentDate),
         label: "Today",
@@ -41,6 +42,7 @@ export const NOW_CHART_INTERVALS = {
         dateFormatter: formatTimeToAmPm
     },
     last24Hours: {
+        prevStartDate: subDays(currentDate, 2),
         startDate: subDays(currentDate, 1),
         endDate: currentDate,
         label: "Last 24 Hours",
@@ -49,6 +51,7 @@ export const NOW_CHART_INTERVALS = {
         dateFormatter: formatTimeToAmPm
     },
     yesterday: {
+        prevStartDate: startOfDay(subDays(currentDate, 2)),
         startDate: startOfDay(subDays(currentDate, 1)),
         endDate: endOfDay(subDays(currentDate, 1)),
         label: "Yesterday",
@@ -60,6 +63,7 @@ export const NOW_CHART_INTERVALS = {
 
 export const WEEK_CHART_INTERVALS = {
     thisWeek: {
+        prevStartDate: undefined,
         startDate: startOfWeek(currentDate),
         endDate: endOfWeek(currentDate),
         label: "This Week",
@@ -68,6 +72,7 @@ export const WEEK_CHART_INTERVALS = {
         dateFormatter: formatDateToDayMonth
     },
     last7Days: {
+        prevStartDate: subWeeks(currentDate, 2),
         startDate: subWeeks(currentDate, 1),
         endDate: currentDate,
         label: "Last 7 Days",
@@ -76,6 +81,7 @@ export const WEEK_CHART_INTERVALS = {
         dateFormatter: formatDateToDayMonth
     },
     lastWeek: {
+        prevStartDate: startOfWeek(subWeeks(currentDate, 2)),
         startDate: startOfWeek(subWeeks(currentDate, 1)),
         endDate: endOfWeek(subWeeks(currentDate, 1)),
         label: "Last Week",
@@ -87,6 +93,7 @@ export const WEEK_CHART_INTERVALS = {
 
 export const MONTH_CHART_INTERVALS = {
     thisMonth: {
+        prevStartDate: undefined,
         startDate: startOfMonth(currentDate),
         endDate: endOfMonth(currentDate),
         label: "This Month",
@@ -95,6 +102,7 @@ export const MONTH_CHART_INTERVALS = {
         dateFormatter: formatDateToDayMonth
     },
     last30Days: {
+        prevStartDate: subDays(currentDate, 60),
         startDate: subDays(currentDate, 30),
         endDate: currentDate,
         label: "Last 30 Days",
@@ -103,6 +111,7 @@ export const MONTH_CHART_INTERVALS = {
         dateFormatter: formatDateToDayMonth
     },
     lastMonth: {
+        prevStartDate: startOfMonth(subMonths(currentDate, 2)),
         startDate: startOfMonth(subMonths(currentDate, 1)),
         endDate: endOfMonth(subMonths(currentDate, 1)),
         label: "Last Month",
@@ -114,6 +123,7 @@ export const MONTH_CHART_INTERVALS = {
 
 export const YEAR_CHART_INTERVALS = {
     thisYear: {
+        prevStartDate: undefined,
         startDate: startOfYear(currentDate),
         endDate: endOfYear(currentDate),
         label: "This Year",
@@ -122,6 +132,7 @@ export const YEAR_CHART_INTERVALS = {
         dateFormatter: formatDateToMonthYear
     },
     last12Months: {
+        prevStartDate: subMonths(currentDate, 24),
         startDate: subMonths(currentDate, 12),
         endDate: currentDate,
         label: "Last 12 Months",
@@ -130,6 +141,7 @@ export const YEAR_CHART_INTERVALS = {
         dateFormatter: formatDateToMonthYear
     },
     lastYear: {
+        prevStartDate: startOfYear(subYears(currentDate, 2)),
         startDate: startOfYear(subYears(currentDate, 1)),
         endDate: endOfYear(subYears(currentDate, 1)),
         label: "Last Year",
@@ -140,6 +152,7 @@ export const YEAR_CHART_INTERVALS = {
 } as const;
 
 export const ALL_TIME_CHART_INTERVAL = {
+    prevStartDate: undefined,
     startDate: undefined,
     endDate: currentDate,
     label: "All Time",

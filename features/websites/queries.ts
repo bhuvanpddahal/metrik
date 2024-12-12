@@ -1,12 +1,22 @@
 "use server";
 
+import {
+    and,
+    count,
+    countDistinct,
+    desc,
+    eq,
+    gte,
+    lte,
+    sum
+} from "drizzle-orm";
 import { JSDOM } from "jsdom";
-import { countDistinct, desc } from "drizzle-orm";
+import { subMinutes } from "date-fns";
 import { WithSubqueryWithSelection } from "drizzle-orm/pg-core";
 
 import { db } from "@/drizzle/db";
 import { scriptSrc } from "./constants";
-import { PageViewTable } from "@/drizzle/schema";
+import { PageViewTable, SessionTable } from "@/drizzle/schema";
 
 export const hasInstalledScript = async (
     websiteId: string,
@@ -38,10 +48,106 @@ export const getWebsiteById = async (websiteId: string) => {
     return website;
 };
 
+export const getVisitorsCount = async (
+    websiteId: string,
+    startDate: Date,
+    endDate: Date
+) => {
+    const [{ visitorsCount }] = await db
+        .select({
+            visitorsCount: countDistinct(PageViewTable.visitorId)
+        })
+        .from(PageViewTable)
+        .where(and(
+            eq(PageViewTable.websiteId, websiteId),
+            gte(PageViewTable.timestamp, startDate),
+            lte(PageViewTable.timestamp, endDate)
+        ));
+
+    return visitorsCount;
+};
+
+export const getBounceRate = async (
+    websiteId: string,
+    startDate: Date,
+    endDate: Date
+) => {
+    const whereClause = and(
+        eq(SessionTable.websiteId, websiteId),
+        gte(SessionTable.startTime, startDate),
+        lte(SessionTable.startTime, endDate)
+    );
+
+    const allSessions = await db
+        .select({
+            id: SessionTable.id
+        })
+        .from(SessionTable)
+        .where(whereClause);
+
+    const singlePageViewSessions = await db
+        .select({
+            pageViews: count(PageViewTable)
+        })
+        .from(SessionTable)
+        .innerJoin(PageViewTable, eq(PageViewTable.sessionId, SessionTable.id))
+        .where(whereClause)
+        .having(({ pageViews }) => eq(pageViews, 1));
+
+    const totalSessions = allSessions.length;
+    const totalSinglePageViewSessions = singlePageViewSessions.length;
+
+    const bounceRate = totalSessions === 0
+        ? 0 : (totalSinglePageViewSessions / totalSessions) * 100;
+
+    return Math.round(bounceRate);
+};
+
+export const getAverageSessionTime = async (
+    websiteId: string,
+    startDate: Date,
+    endDate: Date
+) => {
+    const [{ totalDuration, sessionCount }] = await db
+        .select({
+            totalDuration: sum(SessionTable.duration),
+            sessionCount: count(SessionTable)
+        })
+        .from(SessionTable)
+        .where(and(
+            eq(SessionTable.websiteId, websiteId),
+            gte(SessionTable.startTime, startDate),
+            lte(SessionTable.startTime, endDate)
+        ));
+
+    const averageSessionTime = sessionCount === 0
+        ? 0 : Number(totalDuration) / sessionCount;
+
+    return averageSessionTime;
+};
+
+export const getLiveVisitorsCount = async (
+    websiteId: string,
+    endDate: Date
+) => {
+    const startDate = subMinutes(endDate, 5);
+
+    const [{ liveVisitorsCount }] = await db
+        .select({
+            liveVisitorsCount: countDistinct(PageViewTable.visitorId)
+        })
+        .from(PageViewTable)
+        .where(and(
+            eq(PageViewTable.websiteId, websiteId),
+            gte(PageViewTable.timestamp, startDate),
+            lte(PageViewTable.timestamp, endDate)
+        ));
+
+    return liveVisitorsCount;
+};
+
 type Column = "referrer" | "page" | "country" | "region" | "city" | "device" | "browser" | "operatingSystem";
 export type ChartData = { [x: string]: string | number | null; }[];
-// type ChartData = { [key in Column]: string | null; } & { totalVisitors: number; };
-// type a = Pick<ChartData, "page" | "totalVisitors">;
 
 export const getChartData = async (
     pageViews: WithSubqueryWithSelection<

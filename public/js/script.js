@@ -137,7 +137,8 @@
         xhr.onload = function () {
             if (xhr.status === 200) {
                 console.log("Metrik: Event data sent successfully");
-                setCookie(SESSION_COOKIE, generateUuid(), 1 / 48);
+                const sessionId = getCookieValue(SESSION_COOKIE) ?? generateUuid();
+                setCookie(SESSION_COOKIE, sessionId, 1 / 48);
             } else {
                 console.error("Metrik: Error sending event data:", xhr.status);
             }

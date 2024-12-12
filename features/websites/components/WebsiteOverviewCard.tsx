@@ -7,12 +7,19 @@ import {
     CardHeader
 } from "@/components/ui/Card";
 import { Separator } from "@/components/ui/Separator";
+import { formatNumberToMinuteSecond } from "../utils";
 import { ScrollArea, ScrollBar } from "@/components/ui/ScrollArea";
 
 interface WebsiteOverviewCardProps {
     startDate: string;
     endDate: string;
     visitorsCount: number;
+    visitorsCountChangeInPercentage: number | null;
+    bounceRate: number;
+    bounceRateChangeInPercentage: number | null;
+    averageSessionTime: number;
+    averageSessionTimeChangeInPercentage: number | null;
+    liveVisitorsCount: number;
     overviewChartData: {
         pageViews: number;
         date: string;
@@ -23,6 +30,12 @@ const WebsiteOverviewCard = ({
     startDate,
     endDate,
     visitorsCount,
+    visitorsCountChangeInPercentage,
+    bounceRate,
+    bounceRateChangeInPercentage,
+    averageSessionTime,
+    averageSessionTimeChangeInPercentage,
+    liveVisitorsCount,
     overviewChartData
 }: WebsiteOverviewCardProps) => {
     return (
@@ -32,7 +45,7 @@ const WebsiteOverviewCard = ({
                     <div className="shrink-0 space-y-2 mt-1.5">
                         <div className="text-sm text-muted-foreground font-medium">Visitors</div>
                         <div className="text-xl md:text-[1.65rem] font-bold">{visitorsCount}</div>
-                        <PerformanceIndicator changeInPercentage={20} />
+                        <PerformanceIndicator changeInPercentage={visitorsCountChangeInPercentage} />
                     </div>
                     <Separator orientation="vertical" className="shrink-0 min-h-14" />
                     <div className="shrink-0 space-y-2">
@@ -42,13 +55,18 @@ const WebsiteOverviewCard = ({
                     <Separator orientation="vertical" className="shrink-0 min-h-14" />
                     <div className="shrink-0 space-y-2">
                         <div className="text-sm text-muted-foreground font-medium">Bounce rate</div>
-                        <div className="text-xl md:text-[1.65rem] font-bold">-</div>
+                        <div className="text-xl md:text-[1.65rem] font-bold">
+                            {bounceRate > 0 ? `${bounceRate}%` : "-"}
+                        </div>
+                        <PerformanceIndicator changeInPercentage={bounceRateChangeInPercentage} />
                     </div>
                     <Separator orientation="vertical" className="shrink-0 min-h-14" />
                     <div className="shrink-0 space-y-2">
                         <div className="text-sm text-muted-foreground font-medium">Session time</div>
-                        <div className="text-xl md:text-[1.65rem] font-bold">1m 8s</div>
-                        <PerformanceIndicator changeInPercentage={-15} />
+                        <div className="text-xl md:text-[1.65rem] font-bold">
+                            {averageSessionTime > 0 ? formatNumberToMinuteSecond(averageSessionTime) : "-"}
+                        </div>
+                        <PerformanceIndicator changeInPercentage={averageSessionTimeChangeInPercentage} />
                     </div>
                     <Separator orientation="vertical" className="shrink-0 min-h-14" />
                     <div className="shrink-0 space-y-2">
@@ -56,7 +74,7 @@ const WebsiteOverviewCard = ({
                             Visitors now
                             <PingDot type="active" color="#34d399" />
                         </div>
-                        <div className="text-xl md:text-[1.65rem] font-bold">0</div>
+                        <div className="text-xl md:text-[1.65rem] font-bold">{liveVisitorsCount}</div>
                     </div>
                 </CardHeader>
                 <ScrollBar orientation="horizontal" />

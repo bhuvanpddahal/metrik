@@ -45,6 +45,12 @@ const WebsiteDetailsPageData = (
                 startDate={data.startDate}
                 endDate={data.endDate}
                 visitorsCount={data.visitorsCount}
+                visitorsCountChangeInPercentage={data.visitorsCountChangeInPercentage}
+                bounceRate={data.bounceRate}
+                bounceRateChangeInPercentage={data.bounceRateChangeInPercentage}
+                averageSessionTime={data.averageSessionTime}
+                averageSessionTimeChangeInPercentage={data.averageSessionTimeChangeInPercentage}
+                liveVisitorsCount={data.liveVisitorsCount}
                 overviewChartData={data.overviewChartData}
             />
             <ReferrerSitesCard referrerChartData={data.referrerChartData} />

@@ -1,12 +1,14 @@
 import { cn } from "@/lib/utils";
 
 interface PerformanceIndicatorProps {
-    changeInPercentage: number;
+    changeInPercentage: number | null;
 }
 
 const PerformanceIndicator = (
     { changeInPercentage }: PerformanceIndicatorProps
 ) => {
+    if (!changeInPercentage) return <div className="h-3" />
+
     const isPositive = changeInPercentage > 0;
     const isNegative = changeInPercentage < 0;
     const isZero = changeInPercentage === 0;

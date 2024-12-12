@@ -52,6 +52,7 @@ export function formatDateToWeekYear(date: Date | string) { return format(date, 
 export function formatDateToMonthYear(date: Date | string) { return format(date, "MMM yyyy"); }
 export function formatDateToQuarterYear(date: Date | string) { return format(date, "QQQQ yyyy"); }
 export function formatDateToYear(date: Date | string) { return format(date, "yyyy"); }
+export function formatNumberToMinuteSecond(num: number) { return `${Math.floor(num / 60)}m ${Math.round(num % 60)}s`; }
 
 export function getDateFormatterFromDateDiff(startDate: Date | string, endDate: Date | string) {
     const daysDiff = differenceInDays(endDate, startDate);

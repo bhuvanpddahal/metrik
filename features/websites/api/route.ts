@@ -21,7 +21,11 @@ import {
     generateSqlSeriesFromDateDiff
 } from "../utils";
 import {
+    getAverageSessionTime,
+    getBounceRate,
     getChartData,
+    getLiveVisitorsCount,
+    getVisitorsCount,
     getWebsiteById,
     hasInstalledScript as hasInstalledScriptFn
 } from "../queries";
@@ -229,6 +233,7 @@ const app = new Hono()
             if (website.userId !== userId) return c.json({ error: "Permission denied" }, 403);
 
             const intervalObj = OVERVIEW_CHART_INTERVALS[interval];
+            const prevStartDate = intervalObj.prevStartDate;
             let startDate: Date;
             const endDate = intervalObj.endDate;
             let intervalSql: SQL<unknown>;
@@ -244,24 +249,46 @@ const app = new Hono()
                 joinClause = intervalObj.joinClause!;
             }
 
-            const whereClause = and(
+            const pageViewWherehereClause = and(
                 eq(PageViewTable.websiteId, websiteId),
                 gte(PageViewTable.timestamp, startDate),
                 lte(PageViewTable.timestamp, endDate)
             );
 
-            const [{ visitorsCount }] = await db
-                .select({
-                    visitorsCount: countDistinct(PageViewTable.visitorId)
-                })
-                .from(PageViewTable)
-                .where(whereClause);
+            let visitorsCountChangeInPercentage: number | null = null;
+            const visitorsCount = await getVisitorsCount(websiteId, startDate, endDate);
+            if (prevStartDate) {
+                const prevIntervalVisitorsCount = await getVisitorsCount(websiteId, prevStartDate, startDate);
+                const visitorsCountChange = visitorsCount - prevIntervalVisitorsCount;
+                visitorsCountChangeInPercentage = prevIntervalVisitorsCount > 0
+                    ? (visitorsCountChange / prevIntervalVisitorsCount) * 100 : null;
+            }
+
+            let bounceRateChangeInPercentage: number | null = null;
+            const bounceRate = await getBounceRate(websiteId, startDate, endDate);
+            if (prevStartDate) {
+                const prevIntervalBounceRate = await getBounceRate(websiteId, prevStartDate, startDate);
+                const bounceRateChange = bounceRate - prevIntervalBounceRate;
+                bounceRateChangeInPercentage = prevIntervalBounceRate > 0
+                    ? (bounceRateChange / prevIntervalBounceRate) * 100 : null;
+            }
+
+            let averageSessionTimeChangeInPercentage: number | null = null;
+            const averageSessionTime = await getAverageSessionTime(websiteId, startDate, endDate);
+            if (prevStartDate) {
+                const prevIntervalAverageSessionTime = await getAverageSessionTime(websiteId, prevStartDate, startDate);
+                const averageSessionTimeChange = averageSessionTime - prevIntervalAverageSessionTime;
+                averageSessionTimeChangeInPercentage = prevIntervalAverageSessionTime > 0
+                    ? (averageSessionTimeChange / prevIntervalAverageSessionTime) * 100 : null;
+            }
+
+            const liveVisitorsCount = await getLiveVisitorsCount(websiteId, endDate);
 
             const pageViews = db.$with("pageViews").as(
                 db
                     .select()
                     .from(PageViewTable)
-                    .where(whereClause)
+                    .where(pageViewWherehereClause)
             );
 
             const overviewChartData = await db
@@ -289,6 +316,12 @@ const app = new Hono()
                     startDate,
                     endDate,
                     visitorsCount,
+                    visitorsCountChangeInPercentage,
+                    bounceRate,
+                    bounceRateChangeInPercentage,
+                    averageSessionTime,
+                    averageSessionTimeChangeInPercentage,
+                    liveVisitorsCount,
                     overviewChartData,
                     referrerChartData,
                     pageChartData,

@@ -8,6 +8,7 @@ import {
 import { relations } from "drizzle-orm";
 
 import { UserTable } from "./users";
+import { SessionTable } from "./sessions";
 import { PageViewTable } from "./page-views";
 
 export const WebsiteTable = pgTable(
@@ -40,6 +41,7 @@ export const websiteRelations = relations(
             fields: [WebsiteTable.userId],
             references: [UserTable.id]
         }),
-        pageViews: many(PageViewTable)
+        pageViews: many(PageViewTable),
+        sessions: many(SessionTable)
     })
 );
