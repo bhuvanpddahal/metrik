@@ -1,8 +1,5 @@
-import Link from "next/link";
-import { ArrowLeftIcon } from "lucide-react";
-
+import BackToDashboardButton from "../_components/BackToDashboardButton";
 import AddSiteProgress from "@/features/websites/components/AddSiteProgress";
-import { buttonVariants } from "@/components/ui/Button";
 
 interface NewWebsiteLayoutProps {
     children: React.ReactNode;
@@ -13,13 +10,7 @@ const NewWebsiteLayout = (
 ) => {
     return (
         <div className="max-w-lg w-full mx-auto py-6">
-            <Link
-                href="/dashboard"
-                className={buttonVariants({ variant: "outline" })}
-            >
-                <ArrowLeftIcon className="size-3" />
-                Dashboard
-            </Link>
+            <BackToDashboardButton />
             <AddSiteProgress />
             {children}
         </div>

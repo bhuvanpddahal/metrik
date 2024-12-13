@@ -28,7 +28,7 @@ const UserAccountNav = () => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="hover:bg-gray-200">
+                <Button variant="ghost">
                     <UserAvatar />
                     <span className="text-sm font-medium">
                         {user.name ?? user.email.split("@")[0]}
@@ -42,13 +42,13 @@ const UserAccountNav = () => {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                    <Link href="/settings" className="flex items-center gap-x-2">
+                    <Link href="/dashboard/settings" className="flex items-center gap-x-2">
                         <IoMdSettings className="size-3" />
                         Settings
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                    <Link href="/billing" className="flex items-center gap-x-2">
+                    <Link href="/dashboard/billing" className="flex items-center gap-x-2">
                         <FaMoneyBills className="size-3" />
                         Billing
                     </Link>
