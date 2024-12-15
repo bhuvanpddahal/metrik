@@ -3,9 +3,9 @@ import {
     parseAsStringLiteral,
 } from "nuqs";
 
-const tabs = ["general", "more"] as const;
+const tabs = ["general", "goals", "reports"] as const;
 
-export const useSettingsSearchParams = () => {
+export const useWebsiteSettingsSearchParams = () => {
     const [tab, setTab] = useQueryState(
         "tab",
         parseAsStringLiteral(tabs).withDefault("general").withOptions({ clearOnDefault: true })

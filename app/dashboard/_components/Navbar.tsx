@@ -7,7 +7,7 @@ const Navbar = () => {
     return (
         <header>
             <nav className="container py-4 flex justify-between items-center">
-                <Link href="/">
+                <Link href="/dashboard">
                     <Logo className="h-6" />
                 </Link>
                 <UserAccountNav />

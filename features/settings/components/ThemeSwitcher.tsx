@@ -27,7 +27,7 @@ const ThemeSwitcher = () => {
                 <CardContent className="pt-5">
                     <Select>
                         <SelectTrigger className="w-full shadow-none">
-                            <SelectValue placeholder="Theme" />
+                            <SelectValue placeholder="Select a theme" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="light">

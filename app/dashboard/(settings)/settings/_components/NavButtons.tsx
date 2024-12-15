@@ -1,9 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/Button";
-import { useSettingsSearchParams } from "@/features/settings/hooks/useSettingsSearchParams";
+import { useDashboardSettingsSearchParams } from "@/features/settings/hooks/useDashboardSettingsSearchParams";
 
-const tabButtons = [
+const navButtons = [
     {
         label: "General",
         value: "general"
@@ -14,23 +14,24 @@ const tabButtons = [
     }
 ] as const;
 
-const TabButtons = () => {
-    const { tab, setTab } = useSettingsSearchParams();
+const NavButtons = () => {
+    const { tab, setTab } = useDashboardSettingsSearchParams();
 
     return (
         <div className="w-auto lg:w-52 space-x-2 lg:space-x-0 space-y-0 lg:space-y-2">
-            {tabButtons.map((tabButton) => (
+            {navButtons.map((navButton) => (
                 <Button
-                    variant={tab === tabButton.value ? "secondary" : "ghost"}
+                    key={navButton.value}
+                    variant={tab === navButton.value ? "secondary" : "ghost"}
                     size="lg"
                     className="w-fit lg:w-full justify-start text-base px-4 lg:px-8"
-                    onClick={() => setTab(tabButton.value)}
+                    onClick={() => setTab(navButton.value)}
                 >
-                    {tabButton.label}
+                    {navButton.label}
                 </Button>
             ))}
         </div>
     );
 };
 
-export default TabButtons;
+export default NavButtons;
