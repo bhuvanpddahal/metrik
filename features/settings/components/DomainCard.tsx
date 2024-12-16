@@ -12,14 +12,30 @@ import {
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { type DomainPayload, domainSchema } from "../schemas";
+import { useUpdateDomain } from "@/features/websites/hooks/useUpdateDomain";
 
-const DomainCard = () => {
+interface DomainCardProps {
+    websiteId: string;
+    domain: string;
+}
+
+const DomainCard = ({
+    websiteId,
+    domain
+}: DomainCardProps) => {
+    const { mutate: updateDomain, isPending } = useUpdateDomain();
+
     const form = useForm<DomainPayload>({
         resolver: zodResolver(domainSchema),
-        defaultValues: { domain: "" }
+        defaultValues: { domain }
     });
 
-    const onSubmit = () => { };
+    const onSubmit = (payload: DomainPayload) => {
+        updateDomain({
+            param: { websiteId },
+            json: payload
+        });
+    };
 
     return (
         <SettingsCard title="Domain">
@@ -39,7 +55,7 @@ const DomainCard = () => {
                                         type="text"
                                         placeholder="example.com"
                                         className="shadow-none"
-                                    // disabled={isPending}
+                                        disabled={isPending}
                                     />
                                 </FormControl>
                                 <FormMessage />
@@ -50,9 +66,9 @@ const DomainCard = () => {
                         type="submit"
                         variant="outline"
                         className="flex ml-auto shadow-none"
-                    // isLoading={isPending}
+                        isLoading={isPending}
                     >
-                        Save
+                        {isPending ? "Saving" : "Save"}
                     </Button>
                 </form>
             </Form>

@@ -1,8 +1,16 @@
 import WebsiteSettingsContent from "./_components/WebsiteSettingsContent";
 
-const WebsiteSettingsPage = () => {
+interface WebsiteSettingsPageProps {
+    params: {
+        websiteId: string;
+    };
+}
+
+const WebsiteSettingsPage = ({
+    params: { websiteId }
+}: WebsiteSettingsPageProps) => {
     return (
-        <WebsiteSettingsContent />
+        <WebsiteSettingsContent websiteId={websiteId} />
     );
 };
 

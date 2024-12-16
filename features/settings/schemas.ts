@@ -1,15 +1,9 @@
 import { z } from "zod";
 
-export const domainSchema = z.object({
-    domain: z.string().min(1, {
-        message: "Domain is required"
-    })
-});
+import { addSiteSchema } from "../websites/schemas";
 
+export const domainSchema = addSiteSchema.pick({ domain: true });
 export type DomainPayload = z.infer<typeof domainSchema>;
 
-export const timezoneSchema = z.object({
-    timezone: z.string()
-});
-
+export const timezoneSchema = addSiteSchema.pick({ timezone: true });
 export type TimezonePayload = z.infer<typeof timezoneSchema>;

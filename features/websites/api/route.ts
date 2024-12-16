@@ -35,9 +35,10 @@ import {
     sqlDate
 } from "../constants";
 import { db } from "@/drizzle/db";
-import { addSiteSchema } from "../schemas";
 import { WebsiteTable } from "@/drizzle/schema/websites";
 import { PageViewTable } from "@/drizzle/schema/page-views";
+import { addSiteSchema, websiteIdSchema } from "../schemas";
+import { domainSchema, timezoneSchema } from "@/features/settings/schemas";
 
 const app = new Hono()
     .post(
@@ -100,7 +101,7 @@ const app = new Hono()
     .get(
         "/:websiteId/verify-script",
         verifyAuth(),
-        zValidator("param", z.object({ websiteId: z.string() })),
+        zValidator("param", websiteIdSchema),
         async (c) => {
             const authUser = c.get("authUser");
             const userId = authUser.session.user.id;
@@ -200,9 +201,25 @@ const app = new Hono()
         }
     )
     .get(
+        "/:websiteId",
+        verifyAuth(),
+        zValidator("param", websiteIdSchema),
+        async (c) => {
+            const authUser = c.get("authUser");
+            const userId = authUser.session.user.id;
+            const { websiteId } = c.req.valid("param");
+
+            const website = await getWebsiteById(websiteId);
+            if (!website) return c.json({ error: "Website not found" }, 404);
+            if (website.userId !== userId) return c.json({ error: "Permission denied" }, 403);
+
+            return c.json({ data: { website } });
+        }
+    )
+    .get(
         "/:websiteId/domain",
         verifyAuth(),
-        zValidator("param", z.object({ websiteId: z.string() })),
+        zValidator("param", websiteIdSchema),
         async (c) => {
             const authUser = c.get("authUser");
             const userId = authUser.session.user.id;
@@ -216,9 +233,9 @@ const app = new Hono()
         }
     )
     .get(
-        "/:websiteId",
+        "/:websiteId/data",
         verifyAuth(),
-        zValidator("param", z.object({ websiteId: z.string() })),
+        zValidator("param", websiteIdSchema),
         zValidator("query", z.object({
             interval: z.enum([overviewChartIntervalsKeys[0], ...overviewChartIntervalsKeys.slice(1)])
         })),
@@ -333,6 +350,69 @@ const app = new Hono()
                     operatingSystemChartData
                 }
             });
+        }
+    )
+    .patch(
+        "/:websiteId/domain",
+        verifyAuth(),
+        zValidator("param", websiteIdSchema),
+        zValidator("json", domainSchema),
+        async (c) => {
+            const authUser = c.get("authUser");
+            const userId = authUser.session.user.id;
+            const { websiteId } = c.req.valid("param");
+            const { domain } = c.req.valid("json");
+
+            const website = await getWebsiteById(websiteId);
+            if (!website) return c.json({ error: "Website not found" }, 404);
+            if (website.userId !== userId) return c.json({ error: "Permission denied" }, 403);
+
+            await db.update(WebsiteTable)
+                .set({ domain })
+                .where(eq(WebsiteTable.id, websiteId));
+
+            return c.json({ data: { success: "Website domain updated" } });
+        }
+    )
+    .patch(
+        "/:websiteId/timezone",
+        verifyAuth(),
+        zValidator("param", websiteIdSchema),
+        zValidator("json", timezoneSchema),
+        async (c) => {
+            const authUser = c.get("authUser");
+            const userId = authUser.session.user.id;
+            const { websiteId } = c.req.valid("param");
+            const { timezone } = c.req.valid("json");
+
+            const website = await getWebsiteById(websiteId);
+            if (!website) return c.json({ error: "Website not found" }, 404);
+            if (website.userId !== userId) return c.json({ error: "Permission denied" }, 403);
+
+            await db.update(WebsiteTable)
+                .set({ timezone })
+                .where(eq(WebsiteTable.id, websiteId));
+
+            return c.json({ data: { success: "Website timezone updated" } });
+        }
+    )
+    .delete(
+        "/:websiteId",
+        verifyAuth(),
+        zValidator("param", websiteIdSchema),
+        async (c) => {
+            const authUser = c.get("authUser");
+            const userId = authUser.session.user.id;
+            const { websiteId } = c.req.valid("param");
+
+            const website = await getWebsiteById(websiteId);
+            if (!website) return c.json({ error: "Website not found" }, 404);
+            if (website.userId !== userId) return c.json({ error: "Permission denied" }, 403);
+
+            await db.delete(WebsiteTable)
+                .where(eq(WebsiteTable.id, websiteId));
+
+            return c.json({ data: { success: "Website deleted" } });
         }
     );
 

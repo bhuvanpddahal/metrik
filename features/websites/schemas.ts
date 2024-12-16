@@ -9,3 +9,7 @@ export const addSiteSchema = z.object({
 });
 
 export type AddSitePayload = z.infer<typeof addSiteSchema>;
+
+export const websiteIdSchema = z.object({
+    websiteId: z.string()
+});

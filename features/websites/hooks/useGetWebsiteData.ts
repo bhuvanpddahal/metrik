@@ -11,9 +11,9 @@ export const useGetWebsiteData = (
     const { isInitialLoading } = useGetWebsiteDomain(websiteId);
 
     const query = useQuery({
-        queryKey: ["websites", websiteId, { interval }],
+        queryKey: ["websites", websiteId, "data", { interval }],
         queryFn: async () => {
-            const response = await client.api.websites[":websiteId"].$get({
+            const response = await client.api.websites[":websiteId"].data.$get({
                 param: { websiteId },
                 query: { interval }
             });

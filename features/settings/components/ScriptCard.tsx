@@ -1,9 +1,17 @@
 import Code from "@/components/Code";
 import SettingsCard from "./SettingsCard";
 
-const ScriptCard = () => {
+interface ScriptCardProps {
+    websiteId: string;
+    domain: string;
+}
+
+const ScriptCard = ({
+    websiteId,
+    domain
+}: ScriptCardProps) => {
     const script =
-        `<script defer data-website-id="${"websiteId"}" data-domain="${"domain"}" src="${"scriptSrc"}"></script>`;
+        `<script defer data-website-id="${websiteId}" data-domain="${domain}" src="${"scriptSrc"}"></script>`;
 
     return (
         <SettingsCard

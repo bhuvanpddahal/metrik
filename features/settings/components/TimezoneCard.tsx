@@ -19,14 +19,30 @@ import {
 } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
 import { type TimezonePayload, timezoneSchema } from "../schemas";
+import { useUpdateTimezone } from "@/features/websites/hooks/useUpdateTimezone";
 
-const TimezoneCard = () => {
+interface TimezoneCardProps {
+    websiteId: string;
+    timezone: string;
+}
+
+const TimezoneCard = ({
+    websiteId,
+    timezone
+}: TimezoneCardProps) => {
+    const { mutate: updateTimezone, isPending } = useUpdateTimezone();
+
     const form = useForm<TimezonePayload>({
         resolver: zodResolver(timezoneSchema),
-        defaultValues: { timezone: "" }
+        defaultValues: { timezone }
     });
 
-    const onSubmit = () => { };
+    const onSubmit = (payload: TimezonePayload) => {
+        updateTimezone({
+            param: { websiteId },
+            json: payload
+        });
+    };
 
     return (
         <SettingsCard
@@ -46,7 +62,7 @@ const TimezoneCard = () => {
                                 <Select
                                     defaultValue={field.value}
                                     onValueChange={field.onChange}
-                                // disabled={isPending}
+                                    disabled={isPending}
                                 >
                                     <FormControl>
                                         <SelectTrigger className="shadow-none">
@@ -67,9 +83,9 @@ const TimezoneCard = () => {
                         type="submit"
                         variant="outline"
                         className="flex ml-auto shadow-none"
-                    // isLoading={isPending}
+                        isLoading={isPending}
                     >
-                        Save
+                        {isPending ? "Saving" : "Save"}
                     </Button>
                 </form>
             </Form>
