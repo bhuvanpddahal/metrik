@@ -19,7 +19,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <head>
-                <script defer data-website-id="0e91aefd-5046-430e-87bb-4b176cdca555" data-domain="apex-guard.vercel.app" src="http://localhost:3000/js/script.js"></script>
+                <script defer data-website-id="f36748a5-9e29-449b-8f5b-0393d30cca66" data-domain="metrik-one.vercel.app" src="http://localhost:3000/js/script.js"></script>
             </head>
             <body className={`${Fustat.className} antialiased`}>
                 <Providers>

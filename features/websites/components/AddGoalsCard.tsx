@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { useState } from "react";
 import { ChevronDownIcon, PlusIcon } from "lucide-react";
 
 import AddGoalsCardLoader from "./skeletons/AddGoalsCardLoader";
@@ -14,8 +16,8 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from "@/components/ui/DropdownMenu";
-import { Button } from "@/components/ui/Button";
 import { useGetWebsiteData } from "../hooks/useGetWebsiteData";
+import { Button, buttonVariants } from "@/components/ui/Button";
 import { useGetWebsiteDomain } from "../hooks/useGetWebsiteDomain";
 import { useWebsiteDetailsSearchParams } from "../hooks/useWebsiteDetailsSearchParams";
 
@@ -29,35 +31,43 @@ const AddGoalsCard = (
     const { interval } = useWebsiteDetailsSearchParams();
     const { isError } = useGetWebsiteData(websiteId, interval);
     const { isInitialLoading } = useGetWebsiteDomain(websiteId);
+    const [activeMenu, setActiveMenu] = useState<"goal" | "journey">("goal");
 
     if (isInitialLoading) return <AddGoalsCardLoader />
     if (isError) return null;
 
     return (
-        <Card className="md:col-span-2">
+        <Card className="md:col-span-2 overflow-hidden">
             <CardHeader className="p-1 border-b">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="w-fit pr-2 font-semibold">
-                            Goal
+                        <Button variant="ghost" className="w-fit pr-2 font-semibold capitalize">
+                            {activeMenu}
                             <ChevronDownIcon className="size-4 text-muted-foreground" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">
-                        <DropdownMenuItem>Goal</DropdownMenuItem>
-                        <DropdownMenuItem>Journey</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setActiveMenu("goal")}>Goal</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setActiveMenu("journey")}>Journey</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </CardHeader>
-            <CardContent className="h-96">
-                <div className="h-full flex flex-col items-center justify-center gap-y-3">
+            <CardContent className="relative h-96">
+                <div className="absolute inset-0 bg-logo opacity-5 pointer-events-none" />
+                <div className="relative h-full flex flex-col items-center justify-center gap-y-3">
                     <p className="font-semibold">
-                        Track what visitors do on your site
+                        {activeMenu === "goal"
+                            ? "Track what visitors do on your site"
+                            : "Discover what visitors do before completing a goal"
+                        }
                     </p>
-                    <Button>
+                    <Link
+                        href={`/dashboard/${websiteId}/settings?tab=goals`}
+                        className={buttonVariants()}
+                    >
                         <PlusIcon className="size-3" />
                         Add goals
-                    </Button>
+                    </Link>
                 </div>
             </CardContent>
         </Card >

@@ -168,7 +168,7 @@
         }
 
         if (specialEventTypes.includes(eventName)) {
-            trackCustomEvent(eventName, { email: eventData.email });
+            trackCustomEvent(eventName, { ...eventData });
         } else {
             trackCustomEvent("custom", { eventName, ...eventData });
         }

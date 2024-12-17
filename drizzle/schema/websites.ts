@@ -1,4 +1,5 @@
 import {
+    pgEnum,
     pgTable,
     text,
     timestamp,
@@ -7,9 +8,15 @@ import {
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
+import timezones from "@/features/websites/timezones.json";
 import { UserTable } from "./users";
+import { EventTable } from "./events";
 import { SessionTable } from "./sessions";
 import { PageViewTable } from "./page-views";
+
+const timezoneKeys = Object.keys(timezones);
+
+export const timezoneEnum = pgEnum("timezone", [timezoneKeys[0], ...timezoneKeys.slice(1)]);
 
 export const WebsiteTable = pgTable(
     "websites",
@@ -18,8 +25,8 @@ export const WebsiteTable = pgTable(
         userId: uuid("user_id")
             .notNull()
             .references(() => UserTable.id, { onDelete: "cascade" }),
-        domain: text("domain").notNull(),
-        timezone: text("timezone").notNull(),
+        domain: text("domain").notNull().unique(),
+        timezone: timezoneEnum().notNull(),
         addedAt: timestamp("added_at", { withTimezone: true })
             .notNull()
             .defaultNow(),
@@ -42,6 +49,7 @@ export const websiteRelations = relations(
             references: [UserTable.id]
         }),
         pageViews: many(PageViewTable),
-        sessions: many(SessionTable)
+        sessions: many(SessionTable),
+        events: many(EventTable)
     })
 );

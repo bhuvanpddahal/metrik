@@ -6,6 +6,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
+import { EventTable } from "./events";
 import { WebsiteTable } from "./websites";
 import { PageViewTable } from "./page-views";
 
@@ -25,6 +26,7 @@ export const sessionRelations = relations(
     SessionTable,
     ({ one, many }) => ({
         website: one(WebsiteTable),
-        pageViews: many(PageViewTable)
+        pageViews: many(PageViewTable),
+        events: many(EventTable)
     })
 );

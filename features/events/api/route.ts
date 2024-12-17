@@ -6,6 +6,7 @@ import { zValidator } from "@hono/zod-validator";
 
 import { db } from "@/drizzle/db";
 import { eventDataSchema } from "../schemas";
+import { EventTable } from "@/drizzle/schema/events";
 import { SessionTable } from "@/drizzle/schema/sessions";
 import { PageViewTable } from "@/drizzle/schema/page-views";
 
@@ -24,10 +25,11 @@ const app = new Hono()
                 location,
                 viewport,
                 visitorId,
-                sessionId
+                sessionId,
+                extraData
             } = c.req.valid("json");
 
-            if (!href.includes(domain)) {
+            if (!href.includes(domain)) { // TODO: Match the requesting url with the href
                 return c.json({ error: "Domain mismatch" }, 400);
             }
 
@@ -75,7 +77,16 @@ const app = new Hono()
                     screenResolution: `${viewport.width} x ${viewport.height}`,
                     timestamp: timestampDate
                 });
-            } else { }
+            } else {
+                await db.insert(EventTable).values({
+                    type,
+                    websiteId,
+                    visitorId,
+                    sessionId,
+                    extraData,
+                    timestamp: timestampDate
+                });
+            }
 
             return c.json({ success: true });
         }

@@ -1,6 +1,7 @@
 import {
+    jsonb,
+    pgEnum,
     pgTable,
-    text,
     timestamp,
     uuid
 } from "drizzle-orm/pg-core";
@@ -9,8 +10,11 @@ import { relations } from "drizzle-orm";
 import { WebsiteTable } from "./websites";
 import { SessionTable } from "./sessions";
 
-export const PageViewTable = pgTable("page_views", {
+export const eventTypeEnum = pgEnum("type", ["signup", "payment", "custom"]);
+
+export const EventTable = pgTable("events", {
     id: uuid("id").primaryKey().defaultRandom(),
+    type: eventTypeEnum().notNull(),
     websiteId: uuid("website_id")
         .notNull()
         .references(() => WebsiteTable.id, { onDelete: "cascade" }),
@@ -18,28 +22,20 @@ export const PageViewTable = pgTable("page_views", {
     sessionId: uuid("session_id")
         .notNull()
         .references(() => SessionTable.id, { onDelete: "cascade" }),
-    page: text("page").notNull(),
-    referrer: text("referrer"),
-    country: text("country").notNull(),
-    region: text("region").notNull(),
-    city: text("city").notNull(),
-    browser: text("browser").notNull(),
-    operatingSystem: text("operating_system").notNull(),
-    device: text("device").notNull(),
-    screenResolution: text("screen_resolution").notNull(),
+    extraData: jsonb("extra_data").default("{}"),
     timestamp: timestamp("timestamp", { withTimezone: true })
         .notNull()
 });
 
-export const pageViewRelations = relations(
-    PageViewTable,
+export const eventRelations = relations(
+    EventTable,
     ({ one }) => ({
         website: one(WebsiteTable, {
-            fields: [PageViewTable.websiteId],
+            fields: [EventTable.websiteId],
             references: [WebsiteTable.id]
         }),
         session: one(SessionTable, {
-            fields: [PageViewTable.sessionId],
+            fields: [EventTable.sessionId],
             references: [SessionTable.id]
         })
     })

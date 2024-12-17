@@ -75,10 +75,7 @@ const app = new Hono()
                     .query
                     .WebsiteTable
                     .findFirst({
-                        where: and(
-                            eq(WebsiteTable.userId, userId),
-                            eq(WebsiteTable.domain, domain)
-                        )
+                        where: eq(WebsiteTable.domain, domain)
                     });
                 if (existingWebsiteWithSameDomain) {
                     return c.json({
