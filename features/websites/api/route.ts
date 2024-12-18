@@ -7,6 +7,7 @@ import {
     gte,
     inArray,
     lte,
+    ne,
     SQL,
     sql
 } from "drizzle-orm";
@@ -214,7 +215,7 @@ const app = new Hono()
         }
     )
     .get(
-        "/:websiteId/domain",
+        "/:websiteId/header",
         verifyAuth(),
         zValidator("param", websiteIdSchema),
         async (c) => {
@@ -226,7 +227,20 @@ const app = new Hono()
             if (!website) return c.json({ error: "Website not found" }, 404);
             if (website.userId !== userId) return c.json({ error: "Permission denied" }, 403);
 
-            return c.json({ data: { domain: website.domain } });
+            const otherWebsites = await db
+                .select({
+                    id: WebsiteTable.id,
+                    domain: WebsiteTable.domain
+                })
+                .from(WebsiteTable)
+                .where(and(
+                    eq(WebsiteTable.userId, userId),
+                    ne(WebsiteTable.id, websiteId)
+                ))
+                .orderBy(desc(WebsiteTable.addedAt))
+                .limit(10);
+
+            return c.json({ data: { domain: website.domain, otherWebsites } });
         }
     )
     .get(

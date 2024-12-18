@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/Skeleton";
 
-const WebsiteDetailsTitleLoader = () => {
+const WebsiteDetailsHeaderLoader = () => {
     return (
         <div className="flex items-center justify-between">
             <div className="flex items-center gap-x-3">
@@ -12,4 +12,4 @@ const WebsiteDetailsTitleLoader = () => {
     );
 };
 
-export default WebsiteDetailsTitleLoader;
+export default WebsiteDetailsHeaderLoader;

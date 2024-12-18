@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 
 import Hint from "@/components/Hint";
 import WebsiteAvatar from "@/features/websites/components/WebsiteAvatar";
-import WebsiteDetailsTitleLoader from "./skeletons/WebsiteDetailsTitleLoader";
+import WebsiteDetailsHeaderLoader from "./skeletons/WebsiteDetailsHeaderLoader";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -26,21 +26,21 @@ import {
     YEAR_CHART_INTERVALS
 } from "@/features/websites/constants";
 import { Button, buttonVariants } from "@/components/ui/Button";
-import { useGetWebsiteDomain } from "@/features/websites/hooks/useGetWebsiteDomain";
+import { useGetWebsiteHeader } from "@/features/websites/hooks/useGetWebsiteHeader";
 import { useWebsiteDetailsSearchParams } from "@/features/websites/hooks/useWebsiteDetailsSearchParams";
 
-interface WebsiteDetailsTitleProps {
+interface WebsiteDetailsHeaderProps {
     websiteId: string;
 }
 
-const WebsiteDetailsTitle = (
-    { websiteId }: WebsiteDetailsTitleProps
+const WebsiteDetailsHeader = (
+    { websiteId }: WebsiteDetailsHeaderProps
 ) => {
     const router = useRouter();
-    const { isLoading, data } = useGetWebsiteDomain(websiteId);
+    const { isLoading, data } = useGetWebsiteHeader(websiteId);
     const { interval, setInterval } = useWebsiteDetailsSearchParams();
 
-    if (isLoading) return <WebsiteDetailsTitleLoader />
+    if (isLoading) return <WebsiteDetailsHeaderLoader />
     if (!data) return (
         <div className="h-9 text-center text-destructive font-medium">
             Failed to fetch website domain
@@ -64,6 +64,20 @@ const WebsiteDetailsTitle = (
                         <DropdownMenuItem onClick={() => router.push(`/dashboard/${websiteId}/settings`)}>
                             Site settings
                         </DropdownMenuItem>
+                        {data.otherWebsites.length > 0 && (
+                            <>
+                                <DropdownMenuSeparator />
+                                {data.otherWebsites.map((website) => (
+                                    <DropdownMenuItem
+                                        key={website.id}
+                                        onClick={() => router.push(`/dashboard/${website.id}?interval=${interval}`)}
+                                    >
+                                        <WebsiteAvatar domain={website.domain} className="size-6 border-none" />
+                                        {website.domain}
+                                    </DropdownMenuItem>
+                                ))}
+                            </>
+                        )}
                     </DropdownMenuContent>
                 </DropdownMenu>
                 <DropdownMenu>
@@ -129,4 +143,4 @@ const WebsiteDetailsTitle = (
     );
 };
 
-export default WebsiteDetailsTitle;
+export default WebsiteDetailsHeader;

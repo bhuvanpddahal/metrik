@@ -1,14 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { client } from "@/lib/rpc";
-import { useGetWebsiteDomain } from "./useGetWebsiteDomain";
+import { useGetWebsiteHeader } from "./useGetWebsiteHeader";
 import type { OverviewChartIntervalKey } from "../constants";
 
 export const useGetWebsiteData = (
     websiteId: string,
     interval: OverviewChartIntervalKey
 ) => {
-    const { isInitialLoading } = useGetWebsiteDomain(websiteId);
+    const { isInitialLoading } = useGetWebsiteHeader(websiteId);
 
     const query = useQuery({
         queryKey: ["websites", websiteId, "data", { interval }],

@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/DropdownMenu";
 import { useGetWebsiteData } from "../hooks/useGetWebsiteData";
 import { Button, buttonVariants } from "@/components/ui/Button";
-import { useGetWebsiteDomain } from "../hooks/useGetWebsiteDomain";
+import { useGetWebsiteHeader } from "../hooks/useGetWebsiteHeader";
 import { useWebsiteDetailsSearchParams } from "../hooks/useWebsiteDetailsSearchParams";
 
 interface AddGoalsCardProps {
@@ -30,7 +30,7 @@ const AddGoalsCard = (
 ) => {
     const { interval } = useWebsiteDetailsSearchParams();
     const { isError } = useGetWebsiteData(websiteId, interval);
-    const { isInitialLoading } = useGetWebsiteDomain(websiteId);
+    const { isInitialLoading } = useGetWebsiteHeader(websiteId);
     const [activeMenu, setActiveMenu] = useState<"goal" | "journey">("goal");
 
     if (isInitialLoading) return <AddGoalsCardLoader />

@@ -9,19 +9,19 @@ import WebsiteOverviewCard from "@/features/websites/components/WebsiteOverviewC
 import DistributionCardLoader from "@/features/websites/components/skeletons/DistributionCardLoader";
 import WebsiteOverviewCardLoader from "@/features/websites/components/skeletons/WebsiteOverviewCardLoader";
 import { useGetWebsiteData } from "@/features/websites/hooks/useGetWebsiteData";
-import { useGetWebsiteDomain } from "@/features/websites/hooks/useGetWebsiteDomain";
+import { useGetWebsiteHeader } from "@/features/websites/hooks/useGetWebsiteHeader";
 import { useWebsiteDetailsSearchParams } from "@/features/websites/hooks/useWebsiteDetailsSearchParams";
 
-interface WebsiteDetailsPageDataProps {
+interface WebsiteDetailsDataProps {
     websiteId: string;
 }
 
-const WebsiteDetailsPageData = (
-    { websiteId }: WebsiteDetailsPageDataProps
+const WebsiteDetailsData = (
+    { websiteId }: WebsiteDetailsDataProps
 ) => {
     const { interval } = useWebsiteDetailsSearchParams();
     const { isLoading: isLoadingData, data } = useGetWebsiteData(websiteId, interval);
-    const { isInitialLoading: isInitialLoadingDomain } = useGetWebsiteDomain(websiteId);
+    const { isInitialLoading: isInitialLoadingDomain } = useGetWebsiteHeader(websiteId);
 
     if (isInitialLoadingDomain || isLoadingData) return (
         <>
@@ -69,4 +69,4 @@ const WebsiteDetailsPageData = (
     );
 };
 
-export default WebsiteDetailsPageData;
+export default WebsiteDetailsData;
