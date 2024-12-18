@@ -3,18 +3,20 @@ import { ArrowLeftIcon } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/Button";
 
-interface BackToDashboardButtonProps {
-    btnText?: string;
+interface BackButtonProps {
+    href: string;
+    btnText: string;
     className?: string;
 }
 
-const BackToDashboardButton = ({
-    btnText = "Dashboard",
+const BackButton = ({
+    href,
+    btnText,
     className = ""
-}: BackToDashboardButtonProps) => {
+}: BackButtonProps) => {
     return (
         <Link
-            href="/dashboard"
+            href={href}
             className={buttonVariants({ variant: "outline", className })}
         >
             <ArrowLeftIcon className="size-3" />
@@ -23,4 +25,4 @@ const BackToDashboardButton = ({
     );
 };
 
-export default BackToDashboardButton;
+export default BackButton;

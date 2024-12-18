@@ -1,3 +1,4 @@
+import { signOut } from "@hono/auth-js/react";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { MdDesktopWindows } from "react-icons/md";
 import { LogOutIcon, Trash2Icon } from "lucide-react";
@@ -16,8 +17,11 @@ import {
     SelectValue
 } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
+import { useDeleteAccountModal } from "@/features/users/hooks/useDeleteAccountModal";
 
 const ThemeSwitcher = () => {
+    const { open } = useDeleteAccountModal();
+
     return (
         <div className="max-w-[31.25rem] w-full">
             <Card className="w-full">
@@ -53,11 +57,11 @@ const ThemeSwitcher = () => {
                 </CardContent>
             </Card>
             <div className="text-right space-x-2 mt-4">
-                <Button variant="destructive">
+                <Button variant="destructive" onClick={() => signOut()}>
                     <LogOutIcon className="size-4" />
                     Logout
                 </Button>
-                <Button variant="destructive">
+                <Button variant="destructive" onClick={open}>
                     <Trash2Icon className="size-4" />
                     Delete
                 </Button>

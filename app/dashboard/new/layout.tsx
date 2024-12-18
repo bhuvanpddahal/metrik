@@ -1,5 +1,5 @@
-import BackToDashboardButton from "../_components/BackToDashboardButton";
 import AddSiteProgress from "@/features/websites/components/AddSiteProgress";
+import BackButton from "../_components/BackButton";
 
 interface NewWebsiteLayoutProps {
     children: React.ReactNode;
@@ -10,7 +10,7 @@ const NewWebsiteLayout = (
 ) => {
     return (
         <div className="max-w-lg w-full mx-auto py-6">
-            <BackToDashboardButton />
+            <BackButton href="/dashboard" btnText="Dashboard" />
             <AddSiteProgress />
             {children}
         </div>

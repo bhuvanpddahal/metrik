@@ -1,18 +1,8 @@
 "use client";
 
+import { navButtons } from "../constants";
 import { Button } from "@/components/ui/Button";
 import { useDashboardSettingsSearchParams } from "@/features/settings/hooks/useDashboardSettingsSearchParams";
-
-const navButtons = [
-    {
-        label: "General",
-        value: "general"
-    },
-    {
-        label: "More",
-        value: "more"
-    }
-] as const;
 
 const NavButtons = () => {
     const { tab, setTab } = useDashboardSettingsSearchParams();

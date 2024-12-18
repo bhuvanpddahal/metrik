@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import { InferRequestType, InferResponseType } from "hono";
+import type { InferRequestType, InferResponseType } from "hono";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { client } from "@/lib/rpc";
@@ -7,7 +7,7 @@ import { useToast } from "@/hooks/useToast";
 import { useDeleteWebsiteModal } from "./useDeleteWebsiteModal";
 
 type RequestType = InferRequestType<typeof client.api.websites[":websiteId"]["$delete"]>;
-type ResponseType = InferResponseType<typeof client.api.websites[":websiteId"]["$delete"], 200>;
+type ResponseType = InferResponseType<typeof client.api.websites[":websiteId"]["$delete"], 204>;
 
 export const useDeleteWebsite = () => {
     const router = useRouter();
@@ -22,7 +22,10 @@ export const useDeleteWebsite = () => {
     >({
         mutationFn: async ({ param }) => {
             const response = await client.api.websites[":websiteId"].$delete({ param });
-            if (!response.ok) throw new Error("Failed to delete website");
+            if (!response.ok) {
+                const parsedResponse = await response.json();
+                throw new Error(parsedResponse.error);
+            }
 
             return await response.json();
         },
