@@ -18,11 +18,19 @@ const Logo = ({ className = "" }: LogoProps) => {
                 priority
             />
             <Image
-                src="/logo.svg"
+                src="/logo-light.svg"
                 alt="Metrik Logo"
                 width={108}
                 height={24}
-                className={cn("h-8 w-auto hidden sm:inline-block", className)}
+                className={cn("h-8 w-auto hidden sm:inline-block dark:hidden", className)}
+                priority
+            />
+            <Image
+                src="/logo-dark.svg"
+                alt="Metrik Logo"
+                width={108}
+                height={24}
+                className={cn("h-8 w-auto hidden dark:sm:inline-block", className)}
                 priority
             />
         </>

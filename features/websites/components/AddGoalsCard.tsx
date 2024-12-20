@@ -53,7 +53,7 @@ const AddGoalsCard = (
                 </DropdownMenu>
             </CardHeader>
             <CardContent className="relative h-96">
-                <div className="absolute inset-0 bg-logo opacity-5 pointer-events-none" />
+                <div className="absolute inset-0 bg-logo opacity-5 pointer-events-none dark:hidden" />
                 <div className="relative h-full flex flex-col items-center justify-center gap-y-3">
                     <p className="font-semibold">
                         {activeMenu === "goal"

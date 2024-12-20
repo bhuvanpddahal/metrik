@@ -20,9 +20,9 @@ const GoalsNavContentLoader = () => {
             <TabsContent value="standard">
                 <div>
                     <div className="py-[0.1875rem] space-y-1.5">
-                        <Skeleton className="h-3.5 w-full bg-slate-50 rounded-sm" />
-                        <Skeleton className="h-3.5 w-full bg-slate-50 rounded-sm" />
-                        <Skeleton className="h-3.5 max-w-[25.32rem] w-full bg-slate-50 rounded-sm" />
+                        <Skeleton className="h-3.5 w-full bg-slate-50 rounded-sm dark:bg-card" />
+                        <Skeleton className="h-3.5 w-full bg-slate-50 rounded-sm dark:bg-card" />
+                        <Skeleton className="h-3.5 max-w-[25.32rem] w-full bg-slate-50 rounded-sm dark:bg-card" />
                     </div>
                     <SettingsCard
                         cardClassName="mt-6"
@@ -41,7 +41,7 @@ const GoalsNavContentLoader = () => {
                             </>
                         )}
                     >
-                        <Skeleton className="h-16 w-full" />
+                        <Skeleton className="h-10 w-full" />
                     </SettingsCard>
                 </div>
             </TabsContent>

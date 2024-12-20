@@ -23,9 +23,9 @@ const GeneralNavContentLoader = () => {
                 title="Analytics script"
                 description="Paste this snippet in the <head> of your website."
             >
-                <Skeleton className="h-16 w-full" />
+                <Skeleton className="h-[5.5rem] w-full" />
             </SettingsCard>
-            <Skeleton className="h-9 w-[4.576rem] bg-slate-50 ml-auto" />
+            <Skeleton className="h-9 w-[4.576rem] bg-slate-50 ml-auto dark:bg-card" />
         </div>
     );
 };

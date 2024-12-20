@@ -141,12 +141,13 @@ const app = new Hono()
                 .from(WebsiteTable)
                 .leftJoin(
                     PageViewTable,
-                    eq(PageViewTable.websiteId, WebsiteTable.id)
+                    and(
+                        eq(PageViewTable.websiteId, WebsiteTable.id),
+                        gte(PageViewTable.timestamp, startDate),
+                        lte(PageViewTable.timestamp, currentDate)
+                    )
                 )
-                .where(and(
-                    eq(WebsiteTable.userId, userId),
-                    gte(PageViewTable.timestamp, startDate)
-                ))
+                .where(eq(WebsiteTable.userId, userId))
                 .groupBy(WebsiteTable.id)
                 .orderBy(desc(WebsiteTable.addedAt));
 
@@ -159,7 +160,8 @@ const app = new Hono()
                 .from(PageViewTable)
                 .where(and(
                     inArray(PageViewTable.websiteId, websiteIds),
-                    gte(PageViewTable.timestamp, startDate)
+                    gte(PageViewTable.timestamp, startDate),
+                    lte(PageViewTable.timestamp, currentDate)
                 ));
 
             const allWebsitesChartData = await Promise.all(
@@ -173,8 +175,9 @@ const app = new Hono()
                             sql`GENERATE_SERIES(${startDate}, ${currentDate}, '1 hour'::interval) as series`
                         )
                         .leftJoin(PageViewTable, ({ date }) => and(
-                            eq(PageViewTable.websiteId, websiteIds[0]),
+                            eq(PageViewTable.websiteId, websiteId),
                             gte(PageViewTable.timestamp, startDate),
+                            lte(PageViewTable.timestamp, currentDate),
                             eq(sqlDate.extractDate(PageViewTable.timestamp), sqlDate.extractDate(date)),
                             eq(sqlDate.extractHour(PageViewTable.timestamp), sqlDate.extractHour(date))
                         ))
@@ -195,7 +198,7 @@ const app = new Hono()
                 return { ...website, chartData: websiteChartData?.chartData };
             });
 
-            return c.json({ data: { websites: websitesWithChartData, visitorsCount } });
+            return c.json({ data: { websites: websitesWithChartData, visitorsCount } }, 200);
         }
     )
     .get(
@@ -211,7 +214,7 @@ const app = new Hono()
             if (!website) return c.json({ error: "Website not found" }, 404);
             if (website.userId !== userId) return c.json({ error: "Permission denied" }, 403);
 
-            return c.json({ data: { website } });
+            return c.json({ data: { website } }, 200);
         }
     )
     .get(
@@ -240,7 +243,7 @@ const app = new Hono()
                 .orderBy(desc(WebsiteTable.addedAt))
                 .limit(10);
 
-            return c.json({ data: { domain: website.domain, otherWebsites } });
+            return c.json({ data: { domain: website.domain, otherWebsites } }, 200);
         }
     )
     .get(
@@ -360,7 +363,7 @@ const app = new Hono()
                     browserChartData,
                     operatingSystemChartData
                 }
-            });
+            }, 200);
         }
     )
     .patch(
@@ -382,7 +385,7 @@ const app = new Hono()
                 .set({ domain })
                 .where(eq(WebsiteTable.id, websiteId));
 
-            return c.json({ data: { success: "Website domain updated" } });
+            return c.json({ data: { success: "Website domain updated" } }, 200);
         }
     )
     .patch(
@@ -404,7 +407,7 @@ const app = new Hono()
                 .set({ timezone })
                 .where(eq(WebsiteTable.id, websiteId));
 
-            return c.json({ data: { success: "Website timezone updated" } });
+            return c.json({ data: { success: "Website timezone updated" } }, 200);
         }
     )
     .delete(

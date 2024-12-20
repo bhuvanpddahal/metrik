@@ -23,8 +23,8 @@ const Code = ({
     };
 
     return (
-        <div className="relative bg-accent-foreground px-3.5 py-2 rounded-md">
-            <code className="select-all font-mono text-accent text-xs font-semibold">
+        <div className="relative bg-accent-foreground px-3.5 py-2 rounded-md dark:bg-accent">
+            <code className="select-all font-mono text-accent text-xs font-semibold dark:text-accent-foreground">
                 {code}
             </code>
             <Button

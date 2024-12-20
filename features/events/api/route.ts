@@ -88,7 +88,7 @@ const app = new Hono()
                 });
             }
 
-            return c.json({ success: true });
+            return c.json({ success: true }, 200);
         }
     );
 

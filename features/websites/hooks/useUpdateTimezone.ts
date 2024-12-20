@@ -1,4 +1,4 @@
-import { InferRequestType, InferResponseType } from "hono";
+import type { InferRequestType, InferResponseType } from "hono";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { client } from "@/lib/rpc";
@@ -18,7 +18,10 @@ export const useUpdateTimezone = () => {
     >({
         mutationFn: async ({ param, json }) => {
             const response = await client.api.websites[":websiteId"].timezone.$patch({ param, json });
-            if (!response.ok) throw new Error("Failed to update timezone");
+            if (!response.ok) {
+                const parsedResponse = await response.json();
+                throw new Error(parsedResponse.error);
+            }
 
             return await response.json();
         },

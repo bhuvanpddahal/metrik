@@ -1,3 +1,4 @@
+import { useTheme } from "next-themes";
 import { signOut } from "@hono/auth-js/react";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { MdDesktopWindows } from "react-icons/md";
@@ -20,6 +21,7 @@ import { Button } from "@/components/ui/Button";
 import { useDeleteAccountModal } from "@/features/users/hooks/useDeleteAccountModal";
 
 const ThemeSwitcher = () => {
+    const { theme, setTheme } = useTheme();
     const { open } = useDeleteAccountModal();
 
     return (
@@ -29,7 +31,7 @@ const ThemeSwitcher = () => {
                     <CardTitle>Theme</CardTitle>
                 </CardHeader>
                 <CardContent className="pt-5">
-                    <Select>
+                    <Select value={theme} onValueChange={setTheme}>
                         <SelectTrigger className="w-full shadow-none">
                             <SelectValue placeholder="Select a theme" />
                         </SelectTrigger>
