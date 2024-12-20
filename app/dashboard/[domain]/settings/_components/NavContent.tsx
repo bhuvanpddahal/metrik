@@ -1,7 +1,7 @@
 import GoalsNavContent from "./GoalsNavContent";
 import GeneralNavContent from "./GeneralNavContent";
-import ReportsNavContent from "./ReportsNavContent";
 import { useWebsiteSettingsSearchParams } from "@/features/settings/hooks/useWebsiteSettingsSearchParams";
+import ReportsNavContent from "./ReportsNavContent";
 
 interface NavContentProps {
     websiteId: string;

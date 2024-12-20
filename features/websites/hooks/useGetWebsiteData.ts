@@ -5,16 +5,16 @@ import { useGetWebsiteHeader } from "./useGetWebsiteHeader";
 import type { OverviewChartIntervalKey } from "../constants";
 
 export const useGetWebsiteData = (
-    websiteId: string,
+    domain: string,
     interval: OverviewChartIntervalKey
 ) => {
-    const { isInitialLoading } = useGetWebsiteHeader(websiteId);
+    const { isInitialLoading } = useGetWebsiteHeader(domain);
 
     const query = useQuery({
-        queryKey: ["websites", websiteId, "data", { interval }],
+        queryKey: ["websites", domain, "data", { interval }],
         queryFn: async () => {
-            const response = await client.api.websites[":websiteId"].data.$get({
-                param: { websiteId },
+            const response = await client.api.websites[":domain"].data.$get({
+                param: { domain },
                 query: { interval }
             });
             if (!response.ok) {

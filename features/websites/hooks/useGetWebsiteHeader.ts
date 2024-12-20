@@ -2,11 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 
 import { client } from "@/lib/rpc";
 
-export const useGetWebsiteHeader = (websiteId: string) => {
+export const useGetWebsiteHeader = (domain: string) => {
     const query = useQuery({
-        queryKey: ["websites", websiteId, "header"],
+        queryKey: ["websites", domain, "header"],
         queryFn: async () => {
-            const response = await client.api.websites[":websiteId"].header.$get({ param: { websiteId } });
+            const response = await client.api.websites[":domain"].header.$get({ param: { domain } });
             if (!response.ok) {
                 throw new Error("Failed to fetch website header");
             }

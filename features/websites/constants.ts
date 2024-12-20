@@ -170,6 +170,8 @@ export const OVERVIEW_CHART_INTERVALS = {
 } as const;
 
 export type OverviewChartIntervalKey = keyof typeof OVERVIEW_CHART_INTERVALS;
+export type OverviewChartIntervalLabel = (typeof OVERVIEW_CHART_INTERVALS)[OverviewChartIntervalKey]["label"];
+
 export const overviewChartIntervalsKeys = Object.keys(OVERVIEW_CHART_INTERVALS) as OverviewChartIntervalKey[];
 
 export const sqlDate = {

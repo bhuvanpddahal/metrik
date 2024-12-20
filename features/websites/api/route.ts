@@ -27,6 +27,7 @@ import {
     getChartData,
     getLiveVisitorsCount,
     getVisitorsCount,
+    getWebsiteByDomain,
     getWebsiteById,
     hasInstalledScript as hasInstalledScriptFn
 } from "../queries";
@@ -202,15 +203,15 @@ const app = new Hono()
         }
     )
     .get(
-        "/:websiteId",
+        "/:domain",
         verifyAuth(),
-        zValidator("param", websiteIdSchema),
+        zValidator("param", domainSchema),
         async (c) => {
             const authUser = c.get("authUser");
             const userId = authUser.session.user.id;
-            const { websiteId } = c.req.valid("param");
+            const { domain } = c.req.valid("param");
 
-            const website = await getWebsiteById(websiteId);
+            const website = await getWebsiteByDomain(domain);
             if (!website) return c.json({ error: "Website not found" }, 404);
             if (website.userId !== userId) return c.json({ error: "Permission denied" }, 403);
 
@@ -218,15 +219,15 @@ const app = new Hono()
         }
     )
     .get(
-        "/:websiteId/header",
+        "/:domain/header",
         verifyAuth(),
-        zValidator("param", websiteIdSchema),
+        zValidator("param", domainSchema),
         async (c) => {
             const authUser = c.get("authUser");
             const userId = authUser.session.user.id;
-            const { websiteId } = c.req.valid("param");
+            const { domain } = c.req.valid("param");
 
-            const website = await getWebsiteById(websiteId);
+            const website = await getWebsiteByDomain(domain);
             if (!website) return c.json({ error: "Website not found" }, 404);
             if (website.userId !== userId) return c.json({ error: "Permission denied" }, 403);
 
@@ -238,28 +239,28 @@ const app = new Hono()
                 .from(WebsiteTable)
                 .where(and(
                     eq(WebsiteTable.userId, userId),
-                    ne(WebsiteTable.id, websiteId)
+                    ne(WebsiteTable.id, website.id)
                 ))
                 .orderBy(desc(WebsiteTable.addedAt))
                 .limit(10);
 
-            return c.json({ data: { domain: website.domain, otherWebsites } }, 200);
+            return c.json({ data: { otherWebsites } }, 200);
         }
     )
     .get(
-        "/:websiteId/data",
+        "/:domain/data",
         verifyAuth(),
-        zValidator("param", websiteIdSchema),
+        zValidator("param", domainSchema),
         zValidator("query", z.object({
             interval: z.enum([overviewChartIntervalsKeys[0], ...overviewChartIntervalsKeys.slice(1)])
         })),
         async (c) => {
             const authUser = c.get("authUser");
             const userId = authUser.session.user.id;
-            const { websiteId } = c.req.valid("param");
+            const { domain } = c.req.valid("param");
             const { interval } = c.req.valid("query");
 
-            const website = await getWebsiteById(websiteId);
+            const website = await getWebsiteByDomain(domain);
             if (!website) return c.json({ error: "Website not found" }, 404);
             if (website.userId !== userId) return c.json({ error: "Permission denied" }, 403);
 
@@ -281,39 +282,39 @@ const app = new Hono()
             }
 
             const pageViewWherehereClause = and(
-                eq(PageViewTable.websiteId, websiteId),
+                eq(PageViewTable.websiteId, website.id),
                 gte(PageViewTable.timestamp, startDate),
                 lte(PageViewTable.timestamp, endDate)
             );
 
             let visitorsCountChangeInPercentage: number | null = null;
-            const visitorsCount = await getVisitorsCount(websiteId, startDate, endDate);
+            const visitorsCount = await getVisitorsCount(website.id, startDate, endDate);
             if (prevStartDate) {
-                const prevIntervalVisitorsCount = await getVisitorsCount(websiteId, prevStartDate, startDate);
+                const prevIntervalVisitorsCount = await getVisitorsCount(website.id, prevStartDate, startDate);
                 const visitorsCountChange = visitorsCount - prevIntervalVisitorsCount;
                 visitorsCountChangeInPercentage = prevIntervalVisitorsCount > 0
                     ? (visitorsCountChange / prevIntervalVisitorsCount) * 100 : null;
             }
 
             let bounceRateChangeInPercentage: number | null = null;
-            const bounceRate = await getBounceRate(websiteId, startDate, endDate);
+            const bounceRate = await getBounceRate(website.id, startDate, endDate);
             if (prevStartDate) {
-                const prevIntervalBounceRate = await getBounceRate(websiteId, prevStartDate, startDate);
+                const prevIntervalBounceRate = await getBounceRate(website.id, prevStartDate, startDate);
                 const bounceRateChange = bounceRate - prevIntervalBounceRate;
                 bounceRateChangeInPercentage = prevIntervalBounceRate > 0
                     ? (bounceRateChange / prevIntervalBounceRate) * 100 : null;
             }
 
             let averageSessionTimeChangeInPercentage: number | null = null;
-            const averageSessionTime = await getAverageSessionTime(websiteId, startDate, endDate);
+            const averageSessionTime = await getAverageSessionTime(website.id, startDate, endDate);
             if (prevStartDate) {
-                const prevIntervalAverageSessionTime = await getAverageSessionTime(websiteId, prevStartDate, startDate);
+                const prevIntervalAverageSessionTime = await getAverageSessionTime(website.id, prevStartDate, startDate);
                 const averageSessionTimeChange = averageSessionTime - prevIntervalAverageSessionTime;
                 averageSessionTimeChangeInPercentage = prevIntervalAverageSessionTime > 0
                     ? (averageSessionTimeChange / prevIntervalAverageSessionTime) * 100 : null;
             }
 
-            const liveVisitorsCount = await getLiveVisitorsCount(websiteId, endDate);
+            const liveVisitorsCount = await getLiveVisitorsCount(website.id, endDate);
 
             const pageViews = db.$with("pageViews").as(
                 db

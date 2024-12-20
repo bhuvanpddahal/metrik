@@ -13,15 +13,15 @@ import { useGetWebsiteHeader } from "@/features/websites/hooks/useGetWebsiteHead
 import { useWebsiteDetailsSearchParams } from "@/features/websites/hooks/useWebsiteDetailsSearchParams";
 
 interface WebsiteDetailsDataProps {
-    websiteId: string;
+    domain: string;
 }
 
 const WebsiteDetailsData = (
-    { websiteId }: WebsiteDetailsDataProps
+    { domain }: WebsiteDetailsDataProps
 ) => {
     const { interval } = useWebsiteDetailsSearchParams();
-    const { isLoading: isLoadingData, data } = useGetWebsiteData(websiteId, interval);
-    const { isInitialLoading: isInitialLoadingDomain } = useGetWebsiteHeader(websiteId);
+    const { isLoading: isLoadingData, data } = useGetWebsiteData(domain, interval);
+    const { isInitialLoading: isInitialLoadingDomain } = useGetWebsiteHeader(domain);
 
     if (isInitialLoadingDomain || isLoadingData) return (
         <>

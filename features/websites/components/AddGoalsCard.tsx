@@ -22,15 +22,15 @@ import { useGetWebsiteHeader } from "../hooks/useGetWebsiteHeader";
 import { useWebsiteDetailsSearchParams } from "../hooks/useWebsiteDetailsSearchParams";
 
 interface AddGoalsCardProps {
-    websiteId: string;
+    domain: string;
 }
 
 const AddGoalsCard = (
-    { websiteId }: AddGoalsCardProps
+    { domain }: AddGoalsCardProps
 ) => {
     const { interval } = useWebsiteDetailsSearchParams();
-    const { isError } = useGetWebsiteData(websiteId, interval);
-    const { isInitialLoading } = useGetWebsiteHeader(websiteId);
+    const { isError } = useGetWebsiteData(domain, interval);
+    const { isInitialLoading } = useGetWebsiteHeader(domain);
     const [activeMenu, setActiveMenu] = useState<"goal" | "journey">("goal");
 
     if (isInitialLoading) return <AddGoalsCardLoader />
@@ -62,7 +62,7 @@ const AddGoalsCard = (
                         }
                     </p>
                     <Link
-                        href={`/dashboard/${websiteId}/settings?tab=goals`}
+                        href={`/dashboard/${domain}/settings?tab=goals`}
                         className={buttonVariants()}
                     >
                         <PlusIcon className="size-3" />

@@ -8,19 +8,21 @@ import { Skeleton } from "@/components/ui/Skeleton";
 import { useGetWebsite } from "@/features/websites/hooks/useGetWebsite";
 
 interface WebsiteSettingsContentProps {
-    websiteId: string;
+    domain: string;
 }
 
 const WebsiteSettingsContent = (
-    { websiteId }: WebsiteSettingsContentProps
+    { domain }: WebsiteSettingsContentProps
 ) => {
-    const { isLoading, data } = useGetWebsite(websiteId);
+    const { isLoading, data } = useGetWebsite(domain);
 
     if (isLoading) return (
         <section>
-            <h1 className="flex items-center gap-x-2 lg:gap-x-2.5 text-xl lg:text-2xl font-bold">
+            <h1 className="flex items-center gap-x-1 lg:gap-x-1.5 text-xl lg:text-2xl font-bold">
                 Settings for
-                <Skeleton className="h-7 lg:h-8 w-40 lg:w-[11.5rem] bg-slate-50 rounded-sm dark:bg-card" />
+                <Skeleton className="bg-slate-50 text-transparent rounded-sm pointer-events-none select-none dark:bg-card">
+                    {domain}
+                </Skeleton>
             </h1>
             <div className="flex flex-col lg:flex-row gap-x-8 gap-y-5 mt-6">
                 <NavButtons />

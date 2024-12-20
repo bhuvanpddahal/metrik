@@ -18,6 +18,22 @@ import { db } from "@/drizzle/db";
 import { scriptSrc } from "./constants";
 import { PageViewTable, SessionTable } from "@/drizzle/schema";
 
+export const getWebsiteById = async (websiteId: string) => {
+    const website = await db.query.WebsiteTable.findFirst({
+        where: ({ id }, { eq }) => eq(id, websiteId)
+    });
+
+    return website;
+};
+
+export const getWebsiteByDomain = async (websiteDomain: string) => {
+    const website = await db.query.WebsiteTable.findFirst({
+        where: ({ domain }, { eq }) => eq(domain, websiteDomain)
+    });
+
+    return website;
+};
+
 export const hasInstalledScript = async (
     websiteId: string,
     domain: string
@@ -38,14 +54,6 @@ export const hasInstalledScript = async (
         console.error(error);
         return false;
     }
-};
-
-export const getWebsiteById = async (websiteId: string) => {
-    const website = await db.query.WebsiteTable.findFirst({
-        where: ({ id }, { eq }) => eq(id, websiteId)
-    });
-
-    return website;
 };
 
 export const getVisitorsCount = async (

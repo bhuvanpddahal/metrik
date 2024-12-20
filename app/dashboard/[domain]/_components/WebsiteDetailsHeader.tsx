@@ -30,20 +30,27 @@ import { useGetWebsiteHeader } from "@/features/websites/hooks/useGetWebsiteHead
 import { useWebsiteDetailsSearchParams } from "@/features/websites/hooks/useWebsiteDetailsSearchParams";
 
 interface WebsiteDetailsHeaderProps {
-    websiteId: string;
+    domain: string;
 }
 
 const WebsiteDetailsHeader = (
-    { websiteId }: WebsiteDetailsHeaderProps
+    { domain }: WebsiteDetailsHeaderProps
 ) => {
     const router = useRouter();
-    const { isLoading, data } = useGetWebsiteHeader(websiteId);
+    const { isLoading, data } = useGetWebsiteHeader(domain);
     const { interval, setInterval } = useWebsiteDetailsSearchParams();
 
-    if (isLoading) return <WebsiteDetailsHeaderLoader />
+    const activeIntervalLabel = OVERVIEW_CHART_INTERVALS[interval].label;
+
+    if (isLoading) return (
+        <WebsiteDetailsHeaderLoader
+            domain={domain}
+            intervalLabel={activeIntervalLabel}
+        />
+    );
     if (!data) return (
         <div className="h-9 text-center text-destructive font-medium">
-            Failed to fetch website domain
+            Failed to fetch website header
         </div>
     );
 
@@ -54,14 +61,14 @@ const WebsiteDetailsHeader = (
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="px-2">
                             <div className="flex items-center gap-x-2">
-                                <WebsiteAvatar domain={data.domain} className="size-6 border-none" />
-                                <p className="font-semibold leading-none tracking-tight">{data.domain}</p>
+                                <WebsiteAvatar domain={domain} className="size-6 border-none" />
+                                <p className="font-semibold leading-none tracking-tight">{domain}</p>
                             </div>
                             <ChevronDownIcon className="size-4 text-muted-foreground" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <DropdownMenuItem onClick={() => router.push(`/dashboard/${websiteId}/settings`)}>
+                        <DropdownMenuItem onClick={() => router.push(`/dashboard/${domain}/settings`)}>
                             Site settings
                         </DropdownMenuItem>
                         {data.otherWebsites.length > 0 && (
@@ -70,7 +77,7 @@ const WebsiteDetailsHeader = (
                                 {data.otherWebsites.map((website) => (
                                     <DropdownMenuItem
                                         key={website.id}
-                                        onClick={() => router.push(`/dashboard/${website.id}?interval=${interval}`)}
+                                        onClick={() => router.push(`/dashboard/${website.domain}${interval !== "today" ? `?interval=${interval}` : ""}`)}
                                     >
                                         <WebsiteAvatar domain={website.domain} className="size-6 border-none" />
                                         {website.domain}
@@ -83,7 +90,7 @@ const WebsiteDetailsHeader = (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="pr-2">
-                            {OVERVIEW_CHART_INTERVALS[interval].label}
+                            {activeIntervalLabel}
                             <ChevronDownIcon className="size-4 text-muted-foreground" />
                         </Button>
                     </DropdownMenuTrigger>
@@ -132,7 +139,7 @@ const WebsiteDetailsHeader = (
             </div>
             <Hint message="View the live website">
                 <Link
-                    href={`https://${data.domain}`}
+                    href={`https://${domain}`}
                     target="_blank"
                     className={buttonVariants({ variant: "outline", size: "icon" })}
                 >

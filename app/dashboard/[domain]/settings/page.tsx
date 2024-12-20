@@ -2,15 +2,15 @@ import WebsiteSettingsContent from "./_components/WebsiteSettingsContent";
 
 interface WebsiteSettingsPageProps {
     params: {
-        websiteId: string;
+        domain: string;
     };
 }
 
 const WebsiteSettingsPage = ({
-    params: { websiteId }
+    params: { domain }
 }: WebsiteSettingsPageProps) => {
     return (
-        <WebsiteSettingsContent websiteId={websiteId} />
+        <WebsiteSettingsContent domain={domain} />
     );
 };
 
