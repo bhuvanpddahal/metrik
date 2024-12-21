@@ -5,7 +5,7 @@ import {
     ChevronDownIcon,
     SquareArrowOutUpRightIcon
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 
 import Hint from "@/components/Hint";
 import WebsiteAvatar from "@/features/websites/components/WebsiteAvatar";

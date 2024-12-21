@@ -59,7 +59,8 @@ const config: Config = {
 			},
 			backgroundImage: {
 				waves: "url('/waves.svg')",
-				logo: "url('/logo.svg')"
+				"logo-light": "url('/logo-light.svg')",
+				"logo-dark": "url('/logo-dark.svg')"
 			},
 			keyframes: {
 				"accordion-down": {

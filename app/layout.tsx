@@ -1,3 +1,4 @@
+import NextTopLoader from "nextjs-toploader";
 import type { Metadata } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
@@ -16,12 +17,19 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const color = "hsl(var(--primary))";
+
     return (
         <html lang="en">
             <head>
                 <script defer data-website-id="f36748a5-9e29-449b-8f5b-0393d30cca66" data-domain="metrik-one.vercel.app" src="http://localhost:3000/js/script.js"></script>
             </head>
             <body className={`${Fustat.className} antialiased`}>
+                <NextTopLoader
+                    color={color}
+                    showSpinner={false}
+                    shadow={`0 0 10px ${color}, 0 0 5px ${color}`}
+                />
                 <Providers>
                     <NuqsAdapter>
                         {children}
