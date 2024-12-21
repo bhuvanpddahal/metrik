@@ -8,6 +8,7 @@ import {
     ChartTooltip,
     ChartTooltipContent
 } from "@/components/ui/Chart";
+import { cn } from "@/lib/utils";
 
 const chartConfig = {
     totalVisitors: {
@@ -20,12 +21,14 @@ interface DistributionChartProps {
     chartData: { [x: string]: string | number | null; }[];
     dataKey: string;
     labelFormatter?: (value: string | null) => string;
+    labelClassName?: string;
 }
 
 const DistributionChart = ({
     chartData,
     dataKey,
-    labelFormatter
+    labelFormatter,
+    labelClassName = ""
 }: DistributionChartProps) => {
     return (
         <ChartContainer config={chartConfig} className="h-[21rem] w-full">
@@ -33,10 +36,7 @@ const DistributionChart = ({
                 accessibilityLayer
                 data={chartData}
                 layout="vertical"
-                margin={{
-                    right: 40,
-                    left: 0
-                }}
+                margin={{ left: 0, right: 40 }}
                 barSize={30}
                 barGap={2}
             >
@@ -54,6 +54,7 @@ const DistributionChart = ({
                         indicator="dot"
                         color="hsl(var(--primary))"
                         labelFormatter={labelFormatter}
+                        labelClassName={labelClassName}
                     />
                 } />
                 <Bar
@@ -66,7 +67,7 @@ const DistributionChart = ({
                         dataKey={dataKey}
                         position="insideLeft"
                         offset={18}
-                        className="fill-foreground truncate"
+                        className={cn("fill-foreground truncate", labelClassName)}
                         fontSize={14}
                         fontWeight={500}
                         formatter={labelFormatter}

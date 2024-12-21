@@ -46,13 +46,18 @@ const TopPagesCard = ({
                 <DistributionChart
                     chartData={ensureExactLengthForChartData([...pageChartData])}
                     dataKey="page"
-                    labelFormatter={(value) => getPathnameAndSearchFromUrl(value)}
+                    labelFormatter={getPathnameAndSearchFromUrl}
                 />
             </CardContent>
             <CardFooter className="justify-center">
                 <div
                     className="flex items-center gap-x-1 text-muted-foreground cursor-pointer hover:text-foreground"
-                    onClick={() => open({ title: "Page", data: pageChartData, dataKey: "page" })}
+                    onClick={() => open({
+                        title: "Page",
+                        chartData: pageChartData,
+                        dataKey: "page",
+                        labelFormatter: getPathnameAndSearchFromUrl
+                    })}
                 >
                     <ScanIcon className="size-4" />
                     <div className="text-xs font-semibold mt-0.5">DETAILS</div>

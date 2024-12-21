@@ -94,7 +94,7 @@ const CountriesCard = ({
                 <CardFooter className="justify-center">
                     <div
                         className="flex items-center gap-x-1 text-muted-foreground cursor-pointer hover:text-foreground"
-                        onClick={() => open({ title: label, data: chartData, dataKey: activeMenu })}
+                        onClick={() => open({ title: label, chartData, dataKey: activeMenu })}
                     >
                         <ScanIcon className="size-4" />
                         <div className="text-xs font-semibold mt-0.5">DETAILS</div>

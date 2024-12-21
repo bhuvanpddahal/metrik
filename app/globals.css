@@ -49,14 +49,14 @@ body {
         --muted-foreground: 0 0% 63.9%;
         --accent: 0 0% 14.9%;
         --accent-foreground: 0 0% 98%;
-        --destructive: 0 62.8% 30.6%;
+        --destructive: 0 72.2% 50.6%;
         --destructive-foreground: 0 0% 98%;
         --border: 0 0% 14.9%;
         --input: 0 0% 16%;
         --ring: 0 0% 83.1%;
         --chart-1: 217.2 91.2% 59.8%;
         --chart-2: 20.5 90.2% 48.2%;
-        --chart-3: 197 78.9% 14.9%;
+        --chart-3: 188.7 94.5% 12.7%;
         --chart-4: 280 65% 60%;
         --chart-5: 160 60% 45%;
     }

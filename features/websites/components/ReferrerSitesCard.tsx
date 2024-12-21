@@ -48,13 +48,18 @@ const ReferrerSitesCard = ({
                 <DistributionChart
                     chartData={ensureExactLengthForChartData([...referrerChartData])}
                     dataKey="referrer"
-                    labelFormatter={(value) => getDomainNameFromUrl(value)}
+                    labelFormatter={getDomainNameFromUrl}
                 />
             </CardContent>
             <CardFooter className="justify-center">
                 <div
                     className="flex items-center gap-x-1 text-muted-foreground cursor-pointer hover:text-foreground"
-                    onClick={() => open({ title: "Referrer", data: referrerChartData, dataKey: "referrer" })}
+                    onClick={() => open({
+                        title: "Referrer",
+                        chartData: referrerChartData,
+                        dataKey: "referrer",
+                        labelFormatter: getDomainNameFromUrl
+                    })}
                 >
                     <ScanIcon className="size-4" />
                     <div className="text-xs font-semibold mt-0.5">DETAILS</div>
