@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { Card, CardHeader } from "@/components/ui/Card";
 
-const AddGoalsCardLoader = () => {
+const GoalsCardLoader = () => {
     return (
         <Card className="md:col-span-2 overflow-hidden">
             <CardHeader className="p-1 border-b">
@@ -18,4 +18,4 @@ const AddGoalsCardLoader = () => {
     );
 };
 
-export default AddGoalsCardLoader;
+export default GoalsCardLoader;

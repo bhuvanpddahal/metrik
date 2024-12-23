@@ -1,4 +1,4 @@
-import PingDot from "@/features/websites/components/PingDot";
+import PingDot from "@/features/websites/components/ProgressIndicator";
 import {
     Card,
     CardContent,

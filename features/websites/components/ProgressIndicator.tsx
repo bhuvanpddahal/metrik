@@ -2,15 +2,15 @@ import { CheckIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-interface PingDotProps {
+interface ProgressIndicatorProps {
     color?: string;
     type?: "muted" | "active" | "checked";
 }
 
-const PingDot = ({
+const ProgressIndicator = ({
     color = "hsl(var(--primary))",
     type = "muted"
-}: PingDotProps) => {
+}: ProgressIndicatorProps) => {
     return (
         <div
             className={cn(
@@ -32,4 +32,4 @@ const PingDot = ({
     );
 };
 
-export default PingDot;
+export default ProgressIndicator;

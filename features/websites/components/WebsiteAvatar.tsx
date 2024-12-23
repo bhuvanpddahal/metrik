@@ -17,8 +17,8 @@ const WebsiteAvatar = (
     return (
         <Avatar className={className}>
             <AvatarImage src={`https://icons.duckduckgo.com/ip3/${domain}.ico`} />
-            <AvatarFallback>
-                <FaGlobeAmericas className="size-4 text-muted-foreground" />
+            <AvatarFallback className="p-1">
+                <FaGlobeAmericas className="size-full text-muted-foreground" />
             </AvatarFallback>
         </Avatar>
     );

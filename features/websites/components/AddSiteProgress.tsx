@@ -1,13 +1,10 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-
-import PingDot from "./PingDot";
+import ProgressIndicator from "./ProgressIndicator";
 import { cn } from "@/lib/utils";
 import { useAddWebsiteSearchParams } from "../hooks/useAddWebsiteSearchParams";
 
 const AddSiteProgress = () => {
-    const router = useRouter();
     const { step, setStep } = useAddWebsiteSearchParams();
 
     return (
@@ -19,7 +16,7 @@ const AddSiteProgress = () => {
                 )}
                 onClick={() => setStep("site")}
             >
-                <PingDot type={step === "script" ? "checked" : "active"} />
+                <ProgressIndicator type={step === "script" ? "checked" : "active"} />
                 <div className="text-primary text-sm font-semibold">
                     Add site
                 </div>
@@ -28,7 +25,7 @@ const AddSiteProgress = () => {
                 "flex items-center gap-x-3",
                 step !== "script" && "cursor-not-allowed pointer-events-none"
             )}>
-                <PingDot type={step === "script" ? "active" : "muted"} />
+                <ProgressIndicator type={step === "script" ? "active" : "muted"} />
                 <div className="text-muted-foreground text-sm font-semibold">
                     Install script
                 </div>

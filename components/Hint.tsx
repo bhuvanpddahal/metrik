@@ -6,11 +6,13 @@ import {
 } from "@/components/ui/Tooltip";
 
 interface HintProps {
+    side?: "top" | "bottom" | "left" | "right";
     message: string;
     children: React.ReactNode;
 }
 
 const Hint = ({
+    side = "top",
     message,
     children
 }: HintProps) => {
@@ -20,7 +22,7 @@ const Hint = ({
                 <TooltipTrigger asChild>
                     {children}
                 </TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent side={side}>
                     <p>{message}</p>
                 </TooltipContent>
             </Tooltip>

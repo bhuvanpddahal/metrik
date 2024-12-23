@@ -1,5 +1,5 @@
-import AddSiteProgress from "@/features/websites/components/AddSiteProgress";
 import BackButton from "../_components/BackButton";
+import AddSiteProgress from "@/features/websites/components/AddSiteProgress";
 
 interface NewWebsiteLayoutProps {
     children: React.ReactNode;
