@@ -13,7 +13,7 @@ const GoalsCardLoader = () => {
                     <ChevronDownIcon className="size-4 text-muted-foreground" />
                 </Button>
             </CardHeader>
-            <Skeleton className="h-96 rounded-none" />
+            <Skeleton className="h-[25.875rem] rounded-none" />
         </Card >
     );
 };

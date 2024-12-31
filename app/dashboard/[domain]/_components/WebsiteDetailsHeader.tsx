@@ -67,7 +67,7 @@ const WebsiteDetailsHeader = (
                             <ChevronDownIcon className="size-4 text-muted-foreground" />
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent>
+                    <DropdownMenuContent align="start" className="min-w-40">
                         <DropdownMenuItem onClick={() => router.push(`/dashboard/${domain}/settings`)}>
                             Site settings
                         </DropdownMenuItem>
@@ -77,6 +77,7 @@ const WebsiteDetailsHeader = (
                                 {data.otherWebsites.map((website) => (
                                     <DropdownMenuItem
                                         key={website.id}
+                                        className="pr-4"
                                         onClick={() => router.push(`/dashboard/${website.domain}${interval !== "today" ? `?interval=${interval}` : ""}`)}
                                     >
                                         <WebsiteAvatar domain={website.domain} className="size-6 border-none" />

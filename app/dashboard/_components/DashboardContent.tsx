@@ -9,7 +9,7 @@ import WebsitesList from "@/features/websites/components/WebsitesList";
 import WebsitesListLoader from "@/features/websites/components/skeletons/WebsitesListLoader";
 import { useGetWebsites } from "@/features/websites/hooks/useGetWebsites";
 
-const DashboardPageContent = () => {
+const DashboardContent = () => {
     const router = useRouter();
     const { isLoading, data } = useGetWebsites();
 
@@ -22,6 +22,8 @@ const DashboardPageContent = () => {
     if (!data) return <Error message="Unexpected happened while trying to fetch websites" />
     if (!data.websites.length) router.push("/dashboard/new");
 
+    console.log({ data });
+
     return (
         <div className="container py-4">
             <DashboardTitle visitorsCount={data.visitorsCount} />
@@ -30,4 +32,4 @@ const DashboardPageContent = () => {
     );
 };
 
-export default DashboardPageContent;
+export default DashboardContent;

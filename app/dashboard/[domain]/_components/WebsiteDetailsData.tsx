@@ -1,11 +1,13 @@
 "use client";
 
 import Error from "@/components/Error";
+import GoalsCard from "@/features/websites/components/GoalsCard";
 import DevicesCard from "@/features/websites/components/DevicesCard";
 import TopPagesCard from "@/features/websites/components/TopPagesCard";
 import CountriesCard from "@/features/websites/components/CountriesCard";
 import ReferrerSitesCard from "@/features/websites/components/ReferrerSitesCard";
 import WebsiteOverviewCard from "@/features/websites/components/WebsiteOverviewCard";
+import GoalsCardLoader from "@/features/websites/components/skeletons/GoalsCardLoader";
 import DistributionCardLoader from "@/features/websites/components/skeletons/DistributionCardLoader";
 import WebsiteOverviewCardLoader from "@/features/websites/components/skeletons/WebsiteOverviewCardLoader";
 import { useGetWebsiteData } from "@/features/websites/hooks/useGetWebsiteData";
@@ -30,6 +32,7 @@ const WebsiteDetailsData = (
             <DistributionCardLoader name="Page" />
             <DistributionCardLoader name="Country" />
             <DistributionCardLoader name="Device" />
+            <GoalsCardLoader />
         </>
     );
     if (!data) return (
@@ -65,6 +68,7 @@ const WebsiteDetailsData = (
                 operatingSystemChartData={data.operatingSystemChartData}
                 deviceChartData={data.deviceChartData}
             />
+            <GoalsCard goalChartData={[]} />
         </>
     );
 };

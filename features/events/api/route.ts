@@ -6,9 +6,11 @@ import { zValidator } from "@hono/zod-validator";
 
 import { db } from "@/drizzle/db";
 import { eventDataSchema } from "../schemas";
+import { VisitorTable } from "@/drizzle/schema";
 import { EventTable } from "@/drizzle/schema/events";
 import { SessionTable } from "@/drizzle/schema/sessions";
 import { PageViewTable } from "@/drizzle/schema/page-views";
+import { generateRandomNameForVisitor } from "@/features/websites/utils";
 
 const app = new Hono()
     .post(
@@ -33,7 +35,28 @@ const app = new Hono()
                 return c.json({ error: "Domain mismatch" }, 400);
             }
 
+            const userAgent = c.req.header("User-Agent");
+            const parser = new UAParser(userAgent);
+            const result = parser.getResult();
             const timestampDate = new Date(timestamp);
+
+            await db.insert(VisitorTable)
+                .values({
+                    ...location,
+                    id: visitorId,
+                    websiteId,
+                    name: generateRandomNameForVisitor(),
+                    browser: result.browser.name ?? "Unknown",
+                    operatingSystem: result.os.name ?? "Unknown",
+                    device: result.device.type ?? "desktop",
+                    screenResolution: `${viewport.width} x ${viewport.height}`,
+                    visitedAt: timestampDate,
+                    updatedAt: timestampDate
+                })
+                .onConflictDoUpdate({
+                    target: VisitorTable.id,
+                    set: { ...location, updatedAt: timestampDate }
+                });
 
             const [session] = await db
                 .select({ startTime: SessionTable.startTime })
@@ -50,7 +73,8 @@ const app = new Hono()
             } else {
                 await db.insert(SessionTable).values({
                     id: sessionId,
-                    websiteId,
+                    visitorId,
+                    referrer,
                     duration: 0,
                     startTime: timestampDate,
                     endTime: timestampDate
@@ -58,31 +82,15 @@ const app = new Hono()
             }
 
             if (type === "pageview") {
-                const userAgent = c.req.header("User-Agent");
-                const parser = new UAParser(userAgent);
-                const result = parser.getResult();
-
                 await db.insert(PageViewTable).values({
-                    websiteId,
-                    visitorId,
                     sessionId,
                     page: href,
-                    referrer,
-                    country: location.country,
-                    region: location.region,
-                    city: location.city,
-                    browser: result.browser.name ?? "Unknown",
-                    operatingSystem: result.os.name ?? "Unknown",
-                    device: result.device.type ?? "desktop",
-                    screenResolution: `${viewport.width} x ${viewport.height}`,
                     timestamp: timestampDate
                 });
             } else {
                 await db.insert(EventTable).values({
-                    type,
-                    websiteId,
-                    visitorId,
                     sessionId,
+                    type,
                     extraData,
                     timestamp: timestampDate
                 });

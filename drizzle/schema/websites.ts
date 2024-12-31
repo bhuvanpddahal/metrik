@@ -1,18 +1,16 @@
 import {
+    index,
     pgEnum,
     pgTable,
     text,
     timestamp,
-    uniqueIndex,
     uuid
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
 import timezones from "@/features/websites/timezones.json";
 import { UserTable } from "./users";
-import { EventTable } from "./events";
-import { SessionTable } from "./sessions";
-import { PageViewTable } from "./page-views";
+import { VisitorTable } from "./visitors";
 
 const timezoneKeys = Object.keys(timezones);
 
@@ -36,8 +34,7 @@ export const WebsiteTable = pgTable(
             .$onUpdate(() => new Date())
     },
     (website) => ({
-        uniqueUserIdAndDomainIndex: uniqueIndex("websites.unique_user_id_&_domain_index")
-            .on(website.userId, website.domain)
+        domainIndex: index("websites.domain_index").on(website.domain)
     })
 );
 
@@ -48,8 +45,6 @@ export const websiteRelations = relations(
             fields: [WebsiteTable.userId],
             references: [UserTable.id]
         }),
-        pageViews: many(PageViewTable),
-        sessions: many(SessionTable),
-        events: many(EventTable)
+        visitors: many(VisitorTable)
     })
 );

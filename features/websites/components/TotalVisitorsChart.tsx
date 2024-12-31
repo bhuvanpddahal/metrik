@@ -4,13 +4,13 @@ import { ChartContainer, type ChartConfig } from "@/components/ui/Chart";
 
 interface PageViewsChartProps {
     chartData?: {
-        pageViews: number;
         date: string;
+        totalVisitors: number;
     }[];
 }
 
 const chartConfig = {
-    pageViews: {
+    totalVisitors: {
         color: "hsl(var(--chart-2))"
     }
 } satisfies ChartConfig;
@@ -23,15 +23,12 @@ const PageViewsChart = (
             <LineChart
                 accessibilityLayer
                 data={chartData}
-                margin={{
-                    left: 12,
-                    right: 12
-                }}
+                margin={{ left: 12, right: 12 }}
             >
                 <Line
-                    dataKey="pageViews"
+                    dataKey="totalVisitors"
                     type="monotone"
-                    stroke="var(--color-pageViews)"
+                    stroke="var(--color-totalVisitors)"
                     strokeWidth={2}
                     dot={false}
                 />

@@ -1,8 +1,23 @@
-import { and, eq, SQL, sql } from "drizzle-orm";
+import {
+    adjectives,
+    animals,
+    colors,
+    names,
+    uniqueNamesGenerator
+} from "unique-names-generator";
 import { differenceInDays, format } from "date-fns";
+import { and, eq, SQL, sql } from "drizzle-orm";
 
 import { sqlDate } from "./constants";
-import type { ChartData } from "./queries";
+import type { ChartData } from "./types";
+
+export const generateRandomNameForVisitor = () => {
+    return uniqueNamesGenerator({
+        dictionaries: [names, adjectives, animals, colors],
+        length: 2,
+        separator: " "
+    });
+};
 
 export const ensureExactLengthForChartData = (
     chartData: ChartData,

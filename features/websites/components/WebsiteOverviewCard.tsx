@@ -21,8 +21,8 @@ interface WebsiteOverviewCardProps {
     averageSessionTimeChangeInPercentage: number | null;
     liveVisitorsCount: number;
     overviewChartData: {
-        pageViews: number;
         date: string;
+        totalVisitors: number;
     }[];
 }
 

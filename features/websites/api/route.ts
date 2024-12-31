@@ -18,14 +18,18 @@ import { verifyAuth } from "@hono/auth-js";
 import { zValidator } from "@hono/zod-validator";
 
 import {
+    generateJoinClauseForNow,
     generateJoinClauseFromDateDiff,
     generateSqlSeriesFromDateDiff
 } from "../utils";
 import {
     getAverageSessionTime,
     getBounceRate,
-    getChartData,
+    getChartDataFromVisitors,
     getLiveVisitorsCount,
+    getOverviewChartData,
+    getPageChartData,
+    getReferrerChartData,
     getVisitorsCount,
     getWebsiteByDomain,
     getWebsiteById,
@@ -33,10 +37,11 @@ import {
 } from "../queries";
 import {
     OVERVIEW_CHART_INTERVALS,
-    overviewChartIntervalsKeys,
-    sqlDate
+    overviewChartIntervalsKeys
 } from "../constants";
 import { db } from "@/drizzle/db";
+import { SessionTable } from "@/drizzle/schema/sessions";
+import { VisitorTable } from "@/drizzle/schema/visitors";
 import { WebsiteTable } from "@/drizzle/schema/websites";
 import { PageViewTable } from "@/drizzle/schema/page-views";
 import { addSiteSchema, websiteIdSchema } from "../schemas";
@@ -53,47 +58,29 @@ const app = new Hono()
             const { websiteId, domain, timezone } = c.req.valid("json");
 
             if (websiteId) {
-                const website = await db.query.WebsiteTable.findFirst({
-                    where: and(
-                        eq(WebsiteTable.userId, userId),
-                        eq(WebsiteTable.id, websiteId)
-                    )
-                });
+                const website = await getWebsiteById(websiteId);
                 if (!website) return c.json({ error: "Website not found" }, 404);
+                if (website.userId !== userId) return c.json({ error: "Permission denied" }, 403);
 
                 const [updatedWebsite] = await db.update(WebsiteTable)
                     .set({ domain, timezone })
-                    .where(and(
-                        eq(WebsiteTable.userId, userId),
-                        eq(WebsiteTable.id, websiteId)
-                    ))
-                    .returning({
-                        id: WebsiteTable.id
-                    });
+                    .where(eq(WebsiteTable.id, websiteId))
+                    .returning({ id: WebsiteTable.id });
 
                 return c.json({ data: updatedWebsite });
             } else {
-                const existingWebsiteWithSameDomain = await db
-                    .query
-                    .WebsiteTable
-                    .findFirst({
-                        where: eq(WebsiteTable.domain, domain)
-                    });
+                const existingWebsiteWithSameDomain = await getWebsiteByDomain(domain);
                 if (existingWebsiteWithSameDomain) {
                     return c.json({
                         error: `Website with domain '${domain}' already exists`
                     }, 400);
                 }
 
-                const [newWebsite] = await db.insert(WebsiteTable).values({
-                    userId,
-                    domain,
-                    timezone
-                }).returning({
-                    id: WebsiteTable.id
-                });
+                const [newWebsite] = await db.insert(WebsiteTable)
+                    .values({ userId, domain, timezone })
+                    .returning({ id: WebsiteTable.id });
 
-                return c.json({ data: newWebsite });
+                return c.json({ data: newWebsite }, 200);
             }
         }
     )
@@ -106,21 +93,17 @@ const app = new Hono()
             const userId = authUser.session.user.id;
             const { websiteId } = c.req.valid("param");
 
-            const website = await db.query.WebsiteTable.findFirst({
-                where: and(
-                    eq(WebsiteTable.userId, userId),
-                    eq(WebsiteTable.id, websiteId)
-                )
-            });
+            const website = await getWebsiteById(websiteId);
             if (!website) return c.json({ error: "Website not found" }, 404);
+            if (website.userId !== userId) return c.json({ error: "Permission denied" }, 403);
 
             const hasInstalledScript = await hasInstalledScriptFn(
                 website.id,
                 website.domain
             );
-            if (!hasInstalledScript) return c.json({ error: "Script doesn't exist" }, 404);
+            if (!hasInstalledScript) return c.json({ error: "Script doesn't exist" }, 400);
 
-            return c.json({ data: { success: "Script installation verified" } });
+            return c.json({ data: { success: "Script installation verified" } }, 200);
         }
     )
     .get(
@@ -137,17 +120,13 @@ const app = new Hono()
                 .select({
                     id: WebsiteTable.id,
                     domain: WebsiteTable.domain,
-                    visitorsCount: countDistinct(PageViewTable.visitorId)
+                    visitorsCount: count(VisitorTable)
                 })
                 .from(WebsiteTable)
-                .leftJoin(
-                    PageViewTable,
-                    and(
-                        eq(PageViewTable.websiteId, WebsiteTable.id),
-                        gte(PageViewTable.timestamp, startDate),
-                        lte(PageViewTable.timestamp, currentDate)
-                    )
-                )
+                .leftJoin(VisitorTable, eq(
+                    VisitorTable.websiteId,
+                    WebsiteTable.id
+                ))
                 .where(eq(WebsiteTable.userId, userId))
                 .groupBy(WebsiteTable.id)
                 .orderBy(desc(WebsiteTable.addedAt));
@@ -156,34 +135,56 @@ const app = new Hono()
 
             const [{ visitorsCount }] = await db
                 .select({
-                    visitorsCount: countDistinct(PageViewTable.visitorId)
+                    visitorsCount: count(VisitorTable)
                 })
-                .from(PageViewTable)
+                .from(VisitorTable)
                 .where(and(
-                    inArray(PageViewTable.websiteId, websiteIds),
-                    gte(PageViewTable.timestamp, startDate),
-                    lte(PageViewTable.timestamp, currentDate)
+                    inArray(VisitorTable.websiteId, websiteIds),
+                    gte(VisitorTable.updatedAt, startDate),
+                    lte(VisitorTable.updatedAt, currentDate)
                 ));
 
             const allWebsitesChartData = await Promise.all(
                 websiteIds.map(async (websiteId) => {
-                    const chartData = await db
+                    const visitors = db.$with("visitors").as(
+                        db
+                            .select({ id: VisitorTable.id })
+                            .from(VisitorTable)
+                            .where(and(
+                                eq(VisitorTable.websiteId, websiteId),
+                                gte(VisitorTable.updatedAt, startDate),
+                                lte(VisitorTable.visitedAt, currentDate)
+                            ))
+                    );
+
+                    const pageViews = db.$with("page_views").as(
+                        db
+                            .with(visitors)
+                            .select({
+                                visitorId: visitors.id,
+                                timestamp: PageViewTable.timestamp
+                            })
+                            .from(SessionTable)
+                            .innerJoin(visitors, eq(SessionTable.visitorId, visitors.id))
+                            .innerJoin(PageViewTable, and(
+                                eq(PageViewTable.sessionId, SessionTable.id),
+                                gte(PageViewTable.timestamp, startDate),
+                                lte(PageViewTable.timestamp, currentDate)
+                            ))
+                    );
+
+                    const chartData = await db.with(pageViews)
                         .select({
-                            pageViews: count(PageViewTable),
-                            date: sql<string>`${sql.raw("series")}`.inlineParams()
+                            date: sql<string>`${sql.raw("series")}`.inlineParams(),
+                            totalVisitors: countDistinct(pageViews.visitorId)
                         })
                         .from(
                             sql`GENERATE_SERIES(${startDate}, ${currentDate}, '1 hour'::interval) as series`
                         )
-                        .leftJoin(PageViewTable, ({ date }) => and(
-                            eq(PageViewTable.websiteId, websiteId),
-                            gte(PageViewTable.timestamp, startDate),
-                            lte(PageViewTable.timestamp, currentDate),
-                            eq(sqlDate.extractDate(PageViewTable.timestamp), sqlDate.extractDate(date)),
-                            eq(sqlDate.extractHour(PageViewTable.timestamp), sqlDate.extractHour(date))
-                        ))
+                        .leftJoin(pageViews, ({ date }) => generateJoinClauseForNow(pageViews.timestamp, date))
                         .groupBy(({ date }) => date)
                         .orderBy(({ date }) => date);
+
 
                     return {
                         websiteId,
@@ -281,67 +282,51 @@ const app = new Hono()
                 joinClause = intervalObj.joinClause!;
             }
 
-            const pageViewWherehereClause = and(
-                eq(PageViewTable.websiteId, website.id),
-                gte(PageViewTable.timestamp, startDate),
-                lte(PageViewTable.timestamp, endDate)
-            );
+            const args = [website.id, startDate, endDate] as const;
+            const prevArgs = [website.id, prevStartDate!, startDate] as const;
 
             let visitorsCountChangeInPercentage: number | null = null;
-            const visitorsCount = await getVisitorsCount(website.id, startDate, endDate);
+            const visitorsCount = await getVisitorsCount(...args);
             if (prevStartDate) {
-                const prevIntervalVisitorsCount = await getVisitorsCount(website.id, prevStartDate, startDate);
+                const prevIntervalVisitorsCount = await getVisitorsCount(...prevArgs);
                 const visitorsCountChange = visitorsCount - prevIntervalVisitorsCount;
                 visitorsCountChangeInPercentage = prevIntervalVisitorsCount > 0
                     ? (visitorsCountChange / prevIntervalVisitorsCount) * 100 : null;
             }
 
             let bounceRateChangeInPercentage: number | null = null;
-            const bounceRate = await getBounceRate(website.id, startDate, endDate);
+            const bounceRate = await getBounceRate(...args);
             if (prevStartDate) {
-                const prevIntervalBounceRate = await getBounceRate(website.id, prevStartDate, startDate);
+                const prevIntervalBounceRate = await getBounceRate(...prevArgs);
                 const bounceRateChange = bounceRate - prevIntervalBounceRate;
                 bounceRateChangeInPercentage = prevIntervalBounceRate > 0
                     ? (bounceRateChange / prevIntervalBounceRate) * 100 : null;
             }
 
             let averageSessionTimeChangeInPercentage: number | null = null;
-            const averageSessionTime = await getAverageSessionTime(website.id, startDate, endDate);
+            const averageSessionTime = await getAverageSessionTime(...args);
             if (prevStartDate) {
-                const prevIntervalAverageSessionTime = await getAverageSessionTime(website.id, prevStartDate, startDate);
+                const prevIntervalAverageSessionTime = await getAverageSessionTime(...prevArgs);
                 const averageSessionTimeChange = averageSessionTime - prevIntervalAverageSessionTime;
                 averageSessionTimeChangeInPercentage = prevIntervalAverageSessionTime > 0
                     ? (averageSessionTimeChange / prevIntervalAverageSessionTime) * 100 : null;
             }
 
             const liveVisitorsCount = await getLiveVisitorsCount(website.id, endDate);
+            const overviewChartData = await getOverviewChartData(...args, intervalSql, joinClause);
 
-            const pageViews = db.$with("pageViews").as(
-                db
-                    .select()
-                    .from(PageViewTable)
-                    .where(pageViewWherehereClause)
-            );
+            const referrerChartData = await getReferrerChartData(...args);
+            const pageChartData = await getPageChartData(...args);
 
-            const overviewChartData = await db
-                .with(pageViews)
-                .select({
-                    pageViews: count(pageViews),
-                    date: sql<string>`${sql.raw("series")}`.inlineParams()
-                })
-                .from(intervalSql)
-                .leftJoin(pageViews, ({ date }) => joinClause(pageViews.timestamp, date))
-                .groupBy(({ date }) => date)
-                .orderBy(({ date }) => date);
+            const getChartDataFromVisitorsPrefilled = getChartDataFromVisitors.bind(null, ...args);
+            const countryChartData = await getChartDataFromVisitorsPrefilled("country");
+            const regionChartData = await getChartDataFromVisitorsPrefilled("region");
+            const cityChartData = await getChartDataFromVisitorsPrefilled("city");
+            const deviceChartData = await getChartDataFromVisitorsPrefilled("device");
+            const browserChartData = await getChartDataFromVisitorsPrefilled("browser");
+            const operatingSystemChartData = await getChartDataFromVisitorsPrefilled("operatingSystem");
 
-            const referrerChartData = await getChartData(pageViews, "referrer");
-            const pageChartData = await getChartData(pageViews, "page");
-            const countryChartData = await getChartData(pageViews, "country");
-            const regionChartData = await getChartData(pageViews, "region");
-            const cityChartData = await getChartData(pageViews, "city");
-            const deviceChartData = await getChartData(pageViews, "device");
-            const browserChartData = await getChartData(pageViews, "browser");
-            const operatingSystemChartData = await getChartData(pageViews, "operatingSystem");
+            // const goalChartData = await getGoalChartData(website.id, startDate, endDate);
 
             return c.json({
                 data: {
@@ -362,7 +347,8 @@ const app = new Hono()
                     cityChartData,
                     deviceChartData,
                     browserChartData,
-                    operatingSystemChartData
+                    operatingSystemChartData,
+                    // goalChartData
                 }
             }, 200);
         }

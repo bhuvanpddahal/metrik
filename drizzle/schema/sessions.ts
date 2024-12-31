@@ -1,20 +1,22 @@
 import {
     integer,
     pgTable,
+    text,
     timestamp,
     uuid
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
 import { EventTable } from "./events";
-import { WebsiteTable } from "./websites";
+import { VisitorTable } from "./visitors";
 import { PageViewTable } from "./page-views";
 
 export const SessionTable = pgTable("sessions", {
     id: uuid("id").primaryKey(),
-    websiteId: uuid("website_id")
+    visitorId: uuid("visitor_id")
         .notNull()
-        .references(() => WebsiteTable.id, { onDelete: "cascade" }),
+        .references(() => VisitorTable.id, { onDelete: "cascade" }),
+    referrer: text("referrer"),
     duration: integer("duration").notNull(),
     startTime: timestamp("start_time", { withTimezone: true })
         .notNull(),
@@ -25,7 +27,10 @@ export const SessionTable = pgTable("sessions", {
 export const sessionRelations = relations(
     SessionTable,
     ({ one, many }) => ({
-        website: one(WebsiteTable),
+        visitor: one(VisitorTable, {
+            fields: [SessionTable.visitorId],
+            references: [VisitorTable.id]
+        }),
         pageViews: many(PageViewTable),
         events: many(EventTable)
     })

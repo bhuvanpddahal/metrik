@@ -1,8 +1,8 @@
-import DashboardPageContent from "./_components/DashboardPageContent";
+import DashboardContent from "./_components/DashboardContent";
 
 const DashboardPage = () => {
     return (
-        <DashboardPageContent />
+        <DashboardContent />
     );
 };
 

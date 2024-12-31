@@ -1,4 +1,3 @@
-import GoalsCard from "@/features/websites/components/GoalsCard";
 import WebsiteDetailsData from "./_components/WebsiteDetailsData";
 import WebsiteDetailsHeader from "./_components/WebsiteDetailsHeader";
 
@@ -16,7 +15,6 @@ const WebsiteDetailsPage = ({
             <WebsiteDetailsHeader domain={domain} />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                 <WebsiteDetailsData domain={domain} />
-                <GoalsCard domain={domain} />
             </div>
         </div>
     );

@@ -68,7 +68,7 @@ const UserAccountNav = () => {
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                    className="justify-between"
+                    className="justify-between cursor-pointer"
                     onClick={() => signOut()}
                 >
                     Log out

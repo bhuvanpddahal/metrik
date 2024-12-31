@@ -1,7 +1,7 @@
 import { useRouter } from "nextjs-toploader/app";
 
 import WebsiteAvatar from "./WebsiteAvatar";
-import PageViewsChart from "./PageViewsChart";
+import TotalVisitorsChart from "./TotalVisitorsChart";
 import {
     Card,
     CardContent,
@@ -15,8 +15,8 @@ interface WebsitesListProps {
         id: string;
         domain: string;
         chartData?: {
-            pageViews: number;
             date: string;
+            totalVisitors: number;
         }[];
         visitorsCount: number;
     }[];
@@ -40,7 +40,7 @@ const WebsitesList = (
                         <CardTitle>{website.domain}</CardTitle>
                     </CardHeader>
                     <CardContent className="pb-3">
-                        <PageViewsChart chartData={website.chartData} />
+                        <TotalVisitorsChart chartData={website.chartData} />
                     </CardContent>
                     <CardFooter>
                         <p><strong>{website.visitorsCount}</strong> {website.visitorsCount === 1 ? "visitor" : "visitors"}</p>
