@@ -14,16 +14,21 @@ const InstallScriptCard = ({
     websiteId,
     domain
 }: InstallScriptCardProps) => {
-    const script =
-        `<script defer data-website-id="${websiteId}" data-domain="${domain}" src="${scriptSrc}"></script>`;
+    const script = `<script
+  defer
+  data-website-id="${websiteId}"
+  data-domain="${domain}"
+  src="${scriptSrc}"
+></script>`;
     const { mutate: verifyInstallation, isPending } = useVerifyScriptInstallation();
 
     return (
         <div>
             <Code
                 code={script}
-                copySuccessText="Script copied"
-                copyErrorText="Failed to copy script"
+                language="htmlbars"
+                copySuccessMessage="Script copied"
+                copyErrorMessage="Failed to copy script"
             />
             <Button
                 className="w-full mt-6"

@@ -1,5 +1,8 @@
 "use client";
 
+import "highlight.js/styles/vs2015.css";
+import hljs from "highlight.js";
+import { useEffect } from "react";
 import { CopyIcon } from "lucide-react";
 
 import { Button } from "./ui/Button";
@@ -7,20 +10,28 @@ import { copyToClipboard } from "@/lib/utils";
 
 interface CodeProps {
     code: string;
+    language: string;
     copySuccessMessage?: string;
     copyErrorMessage?: string;
 }
 
 const Code = ({
     code,
+    language,
     copySuccessMessage = "Code copied",
     copyErrorMessage = "Failed to copy code"
 }: CodeProps) => {
+    useEffect(() => {
+        hljs.highlightAll();
+    }, [code]);
+
     return (
-        <div className="relative bg-accent-foreground px-3.5 py-2 rounded-md dark:bg-accent">
-            <code className="select-all font-mono text-accent text-xs font-semibold dark:text-accent-foreground">
-                {code}
-            </code>
+        <div className="relative bg-accent-foreground px-4 py-3.5 rounded-md dark:bg-accent">
+            <pre className="text-xs">
+                <code className={`language-${language} !bg-transparent !p-0`}>
+                    {code}
+                </code>
+            </pre>
             <Button
                 variant="outline"
                 size="icon"

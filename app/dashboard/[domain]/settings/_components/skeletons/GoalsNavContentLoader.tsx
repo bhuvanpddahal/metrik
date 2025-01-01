@@ -41,7 +41,7 @@ const GoalsNavContentLoader = () => {
                             </>
                         )}
                     >
-                        <Skeleton className="h-10 w-full" />
+                        <Skeleton className="h-11 w-full" />
                     </SettingsCard>
                 </div>
             </TabsContent>

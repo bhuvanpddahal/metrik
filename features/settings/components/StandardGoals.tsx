@@ -5,7 +5,7 @@ import SettingsCard from "./SettingsCard";
 import { CardDescription, CardTitle } from "@/components/ui/Card";
 
 const StandardGoals = () => {
-    const script = 'window?.metrik("signup", { email: "user@email.com" });';
+    const script = 'window?.metrik("signup", { email: "user@mail.com" });';
 
     return (
         <div>
@@ -31,6 +31,7 @@ const StandardGoals = () => {
             >
                 <Code
                     code={script}
+                    language="javascript"
                     copySuccessMessage="Script copied"
                     copyErrorMessage="Failed to copy script"
                 />

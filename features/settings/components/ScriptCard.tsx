@@ -12,7 +12,12 @@ const ScriptCard = ({
     domain
 }: ScriptCardProps) => {
     const script =
-        `<script defer data-website-id="${websiteId}" data-domain="${domain}" src="${scriptSrc}"></script>`;
+        `<script
+  defer
+  data-website-id="${websiteId}"
+  data-domain="${domain}"
+  src="${scriptSrc}"
+></script>`;
 
     return (
         <SettingsCard
@@ -21,6 +26,7 @@ const ScriptCard = ({
         >
             <Code
                 code={script}
+                language="htmlbars"
                 copySuccessMessage="Script copied"
                 copyErrorMessage="Failed to copy script"
             />

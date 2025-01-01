@@ -5,7 +5,9 @@ import SettingsCard from "./SettingsCard";
 import { CardDescription, CardTitle } from "@/components/ui/Card";
 
 const CustomGoals = () => {
-    const script = 'window?.metrik("goal_name", { description: "A short description of the event" });';
+    const script = `window?.metrik("goal_name", {
+  description: "A short description of the event"
+});`;
 
     return (
         <div>
@@ -31,6 +33,7 @@ const CustomGoals = () => {
             >
                 <Code
                     code={script}
+                    language="javascript"
                     copySuccessMessage="Script copied"
                     copyErrorMessage="Failed to copy script"
                 />
