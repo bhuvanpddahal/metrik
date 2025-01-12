@@ -18,5 +18,5 @@ export const eventDataSchema = z.object({
     }),
     visitorId: z.string(),
     sessionId: z.string(),
-    extraData: z.record(z.unknown()).optional()
+    extraData: z.record(z.unknown())
 });

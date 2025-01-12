@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { formatDistance } from "date-fns";
 
 import WebsiteAvatar from "./WebsiteAvatar";
 import {
@@ -9,10 +10,20 @@ import {
     TableHeader,
     TableRow
 } from "@/components/ui/Table";
+import type { UserJourneyData } from "../types";
+import { getDomainNameFromUrl } from "../utils";
 import { ScrollArea } from "@/components/ui/ScrollArea";
 import { useUserJourneyDetailsDrawer } from "../hooks/useUserJourneyDetailsDrawer";
 
-const UsersJourneyTable = () => {
+interface UsersJourneyTableProps {
+    domain: string;
+    activeEventVisitors: UserJourneyData[number]["visitors"];
+}
+
+const UsersJourneyTable = ({
+    domain,
+    activeEventVisitors
+}: UsersJourneyTableProps) => {
     const { open } = useUserJourneyDetailsDrawer();
 
     return (
@@ -27,71 +38,92 @@ const UsersJourneyTable = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {Array.from({ length: 10 }).map((_, index) => (
-                            <TableRow key={index} className="cursor-pointer" onClick={open}>
-                                <TableCell className="flex flex-col md:flex-row md:items-center gap-x-4 gap-y-2 px-4">
-                                    <Image
-                                        src="/icon.svg"
-                                        alt="User"
-                                        width={10}
-                                        height={10}
-                                        className="size-12 border rounded-full"
-                                    />
-                                    <div>
-                                        <h3 className="font-semibold">user name</h3>
-                                        <ul className="flex items-center gap-x-2">
-                                            <li className="flex items-center gap-x-1 mt-1">
-                                                <Image
-                                                    src="/icon.svg"
-                                                    alt="User"
-                                                    width={10}
-                                                    height={10}
-                                                    className="size-3.5 border rounded"
-                                                />
-                                                <span className="text-muted-foreground text-xs">Country</span>
-                                            </li>
-                                            <li className="flex items-center gap-x-1">
-                                                <Image
-                                                    src="/icon.svg"
-                                                    alt="User"
-                                                    width={10}
-                                                    height={10}
-                                                    className="size-3.5 border rounded"
-                                                />
-                                                <span className="text-muted-foreground text-xs">Device</span>
-                                            </li>
-                                            <li className="flex items-center gap-x-1">
-                                                <Image
-                                                    src="/icon.svg"
-                                                    alt="User"
-                                                    width={10}
-                                                    height={10}
-                                                    className="size-3.5 border rounded"
-                                                />
-                                                <span className="text-muted-foreground text-xs">Operating System</span>
-                                            </li>
-                                            <li className="flex items-center gap-x-1">
-                                                <Image
-                                                    src="/icon.svg"
-                                                    alt="User"
-                                                    width={10}
-                                                    height={10}
-                                                    className="size-3.5 border rounded"
-                                                />
-                                                <span className="text-muted-foreground text-xs">Browser</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </TableCell>
-                                <TableCell>
-                                    <div className="inline-flex items-center gap-x-2">
-                                        <WebsiteAvatar domain={"Direct"} className="size-[1.125rem] size- inline-block" />
-                                        Direct/None
-                                    </div>
-                                </TableCell>
-                                <TableCell>3 days</TableCell>
-                            </TableRow>
-                        ))}
+                        {activeEventVisitors.map((visitor, index) => {
+                            const journeyLength = visitor.journey.length;
+                            const domainName = getDomainNameFromUrl(visitor.journey[0].value);
+                            const timeToComplete = formatDistance(visitor.journey[journeyLength - 1].date, visitor.journey[0].date);
+
+                            return (
+                                <TableRow
+                                    key={index}
+                                    className="cursor-pointer"
+                                    onClick={() => open(domain, visitor)}
+                                >
+                                    <TableCell className="flex flex-col md:flex-row md:items-center gap-x-4 gap-y-2 px-4">
+                                        <Image
+                                            src="/icon.svg"
+                                            alt="User"
+                                            width={10}
+                                            height={10}
+                                            className="size-12 border rounded-full"
+                                        />
+                                        <div>
+                                            <h3 className="font-semibold">{visitor.name}</h3>
+                                            <ul className="flex items-center gap-x-2">
+                                                <li className="flex items-center gap-x-1 mt-1">
+                                                    <Image
+                                                        src="/icon.svg"
+                                                        alt="User"
+                                                        width={10}
+                                                        height={10}
+                                                        className="size-3.5 border rounded"
+                                                    />
+                                                    <span className="text-muted-foreground text-xs">
+                                                        {visitor.country}
+                                                    </span>
+                                                </li>
+                                                <li className="flex items-center gap-x-1">
+                                                    <Image
+                                                        src="/icon.svg"
+                                                        alt="User"
+                                                        width={10}
+                                                        height={10}
+                                                        className="size-3.5 border rounded"
+                                                    />
+                                                    <span className="text-muted-foreground text-xs capitalize">
+                                                        {visitor.device}
+                                                    </span>
+                                                </li>
+                                                <li className="flex items-center gap-x-1">
+                                                    <Image
+                                                        src="/icon.svg"
+                                                        alt="User"
+                                                        width={10}
+                                                        height={10}
+                                                        className="size-3.5 border rounded"
+                                                    />
+                                                    <span className="text-muted-foreground text-xs">
+                                                        {visitor.operatingSystem}
+                                                    </span>
+                                                </li>
+                                                <li className="flex items-center gap-x-1">
+                                                    <Image
+                                                        src="/icon.svg"
+                                                        alt="User"
+                                                        width={10}
+                                                        height={10}
+                                                        className="size-3.5 border rounded"
+                                                    />
+                                                    <span className="text-muted-foreground text-xs">
+                                                        {visitor.browser}
+                                                    </span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="inline-flex items-center gap-x-2">
+                                            <WebsiteAvatar
+                                                domain={domainName}
+                                                className="size-[1.125rem] size- inline-block"
+                                            />
+                                            {domainName}
+                                        </div>
+                                    </TableCell>
+                                    <TableCell>{timeToComplete}</TableCell>
+                                </TableRow>
+                            );
+                        })}
                     </TableBody>
                 </Table>
             </div>

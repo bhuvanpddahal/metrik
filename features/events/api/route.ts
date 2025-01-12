@@ -10,7 +10,7 @@ import { VisitorTable } from "@/drizzle/schema";
 import { EventTable } from "@/drizzle/schema/events";
 import { SessionTable } from "@/drizzle/schema/sessions";
 import { PageViewTable } from "@/drizzle/schema/page-views";
-import { generateRandomNameForVisitor } from "@/features/websites/utils";
+import { generateRandomNameForVisitor, getDomainNameFromUrl, getOriginFromUrl } from "@/features/websites/utils";
 
 const app = new Hono()
     .post(
@@ -74,7 +74,7 @@ const app = new Hono()
                 await db.insert(SessionTable).values({
                     id: sessionId,
                     visitorId,
-                    referrer,
+                    referrer: getOriginFromUrl(referrer),
                     duration: 0,
                     startTime: timestampDate,
                     endTime: timestampDate
@@ -88,12 +88,20 @@ const app = new Hono()
                     timestamp: timestampDate
                 });
             } else {
+                let eventType = type as string, eventExtraData = extraData;
+
+                if (type === "custom") {
+                    const { eventName, ...others } = extraData;
+                    eventType = eventName as string;
+                    eventExtraData = others;
+                }
+
                 await db.insert(EventTable).values({
                     sessionId,
-                    type,
-                    extraData,
+                    type: eventType,
+                    extraData: eventExtraData,
                     timestamp: timestampDate
-                });
+                }).onConflictDoNothing();
             }
 
             return c.json({ success: true }, 200);

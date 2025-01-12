@@ -21,9 +21,7 @@ const Code = ({
     copySuccessMessage = "Code copied",
     copyErrorMessage = "Failed to copy code"
 }: CodeProps) => {
-    useEffect(() => {
-        hljs.highlightAll();
-    }, [code]);
+    useEffect(() => hljs.highlightAll, []);
 
     return (
         <div className="relative bg-accent-foreground px-4 py-3.5 rounded-md dark:bg-accent">

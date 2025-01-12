@@ -10,7 +10,7 @@ const GoalsCardLoader = () => {
             <CardHeader className="p-1 border-b">
                 <Button variant="ghost" className="w-fit pr-2 font-semibold pointer-events-none">
                     Goal
-                    <ChevronDownIcon className="size-4 text-muted-foreground" />
+                    <ChevronDownIcon className="size-4 stroke-[0.8] text-muted-foreground" />
                 </Button>
             </CardHeader>
             <Skeleton className="h-[25.875rem] rounded-none" />

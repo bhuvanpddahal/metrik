@@ -30,6 +30,7 @@ import {
     getOverviewChartData,
     getPageChartData,
     getReferrerChartData,
+    getUserJourneyData,
     getVisitorsCount,
     getWebsiteByDomain,
     getWebsiteById,
@@ -40,6 +41,7 @@ import {
     overviewChartIntervalsKeys
 } from "../constants";
 import { db } from "@/drizzle/db";
+import { conditionalRound } from "@/lib/utils";
 import { SessionTable } from "@/drizzle/schema/sessions";
 import { VisitorTable } from "@/drizzle/schema/visitors";
 import { WebsiteTable } from "@/drizzle/schema/websites";
@@ -290,8 +292,10 @@ const app = new Hono()
             if (prevStartDate) {
                 const prevIntervalVisitorsCount = await getVisitorsCount(...prevArgs);
                 const visitorsCountChange = visitorsCount - prevIntervalVisitorsCount;
-                visitorsCountChangeInPercentage = prevIntervalVisitorsCount > 0
+                const changeInPercentage = prevIntervalVisitorsCount > 0
                     ? (visitorsCountChange / prevIntervalVisitorsCount) * 100 : null;
+                visitorsCountChangeInPercentage = changeInPercentage
+                    ? conditionalRound(changeInPercentage) : null;
             }
 
             let bounceRateChangeInPercentage: number | null = null;
@@ -299,8 +303,10 @@ const app = new Hono()
             if (prevStartDate) {
                 const prevIntervalBounceRate = await getBounceRate(...prevArgs);
                 const bounceRateChange = bounceRate - prevIntervalBounceRate;
-                bounceRateChangeInPercentage = prevIntervalBounceRate > 0
+                const changeInPercentage = prevIntervalBounceRate > 0
                     ? (bounceRateChange / prevIntervalBounceRate) * 100 : null;
+                bounceRateChangeInPercentage = changeInPercentage
+                    ? conditionalRound(changeInPercentage) : null;
             }
 
             let averageSessionTimeChangeInPercentage: number | null = null;
@@ -308,8 +314,10 @@ const app = new Hono()
             if (prevStartDate) {
                 const prevIntervalAverageSessionTime = await getAverageSessionTime(...prevArgs);
                 const averageSessionTimeChange = averageSessionTime - prevIntervalAverageSessionTime;
-                averageSessionTimeChangeInPercentage = prevIntervalAverageSessionTime > 0
+                const changeInPercentage = prevIntervalAverageSessionTime > 0
                     ? (averageSessionTimeChange / prevIntervalAverageSessionTime) * 100 : null;
+                averageSessionTimeChangeInPercentage = changeInPercentage
+                    ? conditionalRound(changeInPercentage) : null;
             }
 
             const liveVisitorsCount = await getLiveVisitorsCount(website.id, endDate);
@@ -326,7 +334,11 @@ const app = new Hono()
             const browserChartData = await getChartDataFromVisitorsPrefilled("browser");
             const operatingSystemChartData = await getChartDataFromVisitorsPrefilled("operatingSystem");
 
-            // const goalChartData = await getGoalChartData(website.id, startDate, endDate);
+            const userJourneyData = await getUserJourneyData(website.id, startDate, endDate);
+            const goalChartData = userJourneyData.map((data) => ({
+                type: data.type,
+                totalVisitors: data.visitors.length
+            }));
 
             return c.json({
                 data: {
@@ -348,7 +360,8 @@ const app = new Hono()
                     deviceChartData,
                     browserChartData,
                     operatingSystemChartData,
-                    // goalChartData
+                    userJourneyData,
+                    goalChartData
                 }
             }, 200);
         }

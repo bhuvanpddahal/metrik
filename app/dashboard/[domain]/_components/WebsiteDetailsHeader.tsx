@@ -64,7 +64,7 @@ const WebsiteDetailsHeader = (
                                 <WebsiteAvatar domain={domain} className="size-6 border-none" />
                                 <p className="font-semibold leading-none tracking-tight">{domain}</p>
                             </div>
-                            <ChevronDownIcon className="size-4 text-muted-foreground" />
+                            <ChevronDownIcon className="size-4 stroke-[0.8] text-muted-foreground" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start" className="min-w-40">
@@ -92,7 +92,7 @@ const WebsiteDetailsHeader = (
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="pr-2">
                             {activeIntervalLabel}
-                            <ChevronDownIcon className="size-4 text-muted-foreground" />
+                            <ChevronDownIcon className="size-4 stroke-[0.8] text-muted-foreground" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>

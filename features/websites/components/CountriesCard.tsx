@@ -15,7 +15,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from "@/components/ui/DropdownMenu";
-import type { ChartData } from "../queries";
+import type { ChartData } from "../types";
 import { Button } from "@/components/ui/Button";
 import { ensureExactLengthForChartData } from "../utils";
 import { useDistributionDetailsModal } from "../hooks/useDistributionDetailsModal";
@@ -65,7 +65,7 @@ const CountriesCard = ({
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="w-fit pr-2 font-semibold">
                             {label}
-                            <ChevronDownIcon className="size-4 text-muted-foreground" />
+                            <ChevronDownIcon className="size-4 stroke-[0.8] text-muted-foreground" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">

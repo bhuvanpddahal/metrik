@@ -68,7 +68,11 @@ const WebsiteDetailsData = (
                 operatingSystemChartData={data.operatingSystemChartData}
                 deviceChartData={data.deviceChartData}
             />
-            <GoalsCard goalChartData={[]} />
+            <GoalsCard
+                domain={domain}
+                goalChartData={data.goalChartData}
+                userJourneyData={data.userJourneyData}
+            />
         </>
     );
 };

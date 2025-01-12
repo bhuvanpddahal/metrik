@@ -5,6 +5,7 @@ import {
     desc,
     eq,
     gte,
+    lt,
     lte,
     SQL,
     sql,
@@ -21,7 +22,7 @@ import {
 } from "@/drizzle/schema";
 import { db } from "@/drizzle/db";
 import { scriptSrc } from "./constants";
-import type { SessionsSubquery, VisitorsSubquery } from "./types";
+import type { UserJourneyData } from "./types";
 
 export const getWebsiteById = async (websiteId: string) => {
     const website = await db.query.WebsiteTable.findFirst({
@@ -89,7 +90,9 @@ const getSessionsSubquery = (
         db
             .with(visitors)
             .select({
-                id: SessionTable.id
+                id: SessionTable.id,
+                duration: SessionTable.duration,
+                visitorId: sql<string>`'visitors.id'`.as("visitor_id")
             })
             .from(visitors)
             .innerJoin(SessionTable, and(
@@ -158,7 +161,7 @@ export const getBounceRate = async (
             pageViews: count(PageViewTable)
         })
         .from(sessions)
-        .innerJoin(PageViewTable, eq(PageViewTable.sessionId, sessions.id))
+        .innerJoin(PageViewTable, eq(sessions.id, PageViewTable.sessionId))
         .groupBy(sessions.id)
         .having(({ pageViews }) => eq(pageViews, 1));
 
@@ -175,20 +178,15 @@ export const getAverageSessionTime = async (
     startDate: Date,
     endDate: Date
 ) => {
-    const visitors = getVisitorsSubquery(websiteId, startDate, endDate);
+    const sessions = getSessionsSubquery(websiteId, startDate, endDate);
 
     const [{ totalDuration, sessionCount }] = await db
-        .with(visitors)
+        .with(sessions)
         .select({
-            totalDuration: sum(SessionTable.duration),
-            sessionCount: count(SessionTable)
+            totalDuration: sum(sessions.duration),
+            sessionCount: count(sessions)
         })
-        .from(visitors)
-        .innerJoin(SessionTable, and(
-            eq(SessionTable.visitorId, visitors.id),
-            gte(SessionTable.startTime, startDate),
-            lte(SessionTable.startTime, endDate)
-        ));
+        .from(sessions);
 
     const averageSessionTime = sessionCount === 0
         ? 0 : Number(totalDuration) / sessionCount;
@@ -253,7 +251,7 @@ export const getReferrerChartData = async (
             gte(SessionTable.startTime, startDate),
             lte(SessionTable.startTime, endDate)
         ))
-        .groupBy(SessionTable.referrer)
+        .groupBy((SessionTable.referrer))
         .orderBy(({ totalVisitors }) => desc(totalVisitors));
 };
 
@@ -294,35 +292,30 @@ export const getChartDataFromVisitors = async (
         .orderBy(({ totalVisitors }) => desc(totalVisitors));
 };
 
-const getVisitorJourneyTillEvent = async (
-    visitorId: string,
-    sessionId: string,
-    eventId: string
-) => {
-    const event = await db
-        .select()
-        .from(EventTable)
-        .where(eq(EventTable.id, eventId));
-
-    // const pageViews = await db
-    //     .select()
-    //     .from(PageViewTable)
-    //     .where()
-};
-
 export const getUserJourneyData = async (
-    visitors: VisitorsSubquery,
-    sessions: SessionsSubquery,
+    websiteId: string,
     startDate: Date,
     endDate: Date
 ) => {
-    const visitorEvents = await db
+    const visitors = getVisitorsSubquery(websiteId, startDate, endDate);
+
+    const visitorsWithEvents = await db
         .with(visitors)
         .select({
-            visitorId: visitors.id,
-            events: sql<{ sessionId: string; eventId: string; timestamp: Date; }[]>`ARRAY_AGG(
+            id: visitors.id,
+            events: sql<{
+                sessionId: string;
+                eventId: string;
+                type: string;
+                extraData: Record<string, unknown>;
+                timestamp: string;
+            }[]>`ARRAY_AGG(
                 JSON_BUILD_OBJECT(
-                    'sessionId', ${SessionTable.id}, 'eventId', ${EventTable.id}, 'timestamp', ${EventTable.timestamp}
+                    'sessionId', ${SessionTable.id},
+                    'eventId', ${EventTable.id},
+                    'type', ${EventTable.type},
+                    'extraData', ${EventTable.extraData},
+                    'timestamp', ${EventTable.timestamp}
                 )
             )`
         })
@@ -335,45 +328,120 @@ export const getUserJourneyData = async (
         ))
         .groupBy(visitors.id);
 
-    const userJourneys = visitorEvents.map(async (visitorEvent) => {
-        const visitorId = visitorEvent.visitorId;
+    let userJourneyData: UserJourneyData = [];
 
-        const visitorSessions = await db
-            .with(sessions)
-            .select()
-            .from(sessions)
-            .where(eq(sessions.visitors.id, visitorId))
-        // b.events.sort(() => );
+    await Promise.all(
+        visitorsWithEvents.map(async (visitor) => {
+            const { id, events } = visitor;
 
-        const a = visitorEvent.events.map(async (event) => {
-            const pageViews = await db
-                .with(sessions)
+            const [visitorInfo] = await db
+                .with(visitors)
                 .select({
-                    value: PageViewTable.page,
-                    timestamp: PageViewTable.timestamp
+                    id: visitors.id,
+                    name: visitors.name,
+                    country: visitors.country,
+                    region: visitors.region,
+                    city: visitors.city,
+                    browser: visitors.browser,
+                    operatingSystem: visitors.operatingSystem,
+                    device: visitors.device,
+                    screenResolution: visitors.screenResolution
                 })
-                .from(sessions)
-                .innerJoin(PageViewTable, and(
-                    eq(PageViewTable.sessionId, sessions.sessions.id),
-                    lte(PageViewTable.timestamp, event.timestamp)
-                ))
-                .orderBy(PageViewTable.timestamp);
+                .from(visitors)
+                .where(eq(visitors.id, id));
 
+            const visitorSessions = db.$with("visitor_sessions").as(
+                db
+                    .with(visitors)
+                    .select({
+                        id: SessionTable.id,
+                        visitorId: SessionTable.visitorId,
+                        referrer: SessionTable.referrer,
+                        startTime: SessionTable.startTime
+                    })
+                    .from(visitors)
+                    .innerJoin(SessionTable, and(
+                        eq(SessionTable.visitorId, visitors.id),
+                        lte(SessionTable.startTime, endDate)
+                    ))
+                    .where(eq(visitors.id, visitor.id))
+            );
 
-        });
-    });
+            const [firstSession] = await db
+                .with(visitorSessions)
+                .select({
+                    referrer: visitorSessions.referrer,
+                    startTime: visitorSessions.startTime
+                })
+                .from(visitorSessions)
+                .orderBy(visitorSessions.startTime)
+                .limit(1);
 
-    // const outputData = a.reduce<string[]>((acc, curr) => {
-    //     const { eventType, ...visitor } = curr;
+            await Promise.all(
+                events.map(async (event) => {
+                    const pageViews = await db
+                        .with(visitorSessions)
+                        .select({
+                            type: sql<"pageview">`'pageview'`.as("type"),
+                            value: PageViewTable.page,
+                            date: PageViewTable.timestamp
+                        })
+                        .from(visitorSessions)
+                        .innerJoin(PageViewTable, and(
+                            eq(PageViewTable.sessionId, visitorSessions.id),
+                            lt(PageViewTable.timestamp, new Date(event.timestamp))
+                        ))
+                        .orderBy(PageViewTable.timestamp);
 
-    //     const existingIndex = acc.findIndex((item) => item.eventType === eventType);
+                    const events = await db
+                        .with(visitorSessions)
+                        .select({
+                            type: EventTable.type,
+                            value: EventTable.extraData,
+                            date: EventTable.timestamp
+                        })
+                        .from(visitorSessions)
+                        .innerJoin(EventTable, and(
+                            eq(EventTable.sessionId, visitorSessions.id),
+                            lt(EventTable.timestamp, new Date(event.timestamp))
+                        ))
+                        .orderBy(EventTable.timestamp);
 
-    //     if (existingIndex !== -1) {
-    //         acc[existingIndex].visitorIds.push(visitorId);
-    //     } else {
-    //         acc.push({ eventType, visitorIds: [visitorId] });
-    //     }
+                    const userJourney = [...pageViews, ...events];
+                    userJourney.sort((a, b) => a.date.getTime() - b.date.getTime());
 
-    //     return acc;
-    // }, []);
+                    const journey = [
+                        {
+                            type: "referrer",
+                            value: firstSession.referrer,
+                            date: firstSession.startTime
+                        },
+                        ...userJourney,
+                        {
+                            type: event.type,
+                            value: event.extraData,
+                            date: new Date(event.timestamp)
+                        }
+                    ];
+
+                    const data = userJourneyData.find((data) => data.type === event.type);
+
+                    if (data) {
+                        data.visitors.push({
+                            ...visitorInfo, journey
+                        });
+                    } else {
+                        userJourneyData.push({
+                            type: event.type,
+                            visitors: [{
+                                ...visitorInfo, journey
+                            }]
+                        });
+                    }
+                })
+            );
+        })
+    );
+
+    return userJourneyData;
 };

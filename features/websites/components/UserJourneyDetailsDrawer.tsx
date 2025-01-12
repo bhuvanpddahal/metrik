@@ -1,6 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import { Fragment } from "react";
+import { SearchIcon } from "lucide-react";
+import { format, isSameDay as isSameDayFn } from "date-fns";
 
 import Hint from "@/components/Hint";
 import MonoTextBlock from "./MonoTextBlock";
@@ -13,10 +16,16 @@ import {
 } from "@/components/ui/Table";
 import { copyToClipboard } from "@/lib/utils";
 import { Drawer, DrawerContent } from "@/components/ui/Drawer";
+import { getDomainNameFromUrl, getEventJourneyFormat } from "../utils";
 import { useUserJourneyDetailsDrawer } from "../hooks/useUserJourneyDetailsDrawer";
 
 const UserJourneyDetailsDrawer = () => {
-    const { isOpen, close } = useUserJourneyDetailsDrawer();
+    const { isOpen, domain, visitor, close } = useUserJourneyDetailsDrawer();
+
+    if (!domain || !visitor) return null;
+
+    const referrerData = visitor.journey[0];
+    let prevEventDate = referrerData.date;
 
     return (
         <Drawer open={isOpen} onOpenChange={close}>
@@ -34,9 +43,9 @@ const UserJourneyDetailsDrawer = () => {
                             <Hint side="right" message="Click to copy">
                                 <h3
                                     className="w-fit text-lg font-bold px-1 rounded-sm cursor-pointer hover:bg-muted"
-                                    onClick={() => copyToClipboard("user name")}
+                                    onClick={() => copyToClipboard(visitor.name)}
                                 >
-                                    user name
+                                    {visitor.name}
                                 </h3>
                             </Hint>
                             <Hint side="right" message="Click to copy">
@@ -57,19 +66,8 @@ const UserJourneyDetailsDrawer = () => {
                                     height={10}
                                     className="size-5 border rounded"
                                 />
-                                <span className="text-muted-foreground">Country, City</span>
-                            </li>
-                            <li className="flex items-center gap-x-2">
-                                <Image
-                                    src="/icon.svg"
-                                    alt="User"
-                                    width={10}
-                                    height={10}
-                                    className="size-5 border rounded"
-                                />
                                 <span className="text-muted-foreground">
-                                    Device
-                                    <small className="ml-1">(785 x 763)</small>
+                                    {visitor.country}, {visitor.city}
                                 </span>
                             </li>
                             <li className="flex items-center gap-x-2">
@@ -80,7 +78,10 @@ const UserJourneyDetailsDrawer = () => {
                                     height={10}
                                     className="size-5 border rounded"
                                 />
-                                <span className="text-muted-foreground">Operating System</span>
+                                <span className="text-muted-foreground capitalize">
+                                    {visitor.device}
+                                    <small className="ml-1">({visitor.screenResolution})</small>
+                                </span>
                             </li>
                             <li className="flex items-center gap-x-2">
                                 <Image
@@ -90,7 +91,21 @@ const UserJourneyDetailsDrawer = () => {
                                     height={10}
                                     className="size-5 border rounded"
                                 />
-                                <span className="text-muted-foreground">Browser</span>
+                                <span className="text-muted-foreground">
+                                    {visitor.operatingSystem}
+                                </span>
+                            </li>
+                            <li className="flex items-center gap-x-2">
+                                <Image
+                                    src="/icon.svg"
+                                    alt="User"
+                                    width={10}
+                                    height={10}
+                                    className="size-5 border rounded"
+                                />
+                                <span className="text-muted-foreground">
+                                    {visitor.browser}
+                                </span>
                             </li>
                         </ul>
                     </div>
@@ -99,68 +114,64 @@ const UserJourneyDetailsDrawer = () => {
                             <TableBody>
                                 <TableRow className="sticky top-0 bg-muted hover:bg-muted">
                                     <TableCell className="w-full text-center font-medium">
-                                        Friday Dec 13th, 2024
+                                        {format(prevEventDate, "EEEE MMM do',' 	yyyy")}
                                     </TableCell>
                                 </TableRow>
                                 <TableRow className="hover:bg-transparent">
                                     <TableCell className="flex items-center justify-between gap-x-2 font-medium">
-                                        <div>
-                                            Found
-                                            <MonoTextBlock text="abc.com">abc.com</MonoTextBlock>
-                                            via
-                                            <MonoTextBlock text="Direct/None">
-                                                <WebsiteAvatar domain={"Direct"} className="size-3 inline-block" />
-                                                Direct/None
-                                            </MonoTextBlock>
+                                        <div className="flex items-center gap-x-3">
+                                            <SearchIcon className="shrink-0 size-5 text-muted-foreground" />
+                                            <div>
+                                                Found
+                                                <MonoTextBlock text={domain}>{domain}</MonoTextBlock>
+                                                via
+                                                <MonoTextBlock text={(referrerData.value ?? "Direct/None") as string}>
+                                                    <WebsiteAvatar
+                                                        domain={(referrerData.value ?? "") as string}
+                                                        className="size-3 inline-block"
+                                                    />
+                                                    {getDomainNameFromUrl(referrerData.value as string | null)}
+                                                </MonoTextBlock>
+                                            </div>
                                         </div>
                                         <div className="shrink-0">
-                                            1:53 AM
+                                            {format(prevEventDate, "p")}
                                         </div>
                                     </TableCell>
                                 </TableRow>
-                                <TableRow className="hover:bg-transparent">
-                                    <TableCell className="flex items-center justify-between gap-x-2 font-medium">
-                                        <div>
-                                            Viewed page
-                                            <MonoTextBlock text="/">/</MonoTextBlock>
-                                        </div>
-                                        <div>
-                                            1:53 AM
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow className="bg-muted hover:bg-muted">
-                                    <TableCell className="w-full text-center font-medium">
-                                        Friday Dec 13th, 2024
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow className="hover:bg-transparent">
-                                    <TableCell className="flex items-center justify-between gap-x-2 font-medium">
-                                        <div>
-                                            Found
-                                            <MonoTextBlock text="abc.com">abc.com</MonoTextBlock>
-                                            via
-                                            <MonoTextBlock text="Direct/None">
-                                                <WebsiteAvatar domain={"Direct"} className="size-3 inline-block" />
-                                                Direct/None
-                                            </MonoTextBlock>
-                                        </div>
-                                        <div>
-                                            1:53 AM
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow className="hover:bg-transparent">
-                                    <TableCell className="flex items-center justify-between gap-x-2 font-medium">
-                                        <div>
-                                            Viewed page
-                                            <MonoTextBlock text="/">/</MonoTextBlock>
-                                        </div>
-                                        <div>
-                                            1:53 AM
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
+                                {visitor.journey.slice(1).map((event, index) => {
+                                    const isSameDay = isSameDayFn(event.date, prevEventDate);
+                                    const eventFormat = getEventJourneyFormat(event.type, event.value);
+                                    prevEventDate = event.date;
+
+                                    return (
+                                        <Fragment key={index}>
+                                            {!isSameDay && (
+                                                <TableRow className="sticky top-0 bg-muted hover:bg-muted">
+                                                    <TableCell className="w-full text-center font-medium">
+                                                        {format(prevEventDate, "EEEE MMM do',' 	yyyy")}
+                                                    </TableCell>
+                                                </TableRow>
+                                            )}
+                                            <TableRow className="hover:bg-transparent">
+                                                <TableCell className="flex items-center justify-between gap-x-2 font-medium">
+                                                    <div className="flex items-center gap-x-3">
+                                                        <eventFormat.icon className="shrink-0 size-5 text-muted-foreground" />
+                                                        <div>
+                                                            {eventFormat.prefixText}
+                                                            <MonoTextBlock text={eventFormat.value}>
+                                                                {eventFormat.value}
+                                                            </MonoTextBlock>
+                                                        </div>
+                                                    </div>
+                                                    <div className="shrink-0">
+                                                        {format(prevEventDate, "p")}
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                        </Fragment>
+                                    );
+                                })}
                             </TableBody>
                         </Table>
                     </div>

@@ -1,12 +1,18 @@
 import {
+    CircleDollarSignIcon,
+    EyeIcon,
+    GoalIcon,
+    UserPlusIcon
+} from "lucide-react";
+import {
     adjectives,
     animals,
     colors,
     names,
     uniqueNamesGenerator
 } from "unique-names-generator";
-import { differenceInDays, format } from "date-fns";
 import { and, eq, SQL, sql } from "drizzle-orm";
+import { differenceInDays, format } from "date-fns";
 
 import { sqlDate } from "./constants";
 import type { ChartData } from "./types";
@@ -42,10 +48,22 @@ export const getDomainNameFromUrl = (url: string | null) => {
         if (!url) return "Direct/None";
 
         const urlObject = new URL(url);
-        return urlObject.hostname;
+        return urlObject.host;
     } catch (error) {
         console.error("Invalid URL:", url, error);
-        return "Direct/None";
+        return url as string;
+    }
+};
+
+export const getOriginFromUrl = (url: string | null) => {
+    try {
+        if (!url) return null;
+
+        const urlObject = new URL(url);
+        return urlObject.origin;
+    } catch (error) {
+        console.error("Invalid URL:", url, error);
+        return null;
     }
 };
 
@@ -58,6 +76,38 @@ export const getPathnameAndSearchFromUrl = (url: string | null) => {
     } catch (error) {
         console.error("Invalid URL:", url, error);
         return "";
+    }
+};
+
+export const getEventJourneyFormat = (
+    eventType: string,
+    value: Record<string, unknown> | string | null
+) => {
+    switch (eventType) {
+        case "pageview":
+            return {
+                icon: EyeIcon,
+                prefixText: "Viewed page",
+                value: getPathnameAndSearchFromUrl(value as string)
+            };
+        case "signup":
+            return {
+                icon: UserPlusIcon,
+                prefixText: "Signed up as",
+                value: (value as Record<string, string>).email
+            };
+        case "payment":
+            return {
+                icon: CircleDollarSignIcon,
+                prefixText: "Purchased a plan as",
+                value: (value as Record<string, string>).email
+            };
+        default:
+            return {
+                icon: GoalIcon,
+                prefixText: "Completed the event",
+                value: eventType
+            };
     }
 };
 

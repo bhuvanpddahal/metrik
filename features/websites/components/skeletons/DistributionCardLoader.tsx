@@ -21,7 +21,7 @@ const DistributionCardLoader = (
             <CardHeader className="p-1 border-b">
                 <Button variant="ghost" className="w-fit pr-2 font-semibold pointer-events-none">
                     {name}
-                    <ChevronDownIcon className="size-4 text-muted-foreground" />
+                    <ChevronDownIcon className="size-4 stroke-[0.8] text-muted-foreground" />
                 </Button>
             </CardHeader>
             <CardContent className="px-0 pt-5">

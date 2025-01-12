@@ -80,8 +80,8 @@
             timestamp: new Date().toISOString(),
             location,
             viewport: {
-                width: window.innerWidth,
-                height: window.innerHeight
+                width: screen.width,
+                height: screen.height
             },
             visitorId,
             sessionId
