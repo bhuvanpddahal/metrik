@@ -7,7 +7,6 @@ import {
     gte,
     inArray,
     lte,
-    ne,
     SQL,
     sql
 } from "drizzle-orm";
@@ -210,6 +209,26 @@ const app = new Hono()
         }
     )
     .get(
+        "/header",
+        verifyAuth(),
+        async (c) => {
+            const authUser = c.get("authUser");
+            const userId = authUser.session.user.id;
+
+            const websites = await db
+                .select({
+                    id: WebsiteTable.id,
+                    domain: WebsiteTable.domain
+                })
+                .from(WebsiteTable)
+                .where(eq(WebsiteTable.userId, userId))
+                .orderBy(desc(WebsiteTable.addedAt))
+                .limit(10);
+
+            return c.json({ data: { websites } }, 200);
+        }
+    )
+    .get(
         "/:domain",
         verifyAuth(),
         zValidator("param", domainSchema),
@@ -223,35 +242,6 @@ const app = new Hono()
             if (website.userId !== userId) return c.json({ error: "Permission denied" }, 403);
 
             return c.json({ data: { website } }, 200);
-        }
-    )
-    .get(
-        "/:domain/header",
-        verifyAuth(),
-        zValidator("param", domainSchema),
-        async (c) => {
-            const authUser = c.get("authUser");
-            const userId = authUser.session.user.id;
-            const { domain } = c.req.valid("param");
-
-            const website = await getWebsiteByDomain(domain);
-            if (!website) return c.json({ error: "Website not found" }, 404);
-            if (website.userId !== userId) return c.json({ error: "Permission denied" }, 403);
-
-            const otherWebsites = await db
-                .select({
-                    id: WebsiteTable.id,
-                    domain: WebsiteTable.domain
-                })
-                .from(WebsiteTable)
-                .where(and(
-                    eq(WebsiteTable.userId, userId),
-                    ne(WebsiteTable.id, website.id)
-                ))
-                .orderBy(desc(WebsiteTable.addedAt))
-                .limit(10);
-
-            return c.json({ data: { otherWebsites } }, 200);
         }
     )
     .get(

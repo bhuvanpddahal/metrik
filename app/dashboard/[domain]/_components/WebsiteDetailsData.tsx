@@ -22,10 +22,10 @@ const WebsiteDetailsData = (
     { domain }: WebsiteDetailsDataProps
 ) => {
     const { interval } = useWebsiteDetailsSearchParams();
-    const { isInitialLoading: isInitialLoadingDomain } = useGetWebsiteHeader(domain);
-    const { isLoading: isLoadingData, data, error, failureReason } = useGetWebsiteData(domain, interval);
+    const { isInitialLoading: isInitialLoadingDomain } = useGetWebsiteHeader();
+    const { isLoading: isLoadingData, data, error } = useGetWebsiteData(domain, interval);
 
-    if (isInitialLoadingDomain || isLoadingData) return (
+    if ((!data && isInitialLoadingDomain) || isLoadingData) return (
         <>
             <WebsiteOverviewCardLoader />
             <DistributionCardLoader name="Referrer" />

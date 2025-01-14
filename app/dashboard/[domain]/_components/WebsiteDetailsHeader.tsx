@@ -37,7 +37,7 @@ const WebsiteDetailsHeader = (
     { domain }: WebsiteDetailsHeaderProps
 ) => {
     const router = useRouter();
-    const { isLoading, data } = useGetWebsiteHeader(domain);
+    const { isLoading, data, error } = useGetWebsiteHeader();
     const { interval, setInterval } = useWebsiteDetailsSearchParams();
 
     const activeIntervalLabel = OVERVIEW_CHART_INTERVALS[interval].label;
@@ -50,7 +50,7 @@ const WebsiteDetailsHeader = (
     );
     if (!data) return (
         <div className="h-9 text-center text-destructive font-medium">
-            Failed to fetch website header
+            {error?.message ?? "Something went wrong"}
         </div>
     );
 
@@ -71,19 +71,23 @@ const WebsiteDetailsHeader = (
                         <DropdownMenuItem onClick={() => router.push(`/dashboard/${domain}/settings`)}>
                             Site settings
                         </DropdownMenuItem>
-                        {data.otherWebsites.length > 0 && (
+                        {data.websites.length > 1 && (
                             <>
                                 <DropdownMenuSeparator />
-                                {data.otherWebsites.map((website) => (
-                                    <DropdownMenuItem
-                                        key={website.id}
-                                        className="pr-4"
-                                        onClick={() => router.push(`/dashboard/${website.domain}${interval !== "today" ? `?interval=${interval}` : ""}`)}
-                                    >
-                                        <WebsiteAvatar domain={website.domain} className="size-6 border-none" />
-                                        {website.domain}
-                                    </DropdownMenuItem>
-                                ))}
+                                {data.websites.map((website) => {
+                                    if (website.domain === domain) return null;
+
+                                    return (
+                                        <DropdownMenuItem
+                                            key={website.id}
+                                            className="pr-4"
+                                            onClick={() => router.push(`/dashboard/${website.domain}${interval !== "today" ? `?interval=${interval}` : ""}`)}
+                                        >
+                                            <WebsiteAvatar domain={website.domain} className="size-6 border-none" />
+                                            {website.domain}
+                                        </DropdownMenuItem>
+                                    );
+                                })}
                             </>
                         )}
                     </DropdownMenuContent>
