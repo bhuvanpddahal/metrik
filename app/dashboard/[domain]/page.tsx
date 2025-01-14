@@ -7,7 +7,7 @@ interface WebsiteDetailsPageProps {
     };
 }
 
-const WebsiteDetailsPage = ({
+const WebsiteDetailsPage = async ({
     params: { domain }
 }: WebsiteDetailsPageProps) => {
     return (

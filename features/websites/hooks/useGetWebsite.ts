@@ -8,7 +8,8 @@ export const useGetWebsite = (domain: string) => {
         queryFn: async () => {
             const response = await client.api.websites[":domain"].$get({ param: { domain } });
             if (!response.ok) {
-                throw new Error("Failed to fetch website");
+                const { error } = await response.json();
+                throw new Error(error);
             }
 
             const { data } = await response.json();

@@ -86,7 +86,7 @@ const app = new Hono()
             }
         }
     )
-    .get(
+    .patch(
         "/:websiteId/verify-script",
         verifyAuth(),
         zValidator("param", websiteIdSchema),
@@ -104,6 +104,10 @@ const app = new Hono()
                 website.domain
             );
             if (!hasInstalledScript) return c.json({ error: "Script doesn't exist" }, 400);
+
+            await db.update(WebsiteTable)
+                .set({ verifiedAt: new Date() })
+                .where(eq(WebsiteTable.id, websiteId));
 
             return c.json({ data: { success: "Script installation verified" } }, 200);
         }
@@ -266,6 +270,11 @@ const app = new Hono()
             const website = await getWebsiteByDomain(domain);
             if (!website) return c.json({ error: "Website not found" }, 404);
             if (website.userId !== userId) return c.json({ error: "Permission denied" }, 403);
+            if (!website.verifiedAt) return c.json({
+                error: "Website not verified",
+                websiteId: website.id,
+                timezone: website.timezone
+            }, 400);
 
             const intervalObj = OVERVIEW_CHART_INTERVALS[interval];
             const prevStartDate = intervalObj.prevStartDate;

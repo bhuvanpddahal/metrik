@@ -1,3 +1,4 @@
+import VerifyWebsiteAlert from "./VerifyWebsiteAlert";
 import DomainCard from "@/features/settings/components/DomainCard";
 import ScriptCard from "@/features/settings/components/ScriptCard";
 import TimezoneCard from "@/features/settings/components/TimezoneCard";
@@ -18,7 +19,7 @@ const GeneralNavContent = ({
     const { open } = useDeleteWebsiteModal();
 
     return (
-        <div className="max-w-[31.25rem] w-full space-y-4">
+        <>
             <DomainCard websiteId={websiteId} domain={domain} />
             <TimezoneCard websiteId={websiteId} timezone={timezone} />
             <ScriptCard websiteId={websiteId} domain={domain} />
@@ -29,7 +30,7 @@ const GeneralNavContent = ({
             >
                 Delete
             </Button>
-        </div>
+        </>
     );
 };
 

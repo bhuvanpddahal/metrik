@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "nextjs-toploader/app";
 
 import { client } from "@/lib/rpc";
 import { useGetWebsiteHeader } from "./useGetWebsiteHeader";
@@ -8,6 +9,7 @@ export const useGetWebsiteData = (
     domain: string,
     interval: OverviewChartIntervalKey
 ) => {
+    const router = useRouter();
     const { isInitialLoading } = useGetWebsiteHeader(domain);
 
     const query = useQuery({
@@ -18,7 +20,14 @@ export const useGetWebsiteData = (
                 query: { interval }
             });
             if (!response.ok) {
-                throw new Error("Failed to fetch website data");
+                if (response.status === 400) {
+                    const { error, websiteId, timezone } = await response.json();
+                    router.push(`/dashboard/new?step=script&websiteId=${websiteId}&domain=${domain}&timezone=${timezone}`)
+                    throw new Error(error);
+                }
+
+                const { error } = await response.json();
+                throw new Error(error);
             }
 
             const { data } = await response.json();

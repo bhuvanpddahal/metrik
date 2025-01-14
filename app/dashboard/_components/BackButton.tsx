@@ -19,7 +19,7 @@ const BackButton = ({
             href={href}
             className={buttonVariants({ variant: "outline", className })}
         >
-            <ArrowLeftIcon className="size-3" />
+            <ArrowLeftIcon className="size-3 stroke-[0.8]" />
             {btnText}
         </Link>
     );

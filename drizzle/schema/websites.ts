@@ -28,6 +28,7 @@ export const WebsiteTable = pgTable(
         addedAt: timestamp("added_at", { withTimezone: true })
             .notNull()
             .defaultNow(),
+        verifiedAt: timestamp("verified_at", { withTimezone: true }),
         updatedAt: timestamp("updated_at", { withTimezone: true })
             .notNull()
             .defaultNow()

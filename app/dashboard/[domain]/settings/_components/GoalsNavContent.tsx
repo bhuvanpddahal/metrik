@@ -9,7 +9,7 @@ import {
 
 const GoalsNavContent = () => {
     return (
-        <Tabs defaultValue="standard" className="max-w-[31.25rem] w-full">
+        <Tabs defaultValue="standard">
             <TabsList className="w-full">
                 <TabsTrigger value="standard" className="text-base">Standard</TabsTrigger>
                 <TabsTrigger value="custom" className="text-base">Custom</TabsTrigger>

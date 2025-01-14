@@ -5,8 +5,8 @@ import { InferRequestType, InferResponseType } from "hono";
 
 import { client } from "@/lib/rpc";
 
-type RequestType = InferRequestType<typeof client.api.websites[":websiteId"]["verify-script"]["$get"]>;
-type ResponseType = InferResponseType<typeof client.api.websites[":websiteId"]["verify-script"]["$get"], 200>;
+type RequestType = InferRequestType<typeof client.api.websites[":websiteId"]["verify-script"]["$patch"]>;
+type ResponseType = InferResponseType<typeof client.api.websites[":websiteId"]["verify-script"]["$patch"], 200>;
 
 export const useVerifyScriptInstallation = () => {
     const router = useRouter();
@@ -17,7 +17,7 @@ export const useVerifyScriptInstallation = () => {
         RequestType
     >({
         mutationFn: async ({ param }) => {
-            const response = await client.api.websites[":websiteId"]["verify-script"].$get({ param });
+            const response = await client.api.websites[":websiteId"]["verify-script"].$patch({ param });
             if (!response.ok) throw new Error("Looks like the script is not installed, please try again.");
 
             return await response.json();

@@ -22,8 +22,8 @@ const WebsiteDetailsData = (
     { domain }: WebsiteDetailsDataProps
 ) => {
     const { interval } = useWebsiteDetailsSearchParams();
-    const { isLoading: isLoadingData, data } = useGetWebsiteData(domain, interval);
     const { isInitialLoading: isInitialLoadingDomain } = useGetWebsiteHeader(domain);
+    const { isLoading: isLoadingData, data, error, failureReason } = useGetWebsiteData(domain, interval);
 
     if (isInitialLoadingDomain || isLoadingData) return (
         <>
@@ -37,7 +37,7 @@ const WebsiteDetailsData = (
     );
     if (!data) return (
         <Error
-            message="Unexpected happened while trying to fetch website data"
+            message={error?.message}
             className="md:col-span-2"
         />
     );

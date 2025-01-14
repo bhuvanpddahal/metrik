@@ -3,6 +3,7 @@
 import NavButtons from "./NavButtons";
 import NavContent from "./NavContent";
 import Error from "@/components/Error";
+import VerifyWebsiteAlert from "./VerifyWebsiteAlert";
 import NavContentLoader from "./skeletons/NavContentLoader";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { useGetWebsite } from "@/features/websites/hooks/useGetWebsite";
@@ -18,7 +19,7 @@ const WebsiteSettingsContent = (
 
     if (isLoading) return (
         <section>
-            <h1 className="flex items-center gap-x-1 lg:gap-x-1.5 text-xl lg:text-2xl font-bold">
+            <h1 className="flex items-center gap-x-[0.3125rem] lg:gap-x-1.5 text-xl lg:text-2xl font-bold">
                 Settings for
                 <Skeleton className="bg-slate-50 text-transparent rounded-sm pointer-events-none select-none dark:bg-card">
                     {domain}
@@ -39,11 +40,20 @@ const WebsiteSettingsContent = (
             </h1>
             <div className="flex flex-col lg:flex-row gap-x-8 gap-y-5 mt-6">
                 <NavButtons />
-                <NavContent
-                    websiteId={data.website.id}
-                    domain={data.website.domain}
-                    timezone={data.website.timezone}
-                />
+                <div className="max-w-[31.25rem] w-full space-y-4">
+                    {!data.website.verifiedAt && (
+                        <VerifyWebsiteAlert
+                            websiteId={data.website.id}
+                            domain={data.website.domain}
+                            timezone={data.website.timezone}
+                        />
+                    )}
+                    <NavContent
+                        websiteId={data.website.id}
+                        domain={data.website.domain}
+                        timezone={data.website.timezone}
+                    />
+                </div>
             </div>
         </section>
     );
