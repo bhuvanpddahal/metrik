@@ -125,6 +125,7 @@ const app = new Hono()
                 .select({
                     id: WebsiteTable.id,
                     domain: WebsiteTable.domain,
+                    timezone: WebsiteTable.timezone,
                     visitorsCount: count(VisitorTable)
                 })
                 .from(WebsiteTable)
@@ -149,61 +150,25 @@ const app = new Hono()
                     lte(VisitorTable.updatedAt, currentDate)
                 ));
 
-            const allWebsitesChartData = await Promise.all(
-                websiteIds.map(async (websiteId) => {
-                    const visitors = db.$with("visitors").as(
-                        db
-                            .select({ id: VisitorTable.id })
-                            .from(VisitorTable)
-                            .where(and(
-                                eq(VisitorTable.websiteId, websiteId),
-                                gte(VisitorTable.updatedAt, startDate),
-                                lte(VisitorTable.visitedAt, currentDate)
-                            ))
+            const websitesWithChartData = await Promise.all(
+                websites.map(async (website) => {
+                    const chartData = await getOverviewChartData(
+                        website.id,
+                        startDate,
+                        currentDate,
+                        website.timezone,
+                        OVERVIEW_CHART_INTERVALS.last24Hours.sql,
+                        OVERVIEW_CHART_INTERVALS.last24Hours.joinClause
                     );
-
-                    const pageViews = db.$with("page_views").as(
-                        db
-                            .with(visitors)
-                            .select({
-                                visitorId: visitors.id,
-                                timestamp: PageViewTable.timestamp
-                            })
-                            .from(SessionTable)
-                            .innerJoin(visitors, eq(SessionTable.visitorId, visitors.id))
-                            .innerJoin(PageViewTable, and(
-                                eq(PageViewTable.sessionId, SessionTable.id),
-                                gte(PageViewTable.timestamp, startDate),
-                                lte(PageViewTable.timestamp, currentDate)
-                            ))
-                    );
-
-                    const chartData = await db.with(pageViews)
-                        .select({
-                            date: sql<string>`${sql.raw("series")}`.inlineParams(),
-                            totalVisitors: countDistinct(pageViews.visitorId)
-                        })
-                        .from(
-                            sql`GENERATE_SERIES(${startDate}, ${currentDate}, '1 hour'::interval) as series`
-                        )
-                        .leftJoin(pageViews, ({ date }) => generateJoinClauseForNow(pageViews.timestamp, date))
-                        .groupBy(({ date }) => date)
-                        .orderBy(({ date }) => date);
-
 
                     return {
-                        websiteId,
+                        id: website.id,
+                        domain: website.domain,
+                        visitorsCount: website.visitorsCount,
                         chartData
                     };
                 })
             );
-
-            const websitesWithChartData = websites.map((website) => {
-                const websiteChartData = allWebsitesChartData.find(
-                    (chartData) => chartData.websiteId === website.id
-                );
-                return { ...website, chartData: websiteChartData?.chartData };
-            });
 
             return c.json({ data: { websites: websitesWithChartData, visitorsCount } }, 200);
         }
@@ -320,10 +285,10 @@ const app = new Hono()
             }
 
             const liveVisitorsCount = await getLiveVisitorsCount(website.id, endDate);
-            const overviewChartData = await getOverviewChartData(...args, intervalSql, joinClause);
+            const overviewChartData = await getOverviewChartData(...args, website.timezone, intervalSql, joinClause);
 
             const referrerChartData = await getReferrerChartData(...args);
-            const pageChartData = await getPageChartData(...args);
+            const pageChartData = await getPageChartData(...args, website.timezone);
 
             const getChartDataFromVisitorsPrefilled = getChartDataFromVisitors.bind(null, ...args);
             const countryChartData = await getChartDataFromVisitorsPrefilled("country");

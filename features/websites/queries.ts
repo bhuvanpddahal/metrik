@@ -106,7 +106,8 @@ const getSessionsSubquery = (
 const getPageViewsSubquery = (
     websiteId: string,
     startDate: Date,
-    endDate: Date
+    endDate: Date,
+    timezone: string
 ) => {
     const visitors = getVisitorsSubquery(websiteId, startDate, endDate);
 
@@ -116,7 +117,9 @@ const getPageViewsSubquery = (
             .select({
                 visitorId: visitors.id,
                 page: PageViewTable.page,
-                timestamp: PageViewTable.timestamp
+                timestamp: sql<string>`${PageViewTable.timestamp} AT TIME ZONE ${timezone}`
+                    .inlineParams()
+                    .as("timestamp")
             })
             .from(SessionTable)
             .innerJoin(visitors, eq(SessionTable.visitorId, visitors.id))
@@ -215,10 +218,11 @@ export const getOverviewChartData = async (
     websiteId: string,
     startDate: Date,
     endDate: Date,
+    timezone: string,
     intervalSql: SQL<unknown>,
     joinClause: (timestamp: any, date: SQL<string>) => SQL<unknown> | undefined
 ) => {
-    const pageViews = getPageViewsSubquery(websiteId, startDate, endDate);
+    const pageViews = getPageViewsSubquery(websiteId, startDate, endDate, timezone);
 
     return await db
         .with(pageViews)
@@ -258,9 +262,10 @@ export const getReferrerChartData = async (
 export const getPageChartData = async (
     websiteId: string,
     startDate: Date,
-    endDate: Date
+    endDate: Date,
+    timezone: string
 ) => {
-    const pageViews = getPageViewsSubquery(websiteId, startDate, endDate);
+    const pageViews = getPageViewsSubquery(websiteId, startDate, endDate, timezone);
 
     return await db
         .with(pageViews)

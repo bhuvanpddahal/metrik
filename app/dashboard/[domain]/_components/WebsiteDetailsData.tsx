@@ -36,10 +36,7 @@ const WebsiteDetailsData = (
         </>
     );
     if (!data) return (
-        <Error
-            message={error?.message}
-            className="md:col-span-2"
-        />
+        <Error message={error?.message} className="md:col-span-2" />
     );
 
     return (

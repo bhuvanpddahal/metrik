@@ -27,12 +27,13 @@ import { AddSitePayload, addSiteSchema } from "../schemas";
 import { useAddWebsiteSearchParams } from "../hooks/useAddWebsiteSearchParams";
 
 const WebsiteForm = () => {
+    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const { mutate: addWebsite, isPending } = useAddWebsite();
     const { websiteId, domain, timezone } = useAddWebsiteSearchParams();
 
     const form = useForm<AddSitePayload>({
         resolver: zodResolver(addSiteSchema),
-        defaultValues: { websiteId, domain, timezone: timezone || "Etc/GMT+12" }
+        defaultValues: { websiteId, domain, timezone: timezone || userTimezone }
     });
 
     const onSubmit = (payload: AddSitePayload) => {
