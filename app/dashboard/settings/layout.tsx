@@ -1,9 +1,21 @@
+import type { Metadata } from "next";
+
 import BackButton from "../_components/BackButton";
 import DeleteAccountModal from "@/features/users/components/DeleteAccountModal";
+import { sharedOpenGraph } from "@/constants/shared-metadata";
 
 interface DashboardSettingsLayoutProps {
     children: React.ReactNode;
 }
+
+export const metadata: Metadata = {
+    title: "Settings",
+    openGraph: {
+        ...sharedOpenGraph,
+        title: "Settings | Metrik",
+        description: "Adjust your profile settings & customize your preferences"
+    }
+};
 
 const DashboardSettingsLayout = (
     { children }: DashboardSettingsLayoutProps

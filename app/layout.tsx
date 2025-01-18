@@ -6,10 +6,19 @@ import "./globals.css";
 import Toasters from "@/components/Toasters";
 import Providers from "@/components/Providers";
 import { Fustat } from "./fonts";
+import { sharedOpenGraph } from "@/constants/shared-metadata";
 
 export const metadata: Metadata = {
-    title: "Metrik",
-    description: "Web analytics tool that enables you to unlock the power of your web data"
+    title: {
+        template: "%s | Metrik",
+        default: "Metrik | Unlocking the Power of Your Web Data"
+    },
+    description: "Web analytics tool that enables you to unlock the power of your web data",
+    openGraph: {
+        ...sharedOpenGraph,
+        title: "Metrik | Unlocking the Power of Your Web Data",
+        description: "Web analytics tool that enables you to unlock the power of your web data"
+    }
 };
 
 export default function RootLayout({
@@ -22,7 +31,12 @@ export default function RootLayout({
     return (
         <html lang="en">
             <head>
-                <script defer data-website-id="f36748a5-9e29-449b-8f5b-0393d30cca66" data-domain="metrik-one.vercel.app" src="http://localhost:3000/js/script.js"></script>
+                <script
+                    defer
+                    data-website-id="f36748a5-9e29-449b-8f5b-0393d30cca66"
+                    data-domain="metrik-one.vercel.app"
+                    src="http://localhost:3000/js/script.js"
+                ></script>
             </head>
             <body className={`${Fustat.className} antialiased`}>
                 <NextTopLoader

@@ -1,6 +1,19 @@
+import type { Metadata } from "next";
+
+import { sharedOpenGraph } from "@/constants/shared-metadata";
+
 interface AuthLayoutProps {
     children: React.ReactNode;
 }
+
+export const metadata: Metadata = {
+    title: "Sign In",
+    openGraph: {
+        ...sharedOpenGraph,
+        title: "Sign In | Metrik",
+        description: "Sign up for Metrik to unlock the power of your web data"
+    }
+};
 
 const AuthLayout = ({ children }: AuthLayoutProps) => {
     return (

@@ -12,7 +12,7 @@ const TabContent = () => {
         case "more":
             return (
                 <div>
-                    More tab
+                    More tab (coming soon)
                 </div>
             );
         default:
