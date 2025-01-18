@@ -14,9 +14,12 @@ const DashboardTitle = ({
         <div className="flex flex-row-reverse items-center justify-between">
             <Link
                 href="/dashboard/new"
-                className={buttonVariants({ variant: "outline" })}
+                className={buttonVariants({
+                    variant: "outline",
+                    className: "pl-2.5"
+                })}
             >
-                <PlusIcon className="size-3" />
+                <PlusIcon className="size-3 stroke-[0.8]" />
                 Website
             </Link>
             {visitorsCount > 0 && (

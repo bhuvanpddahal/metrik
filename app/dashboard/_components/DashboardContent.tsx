@@ -15,7 +15,7 @@ const DashboardContent = () => {
 
     if (isLoading) return (
         <div className="container py-4">
-            <Skeleton className="h-9 w-[6.87rem] bg-slate-50 dark:bg-card ml-auto" />
+            <Skeleton className="h-9 w-[6.495rem] bg-slate-50 dark:bg-card ml-auto" />
             <WebsitesListLoader />
         </div>
     );
