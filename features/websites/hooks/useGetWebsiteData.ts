@@ -10,7 +10,7 @@ export const useGetWebsiteData = (
     interval: OverviewChartIntervalKey
 ) => {
     const router = useRouter();
-    const { isInitialLoading } = useGetWebsiteHeader(domain);
+    const { isInitialLoading } = useGetWebsiteHeader();
 
     const query = useQuery({
         queryKey: ["websites", domain, "data", { interval }],

@@ -1,6 +1,6 @@
 import { WithSubqueryWithSelection } from "drizzle-orm/pg-core";
 
-import { EventTable, SessionTable, VisitorTable } from "@/drizzle/schema";
+import { SessionTable, VisitorTable } from "@/drizzle/schema";
 
 export type VisitorsSubquery = WithSubqueryWithSelection<
     typeof VisitorTable._.columns,
@@ -26,11 +26,11 @@ export type Visitor = {
     journey: {
         type: string;
         value: Record<string, unknown> | string | null;
-        date: Date;
+        date: Date | string;
     }[];
 };
 
 export type UserJourneyData = {
-    type: typeof EventTable.$inferSelect.type;
+    type: string;
     visitors: Visitor[];
 }[];

@@ -1,14 +1,12 @@
 import {
     and,
     count,
-    countDistinct,
     desc,
     eq,
     gte,
     inArray,
     lte,
-    SQL,
-    sql
+    SQL
 } from "drizzle-orm";
 import { z } from "zod";
 import { Hono } from "hono";
@@ -17,7 +15,6 @@ import { verifyAuth } from "@hono/auth-js";
 import { zValidator } from "@hono/zod-validator";
 
 import {
-    generateJoinClauseForNow,
     generateJoinClauseFromDateDiff,
     generateSqlSeriesFromDateDiff
 } from "../utils";
@@ -41,10 +38,8 @@ import {
 } from "../constants";
 import { db } from "@/drizzle/db";
 import { conditionalRound } from "@/lib/utils";
-import { SessionTable } from "@/drizzle/schema/sessions";
 import { VisitorTable } from "@/drizzle/schema/visitors";
 import { WebsiteTable } from "@/drizzle/schema/websites";
-import { PageViewTable } from "@/drizzle/schema/page-views";
 import { addSiteSchema, websiteIdSchema } from "../schemas";
 import { domainSchema, timezoneSchema } from "@/features/settings/schemas";
 

@@ -11,17 +11,11 @@ import {
 interface NewWebsitePageProps {
     searchParams: {
         step?: "site" | "script";
-        websiteId?: string;
-        domain?: string;
     };
 }
 
 const NewWebsitePage = ({
-    searchParams: {
-        step,
-        websiteId = "",
-        domain = ""
-    }
+    searchParams: { step }
 }: NewWebsitePageProps) => {
     return (
         <Card className="mt-5">
@@ -40,10 +34,8 @@ const NewWebsitePage = ({
             </CardHeader>
             <CardContent className="py-6">
                 {step === "script"
-                    ? <InstallScriptCard
-                        websiteId={websiteId}
-                        domain={domain}
-                    /> : <WebsiteForm />
+                    ? <InstallScriptCard />
+                    : <WebsiteForm />
                 }
             </CardContent>
         </Card>

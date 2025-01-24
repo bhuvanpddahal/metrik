@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 
 import BackButton from "../_components/BackButton";
@@ -23,8 +24,10 @@ const NewWebsiteLayout = (
     return (
         <div className="max-w-lg w-full mx-auto py-6">
             <BackButton href="/dashboard" btnText="Dashboard" />
-            <AddSiteProgress />
-            {children}
+            <Suspense>
+                <AddSiteProgress />
+                {children}
+            </Suspense>
         </div>
     );
 };

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import type { ChartData } from "../queries";
+import type { ChartData } from "../types";
 
 type LabelFormatter = (value: string | null) => string;
 

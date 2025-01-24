@@ -425,7 +425,7 @@ export const getUserJourneyData = async (
                         {
                             type: event.type,
                             value: event.extraData,
-                            date: new Date(event.timestamp)
+                            date: event.timestamp
                         }
                     ];
 

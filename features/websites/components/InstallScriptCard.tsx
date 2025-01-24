@@ -3,24 +3,19 @@
 import Code from "@/components/Code";
 import { scriptSrc } from "../constants";
 import { Button } from "@/components/ui/Button";
+import { useAddWebsiteSearchParams } from "../hooks/useAddWebsiteSearchParams";
 import { useVerifyScriptInstallation } from "../hooks/useVerifyScriptInstallation";
 
-interface InstallScriptCardProps {
-    websiteId: string;
-    domain: string;
-}
+const InstallScriptCard = () => {
+    const { websiteId, domain } = useAddWebsiteSearchParams();
+    const { mutate: verifyInstallation, isPending } = useVerifyScriptInstallation();
 
-const InstallScriptCard = ({
-    websiteId,
-    domain
-}: InstallScriptCardProps) => {
     const script = `<script
   defer
   data-website-id="${websiteId}"
   data-domain="${domain}"
   src="${scriptSrc}"
 ></script>`;
-    const { mutate: verifyInstallation, isPending } = useVerifyScriptInstallation();
 
     return (
         <div>

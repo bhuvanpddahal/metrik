@@ -40,7 +40,7 @@ const UsersJourneyTable = ({
                     <TableBody>
                         {activeEventVisitors.map((visitor, index) => {
                             const journeyLength = visitor.journey.length;
-                            const domainName = getDomainNameFromUrl(visitor.journey[0].value);
+                            const domainName = getDomainNameFromUrl(visitor.journey[0].value as string | null);
                             const timeToComplete = formatDistance(visitor.journey[journeyLength - 1].date, visitor.journey[0].date);
 
                             return (

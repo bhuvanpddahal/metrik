@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import NavButtons from "./_components/NavButtons";
 import NavContent from "./_components/NavContent";
 
@@ -8,8 +10,10 @@ const DashboardSettingsPage = () => {
                 Settings
             </h1>
             <div className="flex flex-col lg:flex-row gap-x-8 gap-y-5 mt-6">
-                <NavButtons />
-                <NavContent />
+                <Suspense>
+                    <NavButtons />
+                    <NavContent />
+                </Suspense>
             </div>
         </section>
     );

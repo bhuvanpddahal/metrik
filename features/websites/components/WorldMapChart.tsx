@@ -11,7 +11,7 @@ import {
     TooltipProvider,
     TooltipTrigger
 } from "@/components/ui/Tooltip";
-import type { ChartData } from "../queries";
+import type { ChartData } from "../types";
 
 interface WorldMapChartProps {
     chartData: ChartData;
