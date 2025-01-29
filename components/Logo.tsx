@@ -13,7 +13,7 @@ const Logo = ({ className = "" }: LogoProps) => (
             alt="Metrik Logo"
             width={24}
             height={24}
-            className={cn("h-8 w-auto sm:hidden", className)}
+            className={cn("h-7 w-auto sm:hidden", className)}
             priority
         />
         <Image
@@ -21,7 +21,7 @@ const Logo = ({ className = "" }: LogoProps) => (
             alt="Metrik Logo"
             width={101}
             height={24}
-            className={cn("h-8 w-auto hidden sm:inline-block dark:hidden", className)}
+            className={cn("h-7 w-auto hidden sm:inline-block dark:hidden", className)}
             priority
         />
         <Image
@@ -29,7 +29,7 @@ const Logo = ({ className = "" }: LogoProps) => (
             alt="Metrik Logo"
             width={101}
             height={24}
-            className={cn("h-8 w-auto hidden dark:sm:inline-block", className)}
+            className={cn("h-7 w-auto hidden dark:sm:inline-block", className)}
             priority
         />
     </>

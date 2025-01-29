@@ -1,3 +1,4 @@
+import Footer from "./_components/Footer";
 import Navbar from "./_components/Navbar";
 
 interface LandingLayoutProps {
@@ -9,6 +10,7 @@ const LandingLayout = ({ children }: LandingLayoutProps) => {
         <main>
             <Navbar />
             {children}
+            <Footer />
         </main>
     );
 };

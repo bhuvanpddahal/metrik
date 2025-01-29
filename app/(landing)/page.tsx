@@ -1,15 +1,17 @@
-import Footer from "./_components/Footer";
-import HeroSection from "./_components/HeroSection";
-import ClientsListSection from "./_components/ClientsListSection";
-import DescriptionSection from "./_components/DescriptionSection";
+import FAQs from "./_components/FAQs";
+import HeroSection from "./_components/Hero";
+import Features from "./_components/Features";
+import GetStarted from "./_components/GetStarted";
+import CallToAction from "./_components/CallToAction";
 
 const HomePage = () => {
     return (
         <>
             <HeroSection />
-            <ClientsListSection />
-            <DescriptionSection />
-            <Footer />
+            <Features />
+            <GetStarted />
+            <FAQs />
+            <CallToAction />
         </>
     );
 };

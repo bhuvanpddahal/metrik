@@ -1,34 +1,74 @@
+import Link from "next/link";
+
 import Logo from "@/components/Logo";
+import { footerLinks, socialLinks } from "../constants";
 
 const Footer = () => {
     return (
-        <footer>
-            <div className="container pb-20">
-                <div className="flex justify-between pb-7">
-                    <div>
+        <footer className="bg-gray-100 dark:bg-zinc-800">
+            <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
+                <div className="xl:grid xl:grid-cols-3 xl:gap-8">
+                    <div className="space-y-8 xl:col-span-1">
                         <Logo />
-                        <div>
-                            600 California St, 11th floor, CA 98107
+                        <p className="text-muted-foreground text-base">
+                            Making web analytics simple and powerful for businesses of all sizes.
+                        </p>
+                        <div className="flex space-x-6">
+                            {socialLinks.map((item) => (
+                                <a
+                                    key={item.name}
+                                    href={item.href}
+                                    className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
+                                >
+                                    <span className="sr-only">{item.name}</span>
+                                    <item.icon className="h-6 w-6" aria-hidden="true" />
+                                </a>
+                            ))}
                         </div>
                     </div>
-                    <div>
-                        <div className="text-foreground">
-                            <h3 className="font-bold">Product</h3>
-                            <ul>
-                                <li>Integrations</li>
-                                <li>Integrations</li>
-                                <li>Integrations</li>
-                            </ul>
+                    <div className="mt-12 grid grid-cols-2 gap-8 xl:mt-0 xl:col-span-2">
+                        <div className="md:grid md:grid-cols-2 md:gap-8">
+                            <div>
+                                <h3 className="text-sm font-semibold text-gray-400 dark:text-gray-300 tracking-wider uppercase">
+                                    Solutions
+                                </h3>
+                                <ul role="list" className="mt-4 space-y-4">
+                                    {footerLinks.slice(0, 3).map((item) => (
+                                        <li key={item.name}>
+                                            <Link
+                                                href={item.href}
+                                                className="text-base text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300"
+                                            >
+                                                {item.name}
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                            <div className="mt-12 md:mt-0">
+                                <h3 className="text-sm font-semibold text-gray-400 dark:text-gray-300 tracking-wider uppercase">
+                                    Support
+                                </h3>
+                                <ul role="list" className="mt-4 space-y-4">
+                                    {footerLinks.slice(3).map((item) => (
+                                        <li key={item.name}>
+                                            <Link
+                                                href={item.href}
+                                                className="text-base text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300"
+                                            >
+                                                {item.name}
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div className="flex items-center justify-between border-t pt-7">
-                    <div>
-                        @ {(new Date()).getFullYear()} Metrik Inc.
-                    </div>
-                    <ul>
-                        <li>Social</li>
-                    </ul>
+                <div className="mt-12 border-t dark:border-muted-foreground pt-8">
+                    <p className="text-base text-gray-400 dark:text-gray-300 xl:text-center">
+                        © {new Date().getFullYear()} Metrik, Inc. All rights reserved.
+                    </p>
                 </div>
             </div>
         </footer>
