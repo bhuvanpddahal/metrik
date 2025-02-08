@@ -24,7 +24,7 @@ const FAQs = () => {
                 <div className="max-w-2xl w-full mx-auto mt-10">
                     <Accordion type="single" collapsible className="space-y-4">
                         {questions.map(({ question, answer }, index) => (
-                            <AccordionItem value={`item-${index + 1}`}>
+                            <AccordionItem key={index} value={`item-${index + 1}`}>
                                 <AccordionTrigger>{question}</AccordionTrigger>
                                 <AccordionContent>{answer}</AccordionContent>
                             </AccordionItem>

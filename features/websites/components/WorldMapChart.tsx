@@ -4,6 +4,8 @@ import {
     Geography
 } from "react-simple-maps";
 import { memo } from "react";
+import { useTheme } from "next-themes";
+import { scaleLinear } from "d3-scale";
 
 import {
     Tooltip,
@@ -20,6 +22,15 @@ interface WorldMapChartProps {
 const WorldMapChart = (
     { chartData }: WorldMapChartProps
 ) => {
+    const totalVisitorsArray = chartData.map((data) => data.totalVisitors as number);
+    const maxTotalVisitors = Math.max(...totalVisitorsArray, 1);
+    const { resolvedTheme } = useTheme();
+
+    const colorScale = scaleLinear(
+        [0, maxTotalVisitors],
+        resolvedTheme === "light" ? ["#eff6ff", "#bae6fd"] : ["#172554", "#1d4ed8"]
+    );
+
     return (
         <TooltipProvider>
             <ComposableMap
@@ -34,7 +45,7 @@ const WorldMapChart = (
                     {({ geographies }) =>
                         geographies.map((geo) => {
                             const country = geo.properties.name;
-                            const totalVisitors = chartData.find((row) => row.country === country)?.totalVisitors ?? 0;
+                            const totalVisitors = chartData.find((row) => row.country === country)?.totalVisitors as number ?? 0;
 
                             return (
                                 <Tooltip key={geo.rsmKey}>
@@ -43,19 +54,19 @@ const WorldMapChart = (
                                             geography={geo}
                                             style={{
                                                 default: {
-                                                    fill: "hsl(var(--card)",
-                                                    stroke: "hsl(var(--muted-foreground))",
+                                                    fill: colorScale(totalVisitors),
+                                                    stroke: "hsl(var(--card))",
                                                     strokeWidth: 0.7,
                                                     outline: "none"
                                                 },
                                                 hover: {
-                                                    fill: "hsl(var(--card)",
-                                                    stroke: "hsl(var(--chart-1))",
+                                                    fill: "hsl(var(--accent))",
+                                                    stroke: "hsl(var(--card))",
                                                     outline: "none"
                                                 },
                                                 pressed: {
-                                                    fill: "hsl(var(--chart-3))",
-                                                    stroke: "hsl(var(--chart-3))",
+                                                    fill: "hsl(var(--muted))",
+                                                    stroke: "hsl(var(--card))",
                                                     outline: "none"
                                                 }
                                             }}

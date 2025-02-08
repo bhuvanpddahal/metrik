@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Bar, BarChart, LabelList, XAxis, YAxis } from "recharts";
 

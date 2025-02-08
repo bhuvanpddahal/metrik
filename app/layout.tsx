@@ -11,12 +11,12 @@ import { sharedOpenGraph } from "@/constants/shared-metadata";
 export const metadata: Metadata = {
     title: {
         template: "%s | Metrik",
-        default: "Metrik | Unlocking the Power of Your Web Data"
+        default: "Metrik | Powerful insights for your website"
     },
     description: "Web analytics tool that enables you to unlock the power of your web data",
     openGraph: {
         ...sharedOpenGraph,
-        title: "Metrik | Unlocking the Power of Your Web Data",
+        title: "Metrik | Powerful insights for your website",
         description: "Web analytics tool that enables you to unlock the power of your web data"
     }
 };
