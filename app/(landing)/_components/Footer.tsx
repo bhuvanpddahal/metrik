@@ -15,14 +15,14 @@ const Footer = () => {
                         </p>
                         <div className="flex space-x-6">
                             {socialLinks.map((item) => (
-                                <a
+                                <Link
                                     key={item.name}
                                     href={item.href}
                                     className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
                                 >
                                     <span className="sr-only">{item.name}</span>
                                     <item.icon className="h-6 w-6" aria-hidden="true" />
-                                </a>
+                                </Link>
                             ))}
                         </div>
                     </div>
@@ -65,7 +65,7 @@ const Footer = () => {
                         </div>
                     </div>
                 </div>
-                <div className="mt-12 border-t dark:border-muted-foreground pt-8">
+                <div className="mt-12 border-t dark:border-zinc-700 pt-8">
                     <p className="text-base text-gray-400 dark:text-gray-300 xl:text-center">
                         © {new Date().getFullYear()} Metrik, Inc. All rights reserved.
                     </p>

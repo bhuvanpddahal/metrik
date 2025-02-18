@@ -9,7 +9,7 @@ interface LogoProps {
 const Logo = ({ className = "" }: LogoProps) => (
     <>
         <Image
-            src="/icon.svg"
+            src="/images/icon.svg"
             alt="Metrik Logo"
             width={24}
             height={24}
@@ -17,7 +17,7 @@ const Logo = ({ className = "" }: LogoProps) => (
             priority
         />
         <Image
-            src="/logo-light.svg"
+            src="/images/logo-light.svg"
             alt="Metrik Logo"
             width={101}
             height={24}
@@ -25,7 +25,7 @@ const Logo = ({ className = "" }: LogoProps) => (
             priority
         />
         <Image
-            src="/logo-dark.svg"
+            src="/images/logo-dark.svg"
             alt="Metrik Logo"
             width={101}
             height={24}

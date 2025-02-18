@@ -5,6 +5,6 @@ const baseUrl = env.NEXT_PUBLIC_APP_URL;
 export const sharedOpenGraph = {
     siteName: "Metrik",
     images: [
-        `${baseUrl}/og.png`
+        `${baseUrl}/images/og.png`
     ]
 };

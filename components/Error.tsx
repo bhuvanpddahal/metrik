@@ -16,7 +16,7 @@ const Error = ({
     return (
         <div className={cn("flex flex-col items-center px-5 py-20", className)}>
             <Image
-                src="/error.svg"
+                src="/images/error.svg"
                 alt="Error"
                 width={50}
                 height={40}

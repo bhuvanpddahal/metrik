@@ -62,9 +62,8 @@ const config: Config = {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			backgroundImage: {
-				waves: "url('/waves.svg')",
-				'logo-light': "url('/logo-light.svg')",
-				'logo-dark': "url('/logo-dark.svg')"
+				'logo-light': "url('/images/logo-light.svg')",
+				'logo-dark': "url('/images/logo-dark.svg')"
 			},
 			keyframes: {
 				'accordion-down': {

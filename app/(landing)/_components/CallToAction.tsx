@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { Button } from "@/components/ui/Button";
 
 const CallToAction = () => {
@@ -11,7 +13,7 @@ const CallToAction = () => {
                                 <span className="block">Ready to dive in?</span>
                                 <span className="block">Start your free trial today.</span>
                             </h2>
-                            <p className="mt-4 text-lg leading-6 text-muted dark:text-zinc-200">
+                            <p className="mt-4 text-base sm:text-xl lg:text-lg xl:text-xl leading-6 text-muted dark:text-zinc-200">
                                 Unlock the power of data-driven decisions with our 14-day free trial. No credit card required.
                             </p>
                             <Button
@@ -23,10 +25,12 @@ const CallToAction = () => {
                         </div>
                     </div>
                     <div className="relative -mt-6 aspect-w-5 aspect-h-3 md:aspect-w-2 md:aspect-h-1">
-                        <img
+                        <Image
+                            src="/images/pages.png"
+                            alt="Metrik add goal screenshot"
+                            width={500}
+                            height={500}
                             className="transform translate-x-6 translate-y-6 rounded-md object-cover object-left-top sm:translate-x-16 lg:translate-y-20"
-                            src="/placeholder.svg?height=500&width=800&text=Analytics+Dashboard"
-                            alt="App screenshot"
                         />
                     </div>
                 </div>

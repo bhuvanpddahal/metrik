@@ -9,10 +9,10 @@ import {
 } from "lucide-react";
 
 export const users = [
-    { name: "User 1", avatar: "/og.png" },
-    { name: "User 2", avatar: "/og.png" },
-    { name: "User 3", avatar: "/og.png" },
-    { name: "User 4", avatar: "/og.png" }
+    { name: "User 1", avatar: "/images/user.jpg" },
+    { name: "User 2", avatar: "/images/user.jpg" },
+    { name: "User 3", avatar: "/images/user.jpg" },
+    { name: "User 4", avatar: "/images/user.jpg" }
 ];
 
 export const features = [
@@ -36,16 +36,16 @@ export const features = [
 export const steps = [
     {
         title: "Add our script to your website",
-        description: "Simply copy and paste our tracking script into your website's HTML. It's just one line of code!",
-        imageSrc: "/placeholder.svg?height=300&width=400&text=Copy+Script",
-        imageAlt: ""
+        description: "Simply copy and paste our tracking script into your website's HTML. It's just a few lines of code!",
+        imageSrc: "/images/script.png",
+        imageAlt: "Metrik script"
     },
     {
         title: "View insights on your dashboard",
         description:
             "Access your personalized dashboard to see real-time data and make informed decisions to improve your website's performance.",
-        imageSrc: "/placeholder.svg?height=300&width=400&text=Dashboard+View",
-        imageAlt: ""
+        imageSrc: "/images/insights.png",
+        imageAlt: "Metrik insights"
     }
 ];
 
