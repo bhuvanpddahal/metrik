@@ -22,9 +22,10 @@ export const useVerifyScriptInstallation = () => {
 
             return await response.json();
         },
-        onSuccess: ({ data }, { param }) => {
+        onSuccess: ({ data }) => {
             toast.success(data.success);
-            router.push(`/dashboard/${param.websiteId}`);
+            localStorage.setItem(`first-view-${data.domain}`, "true");
+            router.push(`/dashboard/${data.domain}`);
         },
         onError: (error) => {
             toast.error(error.message);

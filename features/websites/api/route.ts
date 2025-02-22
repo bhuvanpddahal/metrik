@@ -103,7 +103,12 @@ const app = new Hono()
                 .set({ verifiedAt: new Date() })
                 .where(eq(WebsiteTable.id, websiteId));
 
-            return c.json({ data: { success: "Script installation verified" } }, 200);
+            return c.json({
+                data: {
+                    success: "Script installation verified",
+                    domain: website.domain
+                }
+            }, 200);
         }
     )
     .get(

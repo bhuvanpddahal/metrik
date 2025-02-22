@@ -32,7 +32,7 @@ const WorldMapChart = (
     );
 
     return (
-        <TooltipProvider>
+        <TooltipProvider delayDuration={0}>
             <ComposableMap
                 projection="geoMercator"
                 projectionConfig={{
@@ -41,7 +41,7 @@ const WorldMapChart = (
                 }}
                 className="h-[23.375rem] w-full"
             >
-                <Geographies geography="/countries.geo.json">
+                <Geographies geography="/data/countries.geo.json">
                     {({ geographies }) =>
                         geographies.map((geo) => {
                             const country = geo.properties.name;
