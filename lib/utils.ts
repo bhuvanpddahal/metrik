@@ -2,6 +2,9 @@ import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import { clsx, type ClassValue } from "clsx";
 
+export type KeyOfMap<T extends Map<any, any>> =
+    T extends Map<infer K, any> ? K : never;
+
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }

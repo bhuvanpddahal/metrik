@@ -9,6 +9,7 @@ import {
     ChartTooltipContent
 } from "@/components/ui/Chart";
 import { cn } from "@/lib/utils";
+import type { ChartData } from "../types";
 
 const chartConfig = {
     totalVisitors: {
@@ -18,7 +19,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 interface DistributionChartProps {
-    chartData: { [x: string]: string | number | null; }[];
+    chartData: ChartData;
     dataKey: string;
     labelFormatter?: (value: string | null) => string;
     labelClassName?: string;

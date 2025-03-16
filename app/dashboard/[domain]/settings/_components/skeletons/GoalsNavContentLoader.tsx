@@ -40,7 +40,9 @@ const GoalsNavContentLoader = () => {
                                 </div>
                             </>
                         )}
+                        cardContentClassName="space-y-5"
                     >
+                        <Skeleton className="h-[8.75rem] w-full" />
                         <Skeleton className="h-11 w-full" />
                     </SettingsCard>
                 </div>

@@ -65,9 +65,19 @@ const Footer = () => {
                         </div>
                     </div>
                 </div>
-                <div className="mt-12 border-t dark:border-zinc-700 pt-8">
-                    <p className="text-base text-gray-400 dark:text-gray-300 xl:text-center">
+                <div className="mt-12 border-t dark:border-zinc-700 pt-8 xl:text-center">
+                    <p className="text-base text-gray-400 dark:text-gray-300">
                         © {new Date().getFullYear()} Metrik, Inc. All rights reserved.
+                    </p>
+                    <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
+                        Please blame{" "}
+                        <Link
+                            href="https://bhu-1-der.vercel.app"
+                            className="hover:text-gray-900 dark:hover:text-gray-300"
+                        >
+                            Bhuvan Dahal
+                        </Link>
+                        {" "}for any bugs 🕷️
                     </p>
                 </div>
             </div>

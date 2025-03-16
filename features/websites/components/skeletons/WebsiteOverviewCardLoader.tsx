@@ -1,4 +1,4 @@
-import PingDot from "@/features/websites/components/ProgressIndicator";
+import ProgressIndicator from "@/features/websites/components/ProgressIndicator";
 import {
     Card,
     CardContent,
@@ -37,7 +37,7 @@ const WebsiteOverviewCardLoader = () => {
                     <div className="shrink-0 space-y-2">
                         <div className="flex items-center gap-x-3 text-sm text-muted-foreground font-medium">
                             Visitors now
-                            <PingDot type="active" color="#34d399" />
+                            <ProgressIndicator type="active" color="#34d399" />
                         </div>
                         <Skeleton className="h-7 w-9" />
                     </div>

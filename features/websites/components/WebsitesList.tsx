@@ -32,7 +32,7 @@ const WebsitesList = (
             {websites.map((website) => (
                 <Card
                     key={website.id}
-                    className="cursor-pointer hover:shadow-lg"
+                    className="cursor-pointer hover:border-zinc-300 hover:dark:border-zinc-700"
                     onClick={() => router.push(`/dashboard/${website.domain}`)}
                 >
                     <CardHeader className="flex-row gap-x-3 pb-3">

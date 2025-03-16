@@ -51,10 +51,10 @@ const UsersJourneyTable = ({
                                 >
                                     <TableCell className="flex flex-col md:flex-row md:items-center gap-x-4 gap-y-2 px-4">
                                         <Image
-                                            src="/icon.svg"
+                                            src="/images/user.jpg"
                                             alt="User"
-                                            width={10}
-                                            height={10}
+                                            width={640}
+                                            height={640}
                                             className="size-12 border rounded-full"
                                         />
                                         <div>
@@ -115,7 +115,7 @@ const UsersJourneyTable = ({
                                         <div className="inline-flex items-center gap-x-2">
                                             <WebsiteAvatar
                                                 domain={domainName}
-                                                className="size-[1.125rem] size- inline-block"
+                                                className="size-[1.125rem] inline-block"
                                             />
                                             {domainName}
                                         </div>

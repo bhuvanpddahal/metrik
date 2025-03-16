@@ -1,8 +1,15 @@
+"use client";
+
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/Button";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 
 const CallToAction = () => {
+    const router = useRouter();
+    const { isLoggedIn } = useAuth();
+
     return (
         <section className="bg-white dark:bg-neutral-950">
             <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
@@ -19,8 +26,11 @@ const CallToAction = () => {
                             <Button
                                 size="lg"
                                 className="bg-primary-foreground text-primary mt-8 hover:bg-primary-foreground/80"
+                                onClick={() => router.push(
+                                    isLoggedIn ? "/dashboard" : "/sign-in"
+                                )}
                             >
-                                Start free trial
+                                {isLoggedIn ? "View dashboard" : "Start free trial"}
                             </Button>
                         </div>
                     </div>

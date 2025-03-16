@@ -33,10 +33,10 @@ const UserJourneyDetailsDrawer = () => {
                 <div className="flex-shrink-0 max-w-7xl w-full flex flex-col md:flex-row gap-x-12 gap-y-8 p-8 mx-auto">
                     <div className="md:w-56 lg:w-80">
                         <Image
-                            src="/icon.svg"
+                            src="/images/user.jpg"
                             alt="User"
-                            width={10}
-                            height={10}
+                            width={640}
+                            height={640}
                             className="size-24 border rounded-full"
                         />
                         <div className="mt-4">
@@ -121,7 +121,7 @@ const UserJourneyDetailsDrawer = () => {
                                     <TableCell className="flex items-center justify-between gap-x-2 font-medium">
                                         <div className="flex items-center gap-x-3">
                                             <SearchIcon className="shrink-0 size-5 text-muted-foreground" />
-                                            <div>
+                                            <div className="leading-[1.8]">
                                                 Found
                                                 <MonoTextBlock text={domain}>{domain}</MonoTextBlock>
                                                 via
@@ -157,7 +157,7 @@ const UserJourneyDetailsDrawer = () => {
                                                 <TableCell className="flex items-center justify-between gap-x-2 font-medium">
                                                     <div className="flex items-center gap-x-3">
                                                         <eventFormat.icon className="shrink-0 size-5 text-muted-foreground" />
-                                                        <div>
+                                                        <div className="leading-[1.8]">
                                                             {eventFormat.prefixText}
                                                             <MonoTextBlock text={eventFormat.value}>
                                                                 {eventFormat.value}

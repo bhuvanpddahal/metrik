@@ -14,9 +14,9 @@ const WebsiteDetailsContent = ({ domain }: WebsiteDetailsContentProps) => {
     const [showConfetti, setShowConfetti] = useState(false);
 
     useEffect(() => {
-        const firstView = localStorage.getItem(`first-view-${domain}`);
-        if (firstView) {
-            localStorage.removeItem(`first-view-${domain}`);
+        const firstVisit = localStorage.getItem(`first-visit-${domain}`);
+        if (firstVisit) {
+            localStorage.removeItem(`first-visit-${domain}`);
             setShowConfetti(true);
         }
     }, []);

@@ -5,7 +5,15 @@ import SettingsCard from "./SettingsCard";
 import { CardDescription, CardTitle } from "@/components/ui/Card";
 
 const CustomGoals = () => {
-    const script = `window?.metrik("goal_name", {
+    const windowInterface =
+        `// Add this in your declaration (.d.ts) file
+interface Window {
+  metrik: (
+    eventName: string,
+    eventData: Record<string, any>
+  ) => void;
+}`;
+    const metrikFunction = `window?.metrik("goal_name", {
   description: "A short description of the event"
 });`;
 
@@ -30,9 +38,16 @@ const CustomGoals = () => {
                         </div>
                     </>
                 )}
+                cardContentClassName="space-y-5"
             >
                 <Code
-                    code={script}
+                    code={windowInterface}
+                    language="typescript"
+                    copySuccessMessage="Interface copied"
+                    copyErrorMessage="Failed to copy interface"
+                />
+                <Code
+                    code={metrikFunction}
                     language="javascript"
                     copySuccessMessage="Script copied"
                     copyErrorMessage="Failed to copy script"

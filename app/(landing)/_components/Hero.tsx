@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { ArrowRightIcon } from "lucide-react";
 
 import Wave from "./Wave";
 import { users } from "../constants";
@@ -35,7 +35,7 @@ const Hero = () => {
                                 )}
                             >
                                 {isLoggedIn ? "Dashboard" : "Get Started"}
-                                <ArrowRight className="ml-2 h-5 w-5" />
+                                <ArrowRightIcon className="ml-2 h-5 w-5" />
                             </Button>
                         </div>
                         <div className="mt-6">

@@ -14,7 +14,7 @@ const GoalsCardLoader = () => {
                 </Button>
             </CardHeader>
             <Skeleton className="h-[25.875rem] rounded-none" />
-        </Card >
+        </Card>
     );
 };
 

@@ -20,7 +20,7 @@ const GetStarted = () => {
                 <div className="max-w-md lg:max-w-4xl w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
                     {steps.map((step, index) => (
                         <div key={index} className="bg-muted p-1.5 border rounded-xl">
-                            <Card className="relative h-full border-none rounded-lg shadow-sm overflow-hidden dark:bg-neutral-950">
+                            <Card className="relative h-full border-none rounded-lg overflow-hidden dark:bg-neutral-950">
                                 <CardHeader className="p-0 space-y-0">
                                     <AspectRatio ratio={16 / 9}>
                                         <Image

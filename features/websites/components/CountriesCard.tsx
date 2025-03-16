@@ -16,6 +16,7 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/DropdownMenu";
 import type { ChartData } from "../types";
+import type { KeyOfMap } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { ensureExactLengthForChartData } from "../utils";
 import { useDistributionDetailsModal } from "../hooks/useDistributionDetailsModal";
@@ -31,32 +32,20 @@ const CountriesCard = ({
     regionChartData,
     cityChartData
 }: CountriesCardProps) => {
-    const menu = {
-        country: {
-            label: "Country",
-            chartData: countryChartData
-        },
-        map: {
-            label: "Map",
-            chartData: countryChartData
-        },
-        region: {
-            label: "Region",
-            chartData: regionChartData
-        },
-        city: {
-            label: "City",
-            chartData: cityChartData
-        }
-    } as const;
+    const menu = new Map([
+        ["country", { label: "Country", chartData: countryChartData }],
+        ["map", { label: "Map", chartData: countryChartData }],
+        ["region", { label: "Region", chartData: regionChartData }],
+        ["city", { label: "City", chartData: cityChartData }]
+    ] as const);
     const { open } = useDistributionDetailsModal();
 
-    type ActiveMenu = keyof typeof menu;
+    type ActiveMenu = KeyOfMap<typeof menu>;
 
     const [activeMenu, setActiveMenu] = useState<ActiveMenu>("country");
 
-    const label = menu[activeMenu].label;
-    const chartData = menu[activeMenu].chartData;
+    const label = menu.get(activeMenu)!.label;
+    const chartData = menu.get(activeMenu)!.chartData;
 
     return (
         <Card>
@@ -69,10 +58,10 @@ const CountriesCard = ({
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">
-                        {Object.entries(menu).map(([key, value]) => (
+                        {[...menu.entries()].map(([key, value]) => (
                             <DropdownMenuItem
                                 key={key}
-                                onClick={() => setActiveMenu(key as ActiveMenu)}
+                                onClick={() => setActiveMenu(key)}
                             >
                                 {value.label}
                             </DropdownMenuItem>
@@ -101,7 +90,7 @@ const CountriesCard = ({
                     </div>
                 </CardFooter>
             )}
-        </Card >
+        </Card>
     );
 };
 

@@ -14,15 +14,15 @@ const MonoTextBlock = ({
 }: MonoTextBlockProps) => {
     return (
         <Hint message="Click to copy">
-            <div
+            <span
                 className={cn(
-                    "bg-muted inline-flex items-center gap-x-1 text-muted-foreground text-sm font-mono px-1 mx-1 rounded-sm cursor-pointer",
+                    "bg-muted inline-flex items-center gap-x-1 align-middle text-muted-foreground text-sm font-mono px-1 mx-1 rounded-sm cursor-pointer",
                     className
                 )}
                 onClick={() => copyToClipboard(text)}
             >
                 {children}
-            </div>
+            </span>
         </Hint>
     );
 };

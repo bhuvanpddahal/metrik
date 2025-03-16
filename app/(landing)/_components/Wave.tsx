@@ -3,12 +3,11 @@ const Wave = () => {
 
     return (
         <div className="absolute left-0 bottom-0 w-full lg:relative rotate-180">
-            <div className="absolute inset-0 bg-gradient-to-t from-transparent to-blue-200 dark:to-slate-800" />
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 1200 120"
                 preserveAspectRatio="none"
-                className="relative"
+                className="relative drop-shadow-[0_20px_20px_rgb(219,234,254)] dark:drop-shadow-[0_20px_20px_rgb(30,41,59)]"
             >
                 <path
                     d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"

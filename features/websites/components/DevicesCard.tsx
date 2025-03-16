@@ -15,6 +15,7 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/DropdownMenu";
 import type { ChartData } from "../types";
+import type { KeyOfMap } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { ensureExactLengthForChartData } from "../utils";
 import { useDistributionDetailsModal } from "../hooks/useDistributionDetailsModal";
@@ -30,28 +31,19 @@ const DevicesCard = ({
     operatingSystemChartData,
     deviceChartData
 }: DevicesCardProps) => {
-    const menu = {
-        browser: {
-            label: "Browser",
-            chartData: browserChartData
-        },
-        operatingSystem: {
-            label: "Operating System",
-            chartData: operatingSystemChartData
-        },
-        device: {
-            label: "Device",
-            chartData: deviceChartData
-        }
-    } as const;
+    const menu = new Map([
+        ["browser", { label: "Browser", chartData: browserChartData }],
+        ["operatingSystem", { label: "Operating System", chartData: operatingSystemChartData }],
+        ["device", { label: "Device", chartData: deviceChartData }]
+    ] as const);
     const { open } = useDistributionDetailsModal();
 
-    type ActiveMenu = keyof typeof menu;
+    type ActiveMenu = KeyOfMap<typeof menu>;
 
     const [activeMenu, setActiveMenu] = useState<ActiveMenu>("device");
 
-    const label = menu[activeMenu].label;
-    const chartData = menu[activeMenu].chartData;
+    const label = menu.get(activeMenu)!.label;
+    const chartData = menu.get(activeMenu)!.chartData;
 
     return (
         <Card>
@@ -64,10 +56,10 @@ const DevicesCard = ({
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="start">
-                        {Object.entries(menu).map(([key, value]) => (
+                        {[...menu.entries()].map(([key, value]) => (
                             <DropdownMenuItem
                                 key={key}
-                                onClick={() => setActiveMenu(key as ActiveMenu)}
+                                onClick={() => setActiveMenu(key)}
                             >
                                 {value.label}
                             </DropdownMenuItem>

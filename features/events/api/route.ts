@@ -5,18 +5,24 @@ import { differenceInSeconds } from "date-fns";
 import { zValidator } from "@hono/zod-validator";
 
 import { db } from "@/drizzle/db";
+import {
+    generateRandomNameForVisitor,
+    getDomainNameFromUrl,
+    getOriginFromUrl
+} from "@/features/websites/utils";
 import { eventDataSchema } from "../schemas";
 import { VisitorTable } from "@/drizzle/schema";
 import { EventTable } from "@/drizzle/schema/events";
 import { SessionTable } from "@/drizzle/schema/sessions";
 import { PageViewTable } from "@/drizzle/schema/page-views";
-import { generateRandomNameForVisitor, getDomainNameFromUrl, getOriginFromUrl } from "@/features/websites/utils";
+import { getWebsiteByDomain } from "@/features/websites/queries";
 
 const app = new Hono()
     .post(
         "/",
         zValidator("json", eventDataSchema),
         async (c) => {
+            const referer = c.req.header("referer");
             const {
                 websiteId,
                 domain,
@@ -31,9 +37,15 @@ const app = new Hono()
                 extraData
             } = c.req.valid("json");
 
-            if (!href.includes(domain)) { // TODO: Match the requesting url with the href
+            if (
+                getDomainNameFromUrl(referer ?? null) !== domain ||
+                !href.includes(domain)
+            ) {
                 return c.json({ error: "Domain mismatch" }, 400);
             }
+
+            const website = await getWebsiteByDomain(domain);
+            if (!website) return c.json({ error: "Invalid request" }, 400);
 
             const userAgent = c.req.header("User-Agent");
             const parser = new UAParser(userAgent);

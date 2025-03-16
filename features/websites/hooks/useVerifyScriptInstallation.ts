@@ -24,7 +24,7 @@ export const useVerifyScriptInstallation = () => {
         },
         onSuccess: ({ data }) => {
             toast.success(data.success);
-            localStorage.setItem(`first-view-${data.domain}`, "true");
+            localStorage.setItem(`first-visit-${data.domain}`, "true");
             router.push(`/dashboard/${data.domain}`);
         },
         onError: (error) => {
