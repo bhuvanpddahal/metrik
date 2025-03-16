@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 
 import { Button } from "@/components/ui/Button";
 import { useAuth } from "@/features/auth/hooks/useAuth";
@@ -36,10 +36,10 @@ const CallToAction = () => {
                     </div>
                     <div className="relative -mt-6 aspect-w-5 aspect-h-3 md:aspect-w-2 md:aspect-h-1">
                         <Image
-                            src="/images/pages.png"
-                            alt="Metrik add goal screenshot"
-                            width={500}
-                            height={500}
+                            src="/images/visitor.png"
+                            alt="Metrik visitors screenshot"
+                            width={449}
+                            height={251}
                             className="transform translate-x-6 translate-y-6 rounded-md object-cover object-left-top sm:translate-x-16 lg:translate-y-20"
                         />
                     </div>

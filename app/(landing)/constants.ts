@@ -52,27 +52,27 @@ export const steps = [
 export const questions = [
     {
         question: "What is Metrik?",
-        answer: "We are a platform that helps you [briefly explain the core benefit]."
+        answer: "We are a platform that helps you analyze and understand your website's traffic."
     },
     {
         question: "How does Metrik work?",
-        answer: "It's easy! Just [briefly describe the main steps]."
+        answer: "Metrik collects data from your website and presents it in easy-to-understand reports and dashboards."
     },
     {
         question: "What are the benefits of using Metrik?",
         answer:
-            `1. Increased efficiency,\n
-            2. Improved productivity,\n
-            3. Reduced costs,\n
+            `1. Increased efficiency,
+            2. Improved productivity,
+            3. Reduced costs,
             4. Enhanced security.`
     },
     {
         question: "Is there a free trial available?",
-        answer: "Yes, we offer a free trial for [duration]. Sign up today to experience Metrik for free."
+        answer: "Yes, we offer a free trial so you can experience Metrik's features."
     },
     {
         question: "How do I contact support?",
-        answer: "You can contact our support team by email at [[email address removed]] or by submitting a request through our help center."
+        answer: "You can contact our support team via email at support@metrik.com."
     },
     {
         question: "Is my data secure with Metrik?",

@@ -6,7 +6,10 @@ import "./globals.css";
 import Toasters from "@/components/Toasters";
 import Providers from "@/components/Providers";
 import { Fustat } from "./fonts";
+import { env as clientEnv } from "@/constants/env/client";
+import { env as serverEnv } from "@/constants/env/server";
 import { sharedOpenGraph } from "@/constants/shared-metadata";
+import { getDomainNameFromUrl } from "@/features/websites/utils";
 
 export const metadata: Metadata = {
     title: {
@@ -27,15 +30,16 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     const color = "hsl(var(--primary))";
+    const appUrl = clientEnv.NEXT_PUBLIC_APP_URL;
 
     return (
         <html lang="en">
             <head>
                 <script
                     defer
-                    data-website-id="f36748a5-9e29-449b-8f5b-0393d30cca66"
-                    data-domain="metrik-one.vercel.app"
-                    src="http://localhost:3000/js/script.js"
+                    data-website-id={serverEnv.METRIK_WEBSITE_ID}
+                    data-domain={getDomainNameFromUrl(appUrl)}
+                    src={`${appUrl}/js/script.js`}
                 ></script>
             </head>
             <body className={`${Fustat.className} antialiased`}>

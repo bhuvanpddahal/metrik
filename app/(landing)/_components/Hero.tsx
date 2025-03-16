@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { ArrowRightIcon } from "lucide-react";
+import { useRouter } from "nextjs-toploader/app";
 
 import Wave from "./Wave";
 import { users } from "../constants";
@@ -61,8 +61,8 @@ const Hero = () => {
                     <Image
                         src="/images/hero.svg"
                         alt="Metrik dashbaoard"
-                        width={1684}
-                        height={934}
+                        width={1227}
+                        height={919}
                         className="lg:absolute lg:top-0 lg:left-[34rem] h-auto lg:h-[calc(100%+10vw+3rem)] w-full lg:w-auto"
                         priority
                     />

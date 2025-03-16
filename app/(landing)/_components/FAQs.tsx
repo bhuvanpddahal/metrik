@@ -27,7 +27,9 @@ const FAQs = () => {
                             {questions.map(({ question, answer }, index) => (
                                 <AccordionItem key={index} value={`item-${index + 1}`}>
                                     <AccordionTrigger>{question}</AccordionTrigger>
-                                    <AccordionContent>{answer}</AccordionContent>
+                                    <AccordionContent className="whitespace-pre-line">
+                                        {answer}
+                                    </AccordionContent>
                                 </AccordionItem>
                             ))}
                         </Accordion>
