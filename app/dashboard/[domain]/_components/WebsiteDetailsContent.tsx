@@ -19,7 +19,7 @@ const WebsiteDetailsContent = ({ domain }: WebsiteDetailsContentProps) => {
             localStorage.removeItem(`first-visit-${domain}`);
             setShowConfetti(true);
         }
-    }, []);
+    }, [domain]);
 
     return (
         <>

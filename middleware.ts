@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import {
-    apiRoute,
     authRoutes,
-    publicRoutes,
-    apiAuthPrefix,
-    DEFAULT_LOGIN_REDIRECT
+    DEFAULT_LOGIN_REDIRECT,
+    protectedRoutes
 } from "@/routes";
 import { env } from "@/constants/env/server";
 
@@ -20,25 +18,20 @@ export default async function middleware(req: NextRequest) {
 
     const { nextUrl } = req;
     const isLoggedIn = !!session?.user;
-    const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
-    const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
+    const isProtectedRoute = nextUrl.pathname.startsWith("/dashboard");
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
-    const isApiRoute = nextUrl.pathname.startsWith(apiRoute);
+    const response = NextResponse.next();
 
-    if (isApiAuthRoute) return undefined;
-    if (isApiRoute) return undefined;
-    if (isAuthRoute) {
-        if (isLoggedIn) {
-            return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-        }
-        return undefined;
+    if (isLoggedIn && isAuthRoute) {
+        return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }
-    if (!isLoggedIn && !isPublicRoute) {
+    if (!isLoggedIn && isProtectedRoute) {
         return NextResponse.redirect(new URL("/sign-in", nextUrl));
     }
-    return undefined;
+
+    return response;
 }
 
 export const config = {
-    matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"]
+    matcher: [...protectedRoutes, ...authRoutes]
 };

@@ -18,14 +18,14 @@ const AuthContent = () => {
         <Card className="w-96 shadow-rose-50 shadow-2xl dark:shadow-orange-950/15">
             <CardHeader className="sm:p-8">
                 <Image
-                    src="/icon.svg"
+                    src="/images/icon.svg"
                     alt="Metrik Logo"
                     width={24}
                     height={24}
                     className="mx-auto"
                     priority
                 />
-                <CardTitle className="text-center">Log in to Metrik</CardTitle>
+                <CardTitle className="text-center mt-1">Log in to Metrik</CardTitle>
             </CardHeader>
             <CardContent className="sm:px-8 sm:pb-8 space-y-5 sm:space-y-8">
                 <AuthForm />
