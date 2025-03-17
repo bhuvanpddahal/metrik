@@ -13,7 +13,7 @@ const CallToAction = () => {
     return (
         <section className="bg-white dark:bg-neutral-950">
             <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
-                <div className="bg-gradient-to-br from-primary to-blue-300 dark:to-blue-400 rounded-lg shadow-xl overflow-hidden lg:grid lg:grid-cols-2 lg:gap-4">
+                <div className="bg-gradient-to-br from-primary to-blue-300 dark:to-blue-400 border-y-4 border-blue-400 dark:border-blue-500 rounded-lg overflow-hidden lg:grid lg:grid-cols-2 lg:gap-4">
                     <div className="pt-10 pb-12 px-6 sm:pt-16 sm:px-16 lg:py-16 lg:pr-0 xl:py-20 xl:px-20">
                         <div className="lg:self-center">
                             <h2 className="text-3xl font-extrabold text-primary-foreground sm:text-4xl">
