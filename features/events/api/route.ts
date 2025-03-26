@@ -36,6 +36,7 @@ const app = new Hono()
                 sessionId,
                 extraData
             } = c.req.valid("json");
+            console.log({ referer, domain });
 
             if (
                 getDomainNameFromUrl(referer ?? null) !== domain ||
@@ -46,6 +47,7 @@ const app = new Hono()
 
             const website = await getWebsiteByDomain(domain);
             if (!website) return c.json({ error: "Invalid request" }, 400);
+            if (!website.verifiedAt) return c.json({ error: "Website not verified" }, 400);
 
             const userAgent = c.req.header("User-Agent");
             const parser = new UAParser(userAgent);
@@ -100,10 +102,10 @@ const app = new Hono()
                     timestamp: timestampDate
                 });
             } else {
-                let eventType = type as string, eventExtraData = extraData;
+                let eventType = type as string, eventExtraData = extraData!;
 
                 if (type === "custom") {
-                    const { eventName, ...others } = extraData;
+                    const { eventName, ...others } = extraData!;
                     eventType = eventName as string;
                     eventExtraData = others;
                 }

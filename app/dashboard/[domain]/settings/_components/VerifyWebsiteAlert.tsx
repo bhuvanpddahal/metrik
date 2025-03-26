@@ -31,6 +31,7 @@ const VerifyWebsiteAlert = ({
             <Button
                 variant="link"
                 size="sm"
+                className="h-fit mt-2 leading-none underline-offset-1"
                 onClick={() => router.push(`/dashboard/new?step=script&websiteId=${websiteId}&domain=${domain}&timezone=${timezone}`)}
             >
                 Verify Now

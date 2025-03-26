@@ -18,5 +18,14 @@ export const eventDataSchema = z.object({
     }),
     visitorId: z.string(),
     sessionId: z.string(),
-    extraData: z.record(z.unknown())
+    extraData: z.record(z.unknown()).optional()
+}).refine((data) => {
+    if (data.type === "pageview") return true;
+    if (!data.extraData) return false;
+    if (data.type === "custom" && !("eventName" in data.extraData)) return false;
+
+    return true;
+}, {
+    message: "Invalid data passed",
+    path: ["extraData"]
 });

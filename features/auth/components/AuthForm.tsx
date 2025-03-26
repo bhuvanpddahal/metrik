@@ -48,7 +48,7 @@ const AuthForm = () => {
     return (
         <Form {...form}>
             <form
-                className="w-full space-y-6"
+                className="w-full space-y-4"
                 onSubmit={form.handleSubmit(onSubmit)}
             >
                 <FormField
@@ -62,6 +62,7 @@ const AuthForm = () => {
                                     {...field}
                                     type="email"
                                     placeholder="Enter your email"
+                                    className="shadow-none"
                                     disabled={isPending}
                                 />
                             </FormControl>

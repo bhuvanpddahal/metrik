@@ -34,7 +34,7 @@ const AuthContent = () => {
                 </Separator>
                 <SocialButton />
             </CardContent>
-            <CardFooter className="sm:px-8 sm:pb-8">
+            <CardFooter className="sm:px-8">
                 <p className="text-center text-muted-foreground text-sm">
                     By signing up, you agree to our{" "}
                     <Link
