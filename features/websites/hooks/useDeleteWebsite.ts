@@ -7,7 +7,7 @@ import { useToast } from "@/hooks/useToast";
 import { useDeleteWebsiteModal } from "./useDeleteWebsiteModal";
 
 type RequestType = InferRequestType<typeof client.api.websites[":websiteId"]["$delete"]>;
-type ResponseType = InferResponseType<typeof client.api.websites[":websiteId"]["$delete"], 204>;
+type ResponseType = InferResponseType<typeof client.api.websites[":websiteId"]["$delete"], 200>;
 
 export const useDeleteWebsite = () => {
     const router = useRouter();

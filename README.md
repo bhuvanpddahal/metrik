@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Metrik
 
-## Getting Started
+![Metrik Logo](https://metrik-one.vercel.app/images/og.png)
 
-First, run the development server:
+Metrik is a powerful and easy-to-use website analytics tool that provides valuable insights into your website's traffic and user behavior.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Key Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+-   **Event Tracking:** Capture and analyze specific user actions and conversions.
+-   **Realtime Data:** Monitor website activity and metrics as they happen.
+-   **Traffic Analysis:** Gain insights into user demographics, including country and region.
+-   **User Behavior Analysis:** Visualize user journeys and understand their paths to conversion.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Try It Out&excl;
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Experience the power of Metrik and gain valuable insights into your website's performance. [Visit our website](https://metrik-one.vercel.app) to sign up for a free trial and see how Metrik can help you.
 
-## Learn More
+## Local Setup
 
-To learn more about Next.js, take a look at the following resources:
+To set up Metrik locally, follow these steps:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Clone the repository:**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+    ```bash
+    git clone https://github.com/bhuvanpddahal/metrik
+    cd metrik
+    ```
 
-## Deploy on Vercel
+2. **Install dependencies:**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    ```bash
+    npm install  # Or yarn install or pnpm install
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. **Set up environment variables:**
+
+    - Create a `.env` file in the root directory.
+    - Add your environment variables (e.g., database connection details, API keys).
+    - Example `.env` file structure:
+
+        ```bash
+        # Public
+        NEXT_PUBLIC_APP_URL="http://localhost:3000"
+
+        # Database
+        DATABASE_URL=
+
+        # Auth.js
+        AUTH_URL="http://localhost:3000/api/auth"
+        AUTH_SECRET=
+        AUTH_GOOGLE_ID=
+        AUTH_GOOGLE_SECRET=
+
+        # Nodemailer
+        EMAIL_SERVER_USER=
+        EMAIL_SERVER_PASSWORD=
+        EMAIL_SERVER_HOST=
+        EMAIL_SERVER_PORT=
+        EMAIL_FROM=
+
+        # Metrik (If you want to track this website itself)
+        METRIK_WEBSITE_ID=
+        ```
+
+4. **Run the development server:**
+
+    ```bash
+    npm run dev # or yarn dev, or pnpm dev
+    ```
+
+5. **Access the application:**
+
+    - Open your browser and navigate to `http://localhost:3000` (or the port specified by your development server).
+
+## Contributing
+
+We welcome contributions from the community! If you'd like to contribute to Metrik, please follow these guidelines:
+
+1. **Fork the repository.**
+2. **Create a new branch for your feature or bug fix:**
+
+    ```bash
+    git checkout -b feature/your-feature-name
+    ```
+
+3. **Make your changes and commit them:**
+
+    ```bash
+    git add .
+    git commit -m "Add your commit message"
+    ```
+
+4. **Push your changes to your fork:**
+
+    ```bash
+    git push origin feature/your-feature-name
+    ```
+
+5. **Create a pull request.**
+
+Please ensure that your code follows our coding style and make sure that you have tested it well before creating a pull request.
+
+## Thanks&excl;
+
+Hey! 👋
+
+Thanks for checking out Metrik! If you like it, please give it a ⭐ star!
+
+See my other projects: [github.com/bhuvanpddahal](https://github.com/bhuvanpddahal)
+
+Feedback welcome! 🚀
