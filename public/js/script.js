@@ -110,26 +110,31 @@
         sendEventData(pageData, callback);
     }
 
-    function isExternalLink(url) {
-        return window.location.hostname !== new URL(url, window.location.origin).hostname;
-    }
+    // function isExternalLink(url) {
+    //     return window.location.hostname !== new URL(url, window.location.origin).hostname;
+    // }
 
-    function trackLinkClick(linkElement) {
-        if (!linkElement || !linkElement.href) {
+    // function trackLinkClick(linkElement) {
+    //     if (!linkElement || !linkElement.href) {
+    //         return;
+    //     }
+
+    //     const linkUrl = linkElement.href;
+    //     const linkText = linkElement.textContent.trim();
+
+    //     if (isExternalLink(linkUrl)) {
+    //         trackCustomEvent("external_link", { url: linkUrl, text: linkText });
+    //     } else {
+    //         trackCustomEvent("internal_link", { url: linkUrl, text: linkText });
+    //     }
+    // }
+
+    function sendEventData(data, callback) {
+        if (localStorage.getItem("metrik-ignore") === "true") {
+            console.log("Metrik: Event processing disabled, Ignore flag detected in localStorage.");
             return;
         }
 
-        const linkUrl = linkElement.href;
-        const linkText = linkElement.textContent.trim();
-
-        if (isExternalLink(linkUrl)) {
-            trackCustomEvent("external_link", { url: linkUrl, text: linkText });
-        } else {
-            trackCustomEvent("internal_link", { url: linkUrl, text: linkText });
-        }
-    }
-
-    function sendEventData(data, callback) {
         const xhr = new XMLHttpRequest();
         xhr.open("POST", analyticsEndpoint, true);
         xhr.setRequestHeader("Content-Type", "application/json");
@@ -174,33 +179,33 @@
         }
     };
 
-    document.addEventListener("click", (event) => {
-        const clickedElement = event.target.closest("a");
-        if (clickedElement) {
-            trackLinkClick(clickedElement);
-        }
-    });
+    // document.addEventListener("click", (event) => {
+    //     const clickedElement = event.target.closest("a");
+    //     if (clickedElement) {
+    //         trackLinkClick(clickedElement);
+    //     }
+    // });
 
-    document.addEventListener("keydown", (event) => {
-        if (["Enter", " "].includes(event.key)) {
-            const activeElement = document.activeElement;
-            if (activeElement && activeElement.closest("form")) {
-                trackLinkClick(activeElement);
-            }
-        }
-    });
+    // document.addEventListener("keydown", (event) => {
+    //     if (["Enter", " "].includes(event.key)) {
+    //         const activeElement = document.activeElement;
+    //         if (activeElement && activeElement.closest("form")) {
+    //             trackLinkClick(activeElement);
+    //         }
+    //     }
+    // });
 
-    if (isLocalhostOrFileProtocol()) {
-        console.warn("Metrik: Ignoring localhost or file protocol");
+    if (isLocalhostFileProtocolOrIframe()) {
+        console.warn("Metrik: Ignoring localhost or file protocol or iframe");
         return;
     }
 
-    function isLocalhostOrFileProtocol() {
+    function isLocalhostFileProtocolOrIframe() {
         const hostname = window.location.hostname;
         const protocol = window.location.protocol;
 
         const localhostRegex = /^(localhost|127\.0\.0\d|\[::1\])$/;
-        return localhostRegex.test(hostname) || protocol === "file:";
+        return localhostRegex.test(hostname) || protocol === "file:" || window !== window.parent;
     }
 
     trackPageView();

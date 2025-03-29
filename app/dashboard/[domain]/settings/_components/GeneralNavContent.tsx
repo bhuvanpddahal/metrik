@@ -1,4 +1,3 @@
-import VerifyWebsiteAlert from "./VerifyWebsiteAlert";
 import DomainCard from "@/features/settings/components/DomainCard";
 import ScriptCard from "@/features/settings/components/ScriptCard";
 import TimezoneCard from "@/features/settings/components/TimezoneCard";

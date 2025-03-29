@@ -1,4 +1,5 @@
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 import { signOut } from "@hono/auth-js/react";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { MdDesktopWindows } from "react-icons/md";
@@ -23,6 +24,13 @@ import { useDeleteAccountModal } from "@/features/users/hooks/useDeleteAccountMo
 const ThemeSwitcher = () => {
     const { theme, setTheme } = useTheme();
     const { open } = useDeleteAccountModal();
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
+
+    if (!isClient) return null;
 
     return (
         <div className="max-w-[31.25rem] w-full">

@@ -390,7 +390,7 @@ const app = new Hono()
             await db.delete(WebsiteTable)
                 .where(eq(WebsiteTable.id, websiteId));
 
-            return c.json({ data: { success: "Website deleted" } }, 204);
+            return c.json({ data: { success: "Website deleted" } }, 200);
         }
     );
 
