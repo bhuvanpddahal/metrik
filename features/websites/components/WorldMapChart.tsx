@@ -44,8 +44,9 @@ const WorldMapChart = (
                 <Geographies geography="/data/countries.geo.json">
                     {({ geographies }) =>
                         geographies.map((geo) => {
-                            const country = geo.properties.name;
-                            const totalVisitors = chartData.find((row) => row.country === country)?.totalVisitors as number ?? 0;
+                            const countryName = geo.properties.name;
+                            const countryCode = geo.properties.ISO_A2;
+                            const totalVisitors = chartData.find((row) => row.countryCode === countryCode)?.totalVisitors as number ?? 0;
 
                             return (
                                 <Tooltip key={geo.rsmKey}>
@@ -73,7 +74,7 @@ const WorldMapChart = (
                                         />
                                     </TooltipTrigger>
                                     <TooltipContent className="min-w-[8rem] bg-background px-2.5 py-1.5 text-xs border border-border/50 rounded-lg shadow-xl">
-                                        <p className="text-foreground font-medium">{country}</p>
+                                        <p className="text-foreground font-medium">{countryName}</p>
                                         <div className="flex items-center gap-x-2 mt-1.5">
                                             <div className="size-2.5 bg-primary rounded-[2px]" />
                                             <div className="flex-1 flex items-center justify-between">

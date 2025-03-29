@@ -19,6 +19,7 @@
         const data = await response.json();
         return {
             country: data.country_name ?? "Unknown",
+            countryCode: data.country_code ?? "Unknown",
             region: data.region ?? "Unknown",
             city: data.city ?? "Unknown"
         };

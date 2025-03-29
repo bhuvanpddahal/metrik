@@ -286,6 +286,19 @@ export const getChartDataFromVisitors = async (
 ) => {
     const visitors = getVisitorsSubquery(websiteId, startDate, endDate);
 
+    if (column === "country") {
+        return await db
+            .with(visitors)
+            .select({
+                country: visitors.country,
+                countryCode: visitors.countryCode,
+                totalVisitors: count()
+            })
+            .from(visitors)
+            .groupBy(visitors.country, visitors.countryCode)
+            .orderBy(({ totalVisitors }) => desc(totalVisitors));
+    }
+
     return await db
         .with(visitors)
         .select({

@@ -16,6 +16,7 @@ export const VisitorTable = pgTable("visitors", {
         .references(() => WebsiteTable.id, { onDelete: "cascade" }),
     name: text("name").notNull(),
     country: text("country").notNull(),
+    countryCode: text("country_code").notNull(),
     region: text("region").notNull(),
     city: text("city").notNull(),
     browser: text("browser").notNull(),

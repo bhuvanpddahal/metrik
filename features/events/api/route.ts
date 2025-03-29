@@ -11,9 +11,9 @@ import {
     getOriginFromUrl
 } from "@/features/websites/utils";
 import { eventDataSchema } from "../schemas";
-import { VisitorTable } from "@/drizzle/schema";
 import { EventTable } from "@/drizzle/schema/events";
 import { SessionTable } from "@/drizzle/schema/sessions";
+import { VisitorTable } from "@/drizzle/schema/visitors";
 import { PageViewTable } from "@/drizzle/schema/page-views";
 import { getWebsiteByDomain } from "@/features/websites/queries";
 

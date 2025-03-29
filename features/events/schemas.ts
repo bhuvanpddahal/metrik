@@ -9,6 +9,7 @@ export const eventDataSchema = z.object({
     timestamp: z.string(),
     location: z.object({
         country: z.string(),
+        countryCode: z.string(),
         region: z.string(),
         city: z.string()
     }),
