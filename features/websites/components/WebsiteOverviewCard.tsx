@@ -1,3 +1,5 @@
+import NumberFlow, { NumberFlowGroup } from "@number-flow/react";
+
 import PerformanceIndicator from "./PerformanceIndicator";
 import WebsiteOverviewChart from "./WebsiteOverviewChart";
 import ProgressIndicator from "@/features/websites/components/ProgressIndicator";
@@ -7,7 +9,6 @@ import {
     CardHeader
 } from "@/components/ui/Card";
 import { Separator } from "@/components/ui/Separator";
-import { formatNumberToMinuteSecond } from "../utils";
 import { ScrollArea, ScrollBar } from "@/components/ui/ScrollArea";
 
 interface WebsiteOverviewCardProps {
@@ -44,7 +45,9 @@ const WebsiteOverviewCard = ({
                 <CardHeader className="group flex-row gap-x-6 pb-2">
                     <div className="shrink-0 space-y-2 mt-1.5">
                         <div className="text-sm text-muted-foreground font-medium">Visitors</div>
-                        <div className="text-xl md:text-[1.65rem] font-bold">{visitorsCount}</div>
+                        <div className="text-xl md:text-[1.65rem] font-bold">
+                            <NumberFlow value={visitorsCount} />
+                        </div>
                         <PerformanceIndicator changeInPercentage={visitorsCountChangeInPercentage} />
                     </div>
                     <Separator orientation="vertical" className="shrink-0 min-h-14" />
@@ -56,7 +59,12 @@ const WebsiteOverviewCard = ({
                     <div className="shrink-0 space-y-2">
                         <div className="text-sm text-muted-foreground font-medium">Bounce rate</div>
                         <div className="text-xl md:text-[1.65rem] font-bold">
-                            {bounceRate > 0 ? `${bounceRate}%` : "-"}
+                            {bounceRate > 0 ? (
+                                <NumberFlow
+                                    value={bounceRate / 100}
+                                    format={{ style: "percent", maximumFractionDigits: 2 }}
+                                />
+                            ) : "-"}
                         </div>
                         <PerformanceIndicator changeInPercentage={bounceRateChangeInPercentage} />
                     </div>
@@ -64,7 +72,14 @@ const WebsiteOverviewCard = ({
                     <div className="shrink-0 space-y-2">
                         <div className="text-sm text-muted-foreground font-medium">Session time</div>
                         <div className="text-xl md:text-[1.65rem] font-bold">
-                            {averageSessionTime > 0 ? formatNumberToMinuteSecond(averageSessionTime) : "-"}
+                            {averageSessionTime > 0 ? (
+                                <NumberFlowGroup>
+                                    <NumberFlow value={Math.floor(averageSessionTime / 60)} />
+                                    <span>m</span>{" "}
+                                    <NumberFlow value={Math.floor(averageSessionTime % 60)} />
+                                    <span>s</span>
+                                </NumberFlowGroup>
+                            ) : "-"}
                         </div>
                         <PerformanceIndicator changeInPercentage={averageSessionTimeChangeInPercentage} />
                     </div>
@@ -74,7 +89,9 @@ const WebsiteOverviewCard = ({
                             Visitors now
                             <ProgressIndicator type="active" color="#34d399" />
                         </div>
-                        <div className="text-xl md:text-[1.65rem] font-bold">{liveVisitorsCount}</div>
+                        <div className="text-xl md:text-[1.65rem] font-bold">
+                            <NumberFlow value={liveVisitorsCount} />
+                        </div>
                     </div>
                 </CardHeader>
                 <ScrollBar orientation="horizontal" />
