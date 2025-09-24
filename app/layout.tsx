@@ -1,8 +1,9 @@
 import NextTopLoader from "nextjs-toploader";
 import type { Metadata } from "next";
+import { DM_Mono } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
-import "./globals.css";
+import "@/app/globals.css";
 import Toasters from "@/components/Toasters";
 import Providers from "@/components/Providers";
 import { Fustat } from "./fonts";
@@ -10,6 +11,12 @@ import { env as clientEnv } from "@/constants/env/client";
 import { env as serverEnv } from "@/constants/env/server";
 import { sharedOpenGraph } from "@/constants/shared-metadata";
 import { getDomainNameFromUrl } from "@/features/websites/utils";
+
+const dmMono = DM_Mono({
+    variable: "--font-dm-mono",
+    weight: ["300", "400", "500"],
+    subsets: ["latin"]
+});
 
 export const metadata: Metadata = {
     title: {
@@ -33,7 +40,7 @@ export default function RootLayout({
     const appUrl = clientEnv.NEXT_PUBLIC_APP_URL;
 
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
             <head>
                 <script
                     defer
@@ -42,7 +49,7 @@ export default function RootLayout({
                     src={`${appUrl}/js/script.js`}
                 ></script>
             </head>
-            <body className={`${Fustat.className} antialiased`}>
+            <body className={`${Fustat.className} ${dmMono.variable} antialiased`}>
                 <NextTopLoader
                     color={color}
                     showSpinner={false}

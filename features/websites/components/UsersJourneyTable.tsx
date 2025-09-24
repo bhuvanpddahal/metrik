@@ -1,4 +1,5 @@
 import Image from "next/image";
+import ReactCountryFlag from "react-country-flag";
 import { formatDistance } from "date-fns";
 
 import WebsiteAvatar from "./WebsiteAvatar";
@@ -61,12 +62,11 @@ const UsersJourneyTable = ({
                                             <h3 className="font-semibold">{visitor.name}</h3>
                                             <ul className="flex items-center gap-x-2">
                                                 <li className="flex items-center gap-x-1 mt-1">
-                                                    <Image
-                                                        src="/icon.svg"
-                                                        alt="User"
-                                                        width={10}
-                                                        height={10}
-                                                        className="size-3.5 border rounded"
+                                                    <ReactCountryFlag
+                                                        countryCode={visitor.countryCode}
+                                                        aria-label={visitor.country}
+                                                        className="size-3.5 text-xs"
+                                                        svg
                                                     />
                                                     <span className="text-muted-foreground text-xs">
                                                         {visitor.country}
@@ -74,11 +74,11 @@ const UsersJourneyTable = ({
                                                 </li>
                                                 <li className="flex items-center gap-x-1">
                                                     <Image
-                                                        src="/icon.svg"
-                                                        alt="User"
-                                                        width={10}
-                                                        height={10}
-                                                        className="size-3.5 border rounded"
+                                                        src={`/images/devices/${visitor.device}.svg`}
+                                                        alt={visitor.device}
+                                                        width={60}
+                                                        height={60}
+                                                        className="size-3.5 text-xs"
                                                     />
                                                     <span className="text-muted-foreground text-xs capitalize">
                                                         {visitor.device}
@@ -86,11 +86,11 @@ const UsersJourneyTable = ({
                                                 </li>
                                                 <li className="flex items-center gap-x-1">
                                                     <Image
-                                                        src="/icon.svg"
-                                                        alt="User"
-                                                        width={10}
-                                                        height={10}
-                                                        className="size-3.5 border rounded"
+                                                        src={`/images/os/${visitor.operatingSystem.toLowerCase()}.svg`}
+                                                        alt={visitor.operatingSystem}
+                                                        width={60}
+                                                        height={60}
+                                                        className="size-3.5 text-xs"
                                                     />
                                                     <span className="text-muted-foreground text-xs">
                                                         {visitor.operatingSystem}
@@ -98,11 +98,11 @@ const UsersJourneyTable = ({
                                                 </li>
                                                 <li className="flex items-center gap-x-1">
                                                     <Image
-                                                        src="/icon.svg"
-                                                        alt="User"
-                                                        width={10}
-                                                        height={10}
-                                                        className="size-3.5 border rounded"
+                                                        src={`https://cdnjs.cloudflare.com/ajax/libs/browser-logos/74.1.0/${visitor.browser.toLowerCase()}/${visitor.browser.toLowerCase()}_64x64.png`}
+                                                        alt={visitor.browser}
+                                                        width={60}
+                                                        height={60}
+                                                        className="size-3.5 text-xs"
                                                     />
                                                     <span className="text-muted-foreground text-xs">
                                                         {visitor.browser}

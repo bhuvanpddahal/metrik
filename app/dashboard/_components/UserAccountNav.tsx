@@ -36,7 +36,7 @@ const UserAccountNav = () => {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[13rem]">
-                <DropdownMenuLabel className="bg-primary/10 flex flex-col items-center gap-y-2 py-2 -m-1">
+                <DropdownMenuLabel className="bg-primary/10 flex flex-col items-center gap-y-2 py-2 rounded">
                     <UserAvatar className="h-10 w-10" />
                     <p className="truncate">{user.email}</p>
                 </DropdownMenuLabel>

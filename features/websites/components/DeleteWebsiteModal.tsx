@@ -14,11 +14,14 @@ import { useDeleteWebsite } from "../hooks/useDeleteWebsite";
 import { useDeleteWebsiteModal } from "../hooks/useDeleteWebsiteModal";
 
 const DeleteWebsiteModal = () => {
-    const { isOpen, websiteId, close } = useDeleteWebsiteModal();
     const { mutate: deleteWebsite, isPending } = useDeleteWebsite();
+    const { isOpen, websiteId, domain, close } = useDeleteWebsiteModal();
 
     const handleContinue = () => {
-        deleteWebsite({ param: { websiteId } });
+        deleteWebsite({
+            param: { websiteId },
+            domain
+        });
     };
 
     return (

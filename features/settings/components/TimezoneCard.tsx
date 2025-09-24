@@ -40,7 +40,8 @@ const TimezoneCard = ({
     const onSubmit = (payload: TimezonePayload) => {
         updateTimezone({
             param: { websiteId },
-            json: payload
+            json: payload,
+            currentTimezone: timezone
         });
     };
 

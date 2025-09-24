@@ -13,7 +13,7 @@ interface Window {
     eventData: Record<string, any>
   ) => void;
 }`;
-    const metrikFunction = 'window?.metrik("signup", { email: "user@mail.com" });';
+    const metrikFunction = 'window.metrik?.("signup", { email: "user@mail.com" });';
 
     return (
         <div>

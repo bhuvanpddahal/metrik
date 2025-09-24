@@ -74,7 +74,7 @@ const CountriesCard = ({
                     <WorldMapChart chartData={chartData} />
                 ) : (
                     <DistributionChart
-                        chartData={ensureExactLengthForChartData([...chartData])}
+                        chartData={ensureExactLengthForChartData(chartData)}
                         dataKey={activeMenu}
                     />
                 )}

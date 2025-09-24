@@ -10,7 +10,12 @@ const SocialButton = () => {
         <Button
             variant="outline"
             className="w-full"
-            onClick={() => signIn("google", { redirectTo: "/dashboard" })}
+            onClick={() => {
+                window.metrik?.("onboarding_started", {
+                    description: "Clicked 'signup with google' button"
+                });
+                signIn("google", { redirectTo: "/dashboard" });
+            }}
         >
             <FcGoogle className="size-3" />
             Continue with Google

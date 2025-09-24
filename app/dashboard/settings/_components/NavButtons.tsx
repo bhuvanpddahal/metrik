@@ -1,7 +1,7 @@
 "use client";
 
-import { navButtons } from "../constants";
 import { Button } from "@/components/ui/Button";
+import { navButtons } from "@/app/dashboard/settings/constants";
 import { useDashboardSettingsSearchParams } from "@/features/settings/hooks/useDashboardSettingsSearchParams";
 
 const NavButtons = () => {

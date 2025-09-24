@@ -17,7 +17,7 @@ import { useToast } from "@/hooks/useToast";
 import { env } from "@/constants/env/client";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
-import { type SigninPayload, signinSchema } from "../schemas";
+import { type SigninPayload, signinSchema } from "@/features/auth/schemas";
 
 const AuthForm = () => {
     const { toast } = useToast();
@@ -42,6 +42,8 @@ const AuthForm = () => {
                     description: response.error
                 });
             }
+
+            window.metrik?.("signup", { email: payload.email });
         });
     };
 

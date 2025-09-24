@@ -35,6 +35,10 @@ export const useAddWebsite = () => {
             setDomain(json.domain);
             setTimezone(json.timezone);
             queryClient.invalidateQueries({ queryKey: ["websites"] });
+            window.metrik?.("website_added", {
+                websiteId: data.id,
+                domain: json.domain
+            });
         },
         onError: (error) => {
             toast.error(error.message);

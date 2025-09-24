@@ -6,7 +6,9 @@ import { client } from "@/lib/rpc";
 import { useToast } from "@/hooks/useToast";
 import { useDeleteWebsiteModal } from "./useDeleteWebsiteModal";
 
-type RequestType = InferRequestType<typeof client.api.websites[":websiteId"]["$delete"]>;
+type RequestType = InferRequestType<typeof client.api.websites[":websiteId"]["$delete"]> & {
+    domain: string;
+};
 type ResponseType = InferResponseType<typeof client.api.websites[":websiteId"]["$delete"], 200>;
 
 export const useDeleteWebsite = () => {
@@ -29,13 +31,17 @@ export const useDeleteWebsite = () => {
 
             return await response.json();
         },
-        onSuccess: ({ data }) => {
+        onSuccess: ({ data }, { param, domain }) => {
             toast({
                 title: "Success",
                 description: data.success
             });
             close();
             queryClient.invalidateQueries({ queryKey: ["websites"] });
+            window.metrik?.("website_deleted", {
+                websiteId: param.websiteId,
+                domain
+            });
             router.push("/dashboard");
         },
         onError: (error) => {

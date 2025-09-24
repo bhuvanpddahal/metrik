@@ -18,13 +18,16 @@ export const useVerifyScriptInstallation = () => {
     >({
         mutationFn: async ({ param }) => {
             const response = await client.api.websites[":websiteId"]["verify-script"].$patch({ param });
-            if (!response.ok) throw new Error("Looks like the script is not installed, please try again.");
+            if (!response.ok) throw new Error("Looks like the script is not installed, please try again after adding it.");
 
             return await response.json();
         },
         onSuccess: ({ data }) => {
             toast.success(data.success);
             localStorage.setItem(`first-visit-${data.domain}`, "true");
+            window.metrik?.("website_verified", {
+                domain: data.domain
+            });
             router.push(`/dashboard/${data.domain}`);
         },
         onError: (error) => {

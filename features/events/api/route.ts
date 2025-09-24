@@ -10,11 +10,11 @@ import {
     getDomainNameFromUrl,
     getOriginFromUrl
 } from "@/features/websites/utils";
-import { eventDataSchema } from "../schemas";
 import { EventTable } from "@/drizzle/schema/events";
 import { SessionTable } from "@/drizzle/schema/sessions";
 import { VisitorTable } from "@/drizzle/schema/visitors";
 import { PageViewTable } from "@/drizzle/schema/page-views";
+import { eventDataSchema } from "@/features/events/schemas";
 import { getWebsiteByDomain } from "@/features/websites/queries";
 
 const app = new Hono()
@@ -47,6 +47,7 @@ const app = new Hono()
 
             const website = await getWebsiteByDomain(domain);
             if (!website) return c.json({ error: "Invalid request" }, 400);
+            if (websiteId !== website.id) return c.json({ error: "Script configuration error" }, 400);
             if (!website.verifiedAt) return c.json({ error: "Website not verified" }, 400);
 
             const userAgent = c.req.header("User-Agent");

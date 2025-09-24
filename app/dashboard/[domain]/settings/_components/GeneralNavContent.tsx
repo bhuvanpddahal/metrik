@@ -25,7 +25,7 @@ const GeneralNavContent = ({
             <Button
                 variant="destructive"
                 className="flex ml-auto"
-                onClick={() => open(websiteId)}
+                onClick={() => open(websiteId, domain)}
             >
                 Delete
             </Button>

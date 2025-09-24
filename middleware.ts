@@ -7,6 +7,8 @@ import {
 } from "@/routes";
 import { env } from "@/constants/env/server";
 
+const matcher = [...protectedRoutes, ...authRoutes];
+
 export default async function middleware(req: NextRequest) {
     const sessionRequest = await fetch(`${env.AUTH_URL}/session`, {
         headers: {
@@ -32,6 +34,4 @@ export default async function middleware(req: NextRequest) {
     return response;
 }
 
-export const config = {
-    matcher: [...protectedRoutes, ...authRoutes]
-};
+export const config = { matcher };

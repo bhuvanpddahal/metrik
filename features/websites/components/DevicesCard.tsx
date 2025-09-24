@@ -69,7 +69,7 @@ const DevicesCard = ({
             </CardHeader>
             <CardContent className="px-0 pt-5">
                 <DistributionChart
-                    chartData={ensureExactLengthForChartData([...chartData])}
+                    chartData={ensureExactLengthForChartData(chartData)}
                     dataKey={activeMenu}
                     labelClassName="capitalize"
                 />

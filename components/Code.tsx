@@ -35,7 +35,7 @@ const Code = ({
             <Button
                 variant="outline"
                 size="icon"
-                className="size-8 absolute top-1/2 right-2 -translate-y-1/2"
+                className="size-8 absolute top-1/2 right-2 -translate-y-1/2 dark:border-card"
                 onClick={() => copyToClipboard(code, copySuccessMessage, copyErrorMessage)}
             >
                 <CopyIcon className="size-4" />

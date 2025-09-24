@@ -1,6 +1,7 @@
 import localFont from "next/font/local";
 
 export const Fustat = localFont({
+    variable: "--font-fustat",
     src: [
         {
             path: "./fustat/200.woff2",

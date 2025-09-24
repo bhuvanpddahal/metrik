@@ -3,8 +3,8 @@
 import Confetti from "react-confetti";
 import { useEffect, useState } from "react";
 
-import WebsiteDetailsData from "./WebsiteDetailsData";
-import WebsiteDetailsHeader from "./WebsiteDetailsHeader";
+import WebsiteDetailsData from "@/app/dashboard/[domain]/_components/WebsiteDetailsData";
+import WebsiteDetailsHeader from "@/app/dashboard/[domain]/_components/WebsiteDetailsHeader";
 
 interface WebsiteDetailsContentProps {
     domain: string;

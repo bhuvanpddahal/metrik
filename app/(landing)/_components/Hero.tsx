@@ -61,8 +61,8 @@ const Hero = () => {
                     <Image
                         src="/images/hero.svg"
                         alt="Metrik dashbaoard"
-                        width={1227}
-                        height={919}
+                        width={812}
+                        height={489}
                         className="lg:absolute lg:top-0 lg:left-[34rem] h-auto lg:h-[calc(100%+10vw+3rem)] w-full lg:w-auto"
                         priority
                     />

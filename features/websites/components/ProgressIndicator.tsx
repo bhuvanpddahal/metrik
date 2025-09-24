@@ -26,7 +26,7 @@ const ProgressIndicator = ({
                 />
             )}
             {type === "checked" && (
-                <CheckIcon className="size-2.5 text-background stroke-2" />
+                <CheckIcon className="size-2.5 text-background stroke-[4]" />
             )}
         </div>
     );

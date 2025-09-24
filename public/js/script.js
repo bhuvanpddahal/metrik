@@ -196,11 +196,6 @@
     //     }
     // });
 
-    if (isLocalhostFileProtocolOrIframe()) {
-        console.warn("Metrik: Ignoring localhost or file protocol or iframe");
-        return;
-    }
-
     function isLocalhostFileProtocolOrIframe() {
         const hostname = window.location.hostname;
         const protocol = window.location.protocol;
@@ -208,6 +203,11 @@
         const localhostRegex = /^(localhost|127\.0\.0\d|\[::1\])$/;
         return localhostRegex.test(hostname) || protocol === "file:" || window !== window.parent;
     }
+
+    // if (isLocalhostFileProtocolOrIframe()) {
+    //     console.warn("Metrik: Ignoring localhost or file protocol or iframe");
+    //     return;
+    // }
 
     trackPageView();
 

@@ -21,8 +21,8 @@ import {
     VisitorTable
 } from "@/drizzle/schema";
 import { db } from "@/drizzle/db";
-import { scriptSrc } from "./constants";
-import type { UserJourneyData } from "./types";
+import type { UserJourneyData } from "@/features/websites/types";
+import { LIVE_VISITORS_THRESHOLD_IN_MINUTES, scriptSrc } from "@/features/websites/constants";
 
 export const getWebsiteById = async (websiteId: string) => {
     const website = await db.query.WebsiteTable.findFirst({
@@ -201,7 +201,7 @@ export const getLiveVisitorsCount = async (
     websiteId: string,
     endDate: Date
 ) => {
-    const startDate = subMinutes(endDate, 5);
+    const startDate = subMinutes(endDate, LIVE_VISITORS_THRESHOLD_IN_MINUTES);
     const visitors = getVisitorsSubquery(websiteId, startDate, endDate);
 
     const [{ liveVisitorsCount }] = await db
@@ -358,6 +358,7 @@ export const getUserJourneyData = async (
                     id: visitors.id,
                     name: visitors.name,
                     country: visitors.country,
+                    countryCode: visitors.countryCode,
                     region: visitors.region,
                     city: visitors.city,
                     browser: visitors.browser,

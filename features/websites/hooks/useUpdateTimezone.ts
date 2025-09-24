@@ -4,7 +4,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { client } from "@/lib/rpc";
 import { useToast } from "@/hooks/useToast";
 
-type RequestType = InferRequestType<typeof client.api.websites[":websiteId"]["timezone"]["$patch"]>;
+type RequestType = InferRequestType<typeof client.api.websites[":websiteId"]["timezone"]["$patch"]> & {
+    currentTimezone: string;
+};
 type ResponseType = InferResponseType<typeof client.api.websites[":websiteId"]["timezone"]["$patch"], 200>;
 
 export const useUpdateTimezone = () => {
@@ -25,12 +27,17 @@ export const useUpdateTimezone = () => {
 
             return await response.json();
         },
-        onSuccess: ({ data }, { param }) => {
+        onSuccess: ({ data }, { param, json, currentTimezone }) => {
             toast({
                 title: "Success",
                 description: data.success
             });
             queryClient.invalidateQueries({ queryKey: ["websites", param.websiteId] });
+            window.metrik?.("timezone_updated", {
+                websiteId: param.websiteId,
+                prevTimezone: currentTimezone,
+                newTimezone: json.timezone
+            });
         },
         onError: (error) => {
             toast({

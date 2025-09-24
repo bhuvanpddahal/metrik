@@ -15,7 +15,9 @@ const WebsiteOverviewCardLoader = () => {
                 <CardHeader className="flex-row gap-x-6 pb-2">
                     <div className="shrink-0 space-y-2 mt-1.5">
                         <div className="text-sm text-muted-foreground font-medium">Visitors</div>
-                        <Skeleton className="h-7 w-10" />
+                        <div className="pb-1 md:pb-3">
+                            <Skeleton className="h-7 w-10" />
+                        </div>
                         <div className="h-3" />
                     </div>
                     <Separator orientation="vertical" className="shrink-0 min-h-14" />

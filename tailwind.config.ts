@@ -10,6 +10,10 @@ const config: Config = {
 	],
 	theme: {
 		extend: {
+			fontFamily: {
+				fustat: "var(--font-fustat)",
+				"dm-mono": "var(--font-dm-mono)"
+			},
 			colors: {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
@@ -64,6 +68,9 @@ const config: Config = {
 			backgroundImage: {
 				'logo-light': "url('/images/logo-light.svg')",
 				'logo-dark': "url('/images/logo-dark.svg')"
+			},
+			backgroundSize: {
+				'logo-pattern': '210px 60px'
 			},
 			keyframes: {
 				'accordion-down': {

@@ -1,7 +1,7 @@
 import { useRouter } from "nextjs-toploader/app";
 
-import WebsiteAvatar from "./WebsiteAvatar";
-import TotalVisitorsChart from "./TotalVisitorsChart";
+import WebsiteAvatar from "@/features/websites/components/WebsiteAvatar";
+import TotalVisitorsChart from "@/features/websites/components/TotalVisitorsChart";
 import {
     Card,
     CardContent,
@@ -33,7 +33,7 @@ const WebsitesList = (
                 <Card
                     key={website.id}
                     className="cursor-pointer hover:border-zinc-300 hover:dark:border-zinc-700"
-                    onClick={() => router.push(`/dashboard/${website.domain}`)}
+                    onClick={() => router.push(`/dashboard/${encodeURIComponent(website.domain)}`)}
                 >
                     <CardHeader className="flex-row gap-x-3 pb-3">
                         <WebsiteAvatar domain={website.domain} />
@@ -43,7 +43,9 @@ const WebsitesList = (
                         <TotalVisitorsChart chartData={website.chartData} />
                     </CardContent>
                     <CardFooter>
-                        <p><strong>{website.visitorsCount}</strong> {website.visitorsCount === 1 ? "visitor" : "visitors"}</p>
+                        <p>
+                            <strong>{website.visitorsCount}</strong> {website.visitorsCount === 1 ? "visitor" : "visitors"}
+                        </p>
                     </CardFooter>
                 </Card>
             ))}

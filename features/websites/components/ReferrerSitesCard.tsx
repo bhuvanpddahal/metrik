@@ -46,7 +46,7 @@ const ReferrerSitesCard = ({
             </CardHeader>
             <CardContent className="px-0 pt-5">
                 <DistributionChart
-                    chartData={ensureExactLengthForChartData([...referrerChartData])}
+                    chartData={ensureExactLengthForChartData(referrerChartData)}
                     dataKey="referrer"
                     labelFormatter={getDomainNameFromUrl}
                 />

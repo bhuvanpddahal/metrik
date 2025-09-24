@@ -1,8 +1,8 @@
 import NumberFlow, { NumberFlowGroup } from "@number-flow/react";
 
+import ProgressIndicator from "./ProgressIndicator";
 import PerformanceIndicator from "./PerformanceIndicator";
 import WebsiteOverviewChart from "./WebsiteOverviewChart";
-import ProgressIndicator from "@/features/websites/components/ProgressIndicator";
 import {
     Card,
     CardContent,

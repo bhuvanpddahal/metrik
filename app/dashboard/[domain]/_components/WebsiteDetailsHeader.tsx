@@ -37,6 +37,7 @@ const WebsiteDetailsHeader = (
     { domain }: WebsiteDetailsHeaderProps
 ) => {
     const router = useRouter();
+    const decodedDomain = decodeURIComponent(domain);
     const { isLoading, data, error } = useGetWebsiteHeader();
     const { interval, setInterval } = useWebsiteDetailsSearchParams();
 
@@ -44,7 +45,7 @@ const WebsiteDetailsHeader = (
 
     if (isLoading) return (
         <WebsiteDetailsHeaderLoader
-            domain={domain}
+            domain={decodedDomain}
             intervalLabel={activeIntervalLabel}
         />
     );
@@ -61,8 +62,8 @@ const WebsiteDetailsHeader = (
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="px-2">
                             <div className="flex items-center gap-x-2">
-                                <WebsiteAvatar domain={domain} className="size-6 border-none" />
-                                <p className="font-semibold leading-none tracking-tight">{domain}</p>
+                                <WebsiteAvatar domain={decodedDomain} className="size-6 border-none" />
+                                <p className="font-semibold leading-none tracking-tight">{decodedDomain}</p>
                             </div>
                             <ChevronDownIcon className="size-4 stroke-[0.8] text-muted-foreground" />
                         </Button>
@@ -75,7 +76,7 @@ const WebsiteDetailsHeader = (
                             <>
                                 <DropdownMenuSeparator />
                                 {data.websites.map((website) => {
-                                    if (website.domain === domain) return null;
+                                    if (website.domain === decodedDomain) return null;
 
                                     return (
                                         <DropdownMenuItem

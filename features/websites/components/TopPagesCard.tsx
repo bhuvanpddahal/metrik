@@ -44,7 +44,7 @@ const TopPagesCard = ({
             </CardHeader>
             <CardContent className="px-0 pt-5">
                 <DistributionChart
-                    chartData={ensureExactLengthForChartData([...pageChartData])}
+                    chartData={ensureExactLengthForChartData(pageChartData)}
                     dataKey="page"
                     labelFormatter={getPathnameAndSearchFromUrl}
                 />

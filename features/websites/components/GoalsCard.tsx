@@ -85,7 +85,7 @@ const GoalsCard = ({
                     <CardContent className={cn("relative", activeMenu === "goal" ? "px-0 pt-5" : "p-0")}>
                         {activeMenu === "goal" ? (
                             <DistributionChart
-                                chartData={ensureExactLengthForChartData([...goalChartData])}
+                                chartData={ensureExactLengthForChartData(goalChartData)}
                                 dataKey="type"
                             />
                         ) : (
@@ -109,7 +109,7 @@ const GoalsCard = ({
                 </>
             ) : (
                 <CardContent className="relative h-[25.875rem]">
-                    <div className="absolute inset-0 bg-logo-light opacity-[0.03] pointer-events-none dark:bg-logo-dark" />
+                    <div className="absolute inset-0 bg-logo-light bg-center bg-repeat-space bg-logo-pattern opacity-[0.03] pointer-events-none dark:bg-logo-dark" />
                     <div className="relative h-full flex flex-col items-center justify-center gap-y-3">
                         <p className="font-semibold">
                             {activeMenu === "goal"

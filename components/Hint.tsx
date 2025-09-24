@@ -23,7 +23,7 @@ const Hint = ({
                     {children}
                 </TooltipTrigger>
                 <TooltipContent side={side}>
-                    <p>{message}</p>
+                    <p className="font-medium">{message}</p>
                 </TooltipContent>
             </Tooltip>
         </TooltipProvider>

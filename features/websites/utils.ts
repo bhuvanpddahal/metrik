@@ -21,7 +21,8 @@ export const generateRandomNameForVisitor = () => {
     return uniqueNamesGenerator({
         dictionaries: [names, adjectives, animals, colors],
         length: 2,
-        separator: " "
+        separator: " ",
+        style: "capital"
     });
 };
 
@@ -33,14 +34,15 @@ export const ensureExactLengthForChartData = (
     if (dataLength === length) return chartData;
 
     const diffInLength = length - dataLength;
+    const transformedChartData = [...chartData];
 
     if (diffInLength > 0) {
-        chartData.push(...Array(diffInLength).fill({}));
+        transformedChartData.push(...Array(diffInLength).fill({}));
     } else {
-        chartData.splice(diffInLength);
+        transformedChartData.splice(diffInLength);
     }
 
-    return chartData;
+    return transformedChartData;
 };
 
 export const getDomainNameFromUrl = (url: string | null) => {
@@ -105,7 +107,7 @@ export const getEventJourneyFormat = (
         default:
             return {
                 icon: GoalIcon,
-                prefixText: "Completed the event",
+                prefixText: "Triggered the event",
                 value: eventType
             };
     }

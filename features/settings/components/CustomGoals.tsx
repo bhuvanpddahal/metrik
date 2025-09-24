@@ -1,7 +1,7 @@
 import { CrosshairIcon } from "lucide-react";
 
 import Code from "@/components/Code";
-import SettingsCard from "./SettingsCard";
+import SettingsCard from "@/features/settings/components/SettingsCard";
 import { CardDescription, CardTitle } from "@/components/ui/Card";
 
 const CustomGoals = () => {
@@ -13,7 +13,7 @@ interface Window {
     eventData: Record<string, any>
   ) => void;
 }`;
-    const metrikFunction = `window?.metrik("goal_name", {
+    const metrikFunction = `window.metrik?.("goal_name", {
   description: "A short description of the event"
 });`;
 

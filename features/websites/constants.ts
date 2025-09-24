@@ -24,10 +24,11 @@ import {
     generateSqlSeriesForNow,
     generateSqlSeriesForWeeksOrMonth,
     generateSqlSeriesForYear
-} from "./utils";
+} from "@/features/websites/utils";
 import { env } from "@/constants/env/client";
 
 export const scriptSrc = `${env.NEXT_PUBLIC_APP_URL}/js/script.js`;
+export const LIVE_VISITORS_THRESHOLD_IN_MINUTES = 5;
 
 const currentDate = new Date();
 
