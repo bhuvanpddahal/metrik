@@ -6,7 +6,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import "@/app/globals.css";
 import Toasters from "@/components/Toasters";
 import Providers from "@/components/Providers";
-import { Fustat } from "./fonts";
+import { Fustat } from "@/app/fonts";
 import { env as clientEnv } from "@/constants/env/client";
 import { env as serverEnv } from "@/constants/env/server";
 import { sharedOpenGraph } from "@/constants/shared-metadata";
@@ -47,7 +47,7 @@ export default function RootLayout({
                     data-website-id={serverEnv.METRIK_WEBSITE_ID}
                     data-domain={getDomainNameFromUrl(appUrl)}
                     src={`${appUrl}/js/script.js`}
-                ></script>
+                />
             </head>
             <body className={`${Fustat.className} ${dmMono.variable} antialiased`}>
                 <NextTopLoader
