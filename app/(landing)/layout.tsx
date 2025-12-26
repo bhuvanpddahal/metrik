@@ -1,3 +1,4 @@
+import Hero from "./_components/Hero";
 import Footer from "./_components/Footer";
 import Navbar from "./_components/Navbar";
 import SeasonalSnowfall from "@/app/_components/SeasonalSnowfall";
@@ -8,14 +9,15 @@ interface LandingLayoutProps {
 
 const LandingLayout = ({ children }: LandingLayoutProps) => {
     return (
-        <>
-            <main>
+        <main>
+            <div className="relative">
                 <Navbar />
-                {children}
-                <Footer />
-            </main>
-            <SeasonalSnowfall />
-        </>
+                <Hero />
+                <SeasonalSnowfall />
+            </div>
+            {children}
+            <Footer />
+        </main>
     );
 };
 

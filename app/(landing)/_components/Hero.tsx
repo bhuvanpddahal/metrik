@@ -18,7 +18,7 @@ const Hero = () => {
             <div className="container lg:mb-12">
                 <div className="relative lg:w-screen pt-5">
                     <div className="lg:max-w-lg w-full mb-8 lg:mb-0">
-                        <h1 className="font-extrabold tracking-tight text-4xl sm:text-5xl md:text-6xl text-center lg:text-left">
+                        <h1 className="font-bold tracking-tight text-4xl sm:text-5xl md:text-6xl text-center lg:text-left">
                             Powerful insights
                             <br />
                             <span className="text-primary dark:text-blue-400">for your website</span>
