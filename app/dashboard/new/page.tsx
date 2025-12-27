@@ -9,14 +9,14 @@ import {
 } from "@/components/ui/Card";
 
 interface NewWebsitePageProps {
-    searchParams: {
+    searchParams: Promise<{
         step?: "site" | "script";
-    };
+    }>;
 }
 
-const NewWebsitePage = ({
-    searchParams: { step }
-}: NewWebsitePageProps) => {
+const NewWebsitePage = async ({ searchParams }: NewWebsitePageProps) => {
+    const { step } = await searchParams;
+
     return (
         <Card className="mt-5">
             <CardHeader className="border-b">
