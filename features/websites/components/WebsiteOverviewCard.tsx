@@ -44,21 +44,21 @@ const WebsiteOverviewCard = ({
             <ScrollArea className="max-w-full">
                 <CardHeader className="group flex-row gap-x-6 pb-2">
                     <div className="shrink-0 space-y-2 mt-1.5">
-                        <div className="text-sm text-muted-foreground font-medium">Visitors</div>
-                        <div className="text-xl md:text-[1.65rem] font-bold">
+                        <div className="text-sm text-muted-foreground">Visitors</div>
+                        <div className="text-xl md:text-[1.65rem] font-medium">
                             <NumberFlow value={visitorsCount} />
                         </div>
                         <PerformanceIndicator changeInPercentage={visitorsCountChangeInPercentage} />
                     </div>
                     <Separator orientation="vertical" className="shrink-0 min-h-14" />
                     <div className="shrink-0 space-y-2">
-                        <div className="text-sm text-muted-foreground font-medium">Conversion rate</div>
-                        <div className="text-xl md:text-[1.65rem] font-bold">-</div>
+                        <div className="text-sm text-muted-foreground">Conversion rate</div>
+                        <div className="text-xl md:text-[1.65rem] font-medium">-</div>
                     </div>
                     <Separator orientation="vertical" className="shrink-0 min-h-14" />
                     <div className="shrink-0 space-y-2">
-                        <div className="text-sm text-muted-foreground font-medium">Bounce rate</div>
-                        <div className="text-xl md:text-[1.65rem] font-bold">
+                        <div className="text-sm text-muted-foreground">Bounce rate</div>
+                        <div className="text-xl md:text-[1.65rem] font-medium">
                             {bounceRate > 0 ? (
                                 <NumberFlow
                                     value={bounceRate / 100}
@@ -70,8 +70,8 @@ const WebsiteOverviewCard = ({
                     </div>
                     <Separator orientation="vertical" className="shrink-0 min-h-14" />
                     <div className="shrink-0 space-y-2">
-                        <div className="text-sm text-muted-foreground font-medium">Session time</div>
-                        <div className="text-xl md:text-[1.65rem] font-bold">
+                        <div className="text-sm text-muted-foreground">Session time</div>
+                        <div className="text-xl md:text-[1.65rem] font-medium">
                             {averageSessionTime > 0 ? (
                                 <NumberFlowGroup>
                                     <NumberFlow value={Math.floor(averageSessionTime / 60)} />
@@ -85,11 +85,11 @@ const WebsiteOverviewCard = ({
                     </div>
                     <Separator orientation="vertical" className="shrink-0 min-h-14" />
                     <div className="shrink-0 space-y-2">
-                        <div className="flex items-center gap-x-3 text-sm text-muted-foreground font-medium">
+                        <div className="flex items-center gap-x-3 text-sm text-muted-foreground">
                             Visitors now
                             <ProgressIndicator type="active" color="#34d399" />
                         </div>
-                        <div className="text-xl md:text-[1.65rem] font-bold">
+                        <div className="text-xl md:text-[1.65rem] font-medium">
                             <NumberFlow value={liveVisitorsCount} />
                         </div>
                     </div>

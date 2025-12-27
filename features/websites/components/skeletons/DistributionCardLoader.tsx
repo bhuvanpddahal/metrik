@@ -19,7 +19,7 @@ const DistributionCardLoader = (
     return (
         <Card>
             <CardHeader className="p-1 border-b">
-                <Button variant="ghost" className="w-fit pr-2 font-semibold pointer-events-none">
+                <Button variant="ghost" className="w-fit pr-2 pointer-events-none">
                     {name}
                     <ChevronDownIcon className="size-4 stroke-[0.8] text-muted-foreground" />
                 </Button>
@@ -30,7 +30,7 @@ const DistributionCardLoader = (
             <CardFooter className="justify-center">
                 <div className="flex items-center gap-x-1 text-muted-foreground cursor-default">
                     <ScanIcon className="size-4" />
-                    <div className="text-xs font-semibold mt-0.5">DETAILS</div>
+                    <div className="text-xs">DETAILS</div>
                 </div>
             </CardFooter>
         </Card>

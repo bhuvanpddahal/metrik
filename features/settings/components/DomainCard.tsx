@@ -51,7 +51,7 @@ const DomainCard = ({
                         render={({ field }) => (
                             <FormItem>
                                 <div className="flex">
-                                    <div className="bg-muted flex items-center text-muted-foreground text-sm font-medium px-3 rounded-l-md border border-r-0">
+                                    <div className="bg-muted flex items-center text-muted-foreground text-sm px-3 rounded-l-md border border-r-0">
                                         https://
                                     </div>
                                     <FormControl>

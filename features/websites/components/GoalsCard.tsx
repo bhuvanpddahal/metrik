@@ -46,7 +46,7 @@ const GoalsCard = ({
             <CardHeader className="flex-row items-center gap-x-3 p-1 border-b space-y-0">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="w-fit pr-2 font-semibold capitalize">
+                        <Button variant="ghost" className="w-fit pr-2 capitalize">
                             {activeMenu}
                             <ChevronDownIcon className="size-4 stroke-[0.8] text-muted-foreground" />
                         </Button>
@@ -61,7 +61,7 @@ const GoalsCard = ({
                         <span className="text-muted-foreground text-sm">for</span>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" className="w-fit pr-2 font-semibold">
+                                <Button variant="ghost" className="w-fit pr-2">
                                     {activeEvent.type}
                                     <ChevronDownIcon className="size-4 stroke-[0.8] text-muted-foreground" />
                                 </Button>
@@ -102,7 +102,7 @@ const GoalsCard = ({
                                 onClick={() => open({ title: "Goal", chartData: goalChartData, dataKey: "type" })}
                             >
                                 <ScanIcon className="size-4" />
-                                <div className="text-xs font-semibold mt-0.5">DETAILS</div>
+                                <div className="text-xs">DETAILS</div>
                             </div>
                         </CardFooter>
                     )}
@@ -111,7 +111,7 @@ const GoalsCard = ({
                 <CardContent className="relative h-[25.875rem]">
                     <div className="absolute inset-0 bg-logo-light bg-center bg-repeat-space bg-logo-pattern opacity-[0.03] pointer-events-none dark:bg-logo-dark" />
                     <div className="relative h-full flex flex-col items-center justify-center gap-y-3">
-                        <p className="font-semibold">
+                        <p className="font-medium">
                             {activeMenu === "goal"
                                 ? "Track what visitors do on your site"
                                 : "Discover what visitors do before completing a goal"

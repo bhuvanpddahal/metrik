@@ -23,7 +23,7 @@ const VerifyWebsiteAlert = ({
 
     return (
         <Alert variant="warning">
-            <MessageCircleWarningIcon className="size-5" />
+            <MessageCircleWarningIcon className="size-6" />
             <AlertTitle>Verify Your Website!</AlertTitle>
             <AlertDescription>
                 Please verify your website to start tracking user activity and gain valuable insights.
@@ -31,7 +31,7 @@ const VerifyWebsiteAlert = ({
             <Button
                 variant="link"
                 size="sm"
-                className="h-fit mt-2 leading-none underline-offset-1"
+                className="h-fit mt-3 leading-none underline-offset-1"
                 onClick={() => router.push(`/dashboard/new?step=script&websiteId=${websiteId}&domain=${domain}&timezone=${timezone}`)}
             >
                 Verify Now

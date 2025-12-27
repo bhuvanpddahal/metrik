@@ -28,12 +28,12 @@ const VisitorEventsTimeline = ({ domain, journey }: VisitorEventsTimelineProps) 
             <Table>
                 <TableBody>
                     <TableRow className="sticky top-0 bg-muted hover:bg-muted">
-                        <TableCell className="w-full text-center font-medium">
+                        <TableCell className="w-full text-center">
                             {format(prevEventDate, "EEEE MMM do',' 	yyyy")}
                         </TableCell>
                     </TableRow>
                     <TableRow className="hover:bg-transparent">
-                        <TableCell className="flex items-center justify-between gap-x-2 font-medium">
+                        <TableCell className="flex items-center justify-between gap-x-2">
                             <div className="flex items-center gap-x-3">
                                 <SearchIcon className="shrink-0 size-5 text-muted-foreground" />
                                 <div className="leading-[1.8]">
@@ -64,14 +64,14 @@ const VisitorEventsTimeline = ({ domain, journey }: VisitorEventsTimelineProps) 
                             <Fragment key={index}>
                                 {!isSameDay && (
                                     <TableRow className="sticky top-0 bg-muted hover:bg-muted">
-                                        <TableCell className="w-full text-center font-medium">
+                                        <TableCell className="w-full text-center">
                                             {format(prevEventDate, "EEEE MMM do',' 	yyyy")}
                                         </TableCell>
                                     </TableRow>
                                 )}
                                 <TableRow className="hover:bg-transparent">
                                     <TableCell>
-                                        <div className="flex items-center justify-between gap-x-2 font-medium">
+                                        <div className="flex items-center justify-between gap-x-2">
                                             <div className="flex items-center gap-x-3">
                                                 <eventFormat.icon className="shrink-0 size-5 text-muted-foreground" />
                                                 <div className="leading-[1.8]">

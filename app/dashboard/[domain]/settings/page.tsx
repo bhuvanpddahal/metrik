@@ -1,14 +1,14 @@
 import WebsiteSettingsContent from "./_components/WebsiteSettingsContent";
 
 interface WebsiteSettingsPageProps {
-    params: {
+    params: Promise<{
         domain: string;
-    };
+    }>;
 }
 
-const WebsiteSettingsPage = ({
-    params: { domain }
-}: WebsiteSettingsPageProps) => {
+const WebsiteSettingsPage = async ({ params }: WebsiteSettingsPageProps) => {
+    const { domain } = await params;
+
     return (
         <WebsiteSettingsContent domain={domain} />
     );

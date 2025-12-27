@@ -4,16 +4,19 @@ import BackButton from "@/app/dashboard/_components/BackButton";
 import DeleteWebsiteModal from "@/features/websites/components/DeleteWebsiteModal";
 import { sharedOpenGraph } from "@/constants/shared-metadata";
 
-type Params = { domain: string };
+type Params = Promise<{
+    domain: string;
+}>;;
 
 interface WebsiteSettingsLayoutProps {
     params: Params;
     children: React.ReactNode;
 }
 
-export const generateMetadata = ({
-    params: { domain }
-}: { params: Params }): Metadata => {
+export const generateMetadata = async (
+    { params }: { params: Params }
+): Promise<Metadata> => {
+    const { domain } = await params;
     const decodedDomain = decodeURIComponent(domain);
 
     return {
@@ -26,10 +29,12 @@ export const generateMetadata = ({
     };
 };
 
-const WebsiteSettingsLayout = ({
-    params: { domain },
+const WebsiteSettingsLayout = async ({
+    params,
     children
 }: WebsiteSettingsLayoutProps) => {
+    const { domain } = await params;
+
     return (
         <div className="container pt-6 pb-12">
             <BackButton href={`/dashboard/${domain}`} btnText="Back" className="mb-3" />

@@ -204,10 +204,10 @@
         return localhostRegex.test(hostname) || protocol === "file:" || window !== window.parent;
     }
 
-    // if (isLocalhostFileProtocolOrIframe()) {
-    //     console.warn("Metrik: Ignoring localhost or file protocol or iframe");
-    //     return;
-    // }
+    if (isLocalhostFileProtocolOrIframe()) {
+        console.warn("Metrik: Ignoring localhost or file protocol or iframe");
+        return;
+    }
 
     trackPageView();
 

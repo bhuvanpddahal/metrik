@@ -20,7 +20,7 @@ const NewWebsitePage = ({
     return (
         <Card className="mt-5">
             <CardHeader className="border-b">
-                <CardTitle className="font-bold tracking-normal">
+                <CardTitle className="tracking-normal">
                     {step === "script"
                         ? "Install the Metrik script"
                         : "Add a new website"

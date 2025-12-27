@@ -31,7 +31,7 @@ const UsersJourneyTable = ({
         <ScrollArea className="h-[25.875rem]">
             <div className="pt-3 pb-5">
                 <Table>
-                    <TableHeader className="text-xs font-semibold">
+                    <TableHeader className="text-xs">
                         <TableRow className="hover:bg-transparent">
                             <TableHead className="px-4">Visitor</TableHead>
                             <TableHead className="px-4">Source</TableHead>
@@ -59,7 +59,7 @@ const UsersJourneyTable = ({
                                             className="size-12 border rounded-full"
                                         />
                                         <div>
-                                            <h3 className="font-semibold">{visitor.name}</h3>
+                                            <h3 className="font-medium">{visitor.name}</h3>
                                             <ul className="flex items-center gap-x-2">
                                                 <li className="flex items-center gap-x-1 mt-1">
                                                     <ReactCountryFlag

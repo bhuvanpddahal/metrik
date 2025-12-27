@@ -4,13 +4,13 @@ import { env } from "@/constants/env/server";
 import { authRoutes, DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 export default async function proxy(req: NextRequest) {
-    const sessionRequest = await fetch(`${env.AUTH_URL}/session`, {
+    const sessionResponse = await fetch(`${env.AUTH_URL}/session`, {
         headers: {
             Cookie: req.headers.get("cookie") || ""
         }
     });
-    const session = JSON.parse(JSON.stringify(sessionRequest));
-    // const session = await sessionRequest.json();
+    // const session = JSON.parse(JSON.stringify(sessionResponse));
+    const session = await sessionResponse.json();
 
     const { nextUrl } = req;
     const isLoggedIn = !!session?.user;

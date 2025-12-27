@@ -1,9 +1,10 @@
 "use client";
 
+import { useTheme } from "next-themes";
+
 import ProgressIndicator from "./ProgressIndicator";
 import { cn } from "@/lib/utils";
 import { useAddWebsiteSearchParams } from "../hooks/useAddWebsiteSearchParams";
-import { useTheme } from "next-themes";
 
 const AddSiteProgress = () => {
     const { resolvedTheme } = useTheme();
@@ -22,7 +23,7 @@ const AddSiteProgress = () => {
                     type={step === "script" ? "checked" : "active"}
                     color={resolvedTheme === "light" ? undefined : "#60a5fa"}
                 />
-                <div className="text-primary text-sm font-semibold dark:text-blue-400">
+                <div className="text-primary text-sm font-medium dark:text-blue-400">
                     Add site
                 </div>
             </div>
@@ -34,7 +35,7 @@ const AddSiteProgress = () => {
                     type={step === "script" ? "active" : "muted"}
                     color={resolvedTheme === "light" ? undefined : "#60a5fa"}
                 />
-                <div className="text-muted-foreground text-sm font-semibold">
+                <div className="text-muted-foreground text-sm font-medium">
                     Install script
                 </div>
             </div>

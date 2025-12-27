@@ -77,3 +77,8 @@
 .container {
 	@apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
 }
+
+.text-shadow {
+	text-shadow: 0px 1px 1px rgb(0 0 0 / 0.1), 0px 1px 2px rgb(0 0 0 / 0.1),
+		0px 2px 4px rgb(0 0 0 / 0.1);
+}

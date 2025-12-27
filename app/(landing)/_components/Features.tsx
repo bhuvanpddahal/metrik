@@ -16,11 +16,10 @@ const Features = () => {
                         Our web analytics platform provides you with all the tools you need to understand your audience and grow your online presence.
                     </p>
                 </div>
-
                 <div className="mt-10">
                     <dl className="grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-6">
                         {features.map((feature) => (
-                            <Card key={feature.name} className="relative group p-4 bg-muted shadow-sm">
+                            <Card key={feature.name} className="relative group p-4 bg-muted rounded-2xl shadow-sm">
                                 <dt>
                                     <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-primary text-white group-hover:bg-blue-6000 transition-colors duration-300">
                                         <feature.icon className="h-6 w-6" aria-hidden="true" />

@@ -63,7 +63,7 @@ const WebsiteDetailsHeader = (
                         <Button variant="outline" className="px-2">
                             <div className="flex items-center gap-x-2">
                                 <WebsiteAvatar domain={decodedDomain} className="size-6 border-none" />
-                                <p className="font-semibold leading-none tracking-tight">{decodedDomain}</p>
+                                <p className="font-medium leading-none tracking-tight">{decodedDomain}</p>
                             </div>
                             <ChevronDownIcon className="size-4 stroke-[0.8] text-muted-foreground" />
                         </Button>

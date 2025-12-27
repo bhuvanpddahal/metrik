@@ -29,13 +29,13 @@ const Hero = () => {
                         <div className="mt-8 text-center lg:text-left">
                             <Button
                                 size="xl"
-                                className="h-11 sm:h-12 pl-5 pr-4 sm:pl-8 sm:pr-7"
+                                className="group h-11 sm:h-12 pl-5 pr-4 sm:pl-8 sm:pr-7"
                                 onClick={() => router.push(
                                     isLoggedIn ? "/dashboard" : "/sign-in"
                                 )}
                             >
                                 {isLoggedIn ? "Dashboard" : "Get Started"}
-                                <ArrowRightIcon className="ml-2 h-5 w-5" />
+                                <ArrowRightIcon className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                             </Button>
                         </div>
                         <div className="mt-6">

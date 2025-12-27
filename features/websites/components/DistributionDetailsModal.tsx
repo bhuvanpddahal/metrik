@@ -46,10 +46,10 @@ const DistributionDetailsModal = () => {
                         <ul className="py-4">
                             {chartData.map((row, index) => (
                                 <li key={index} className="min-h-11 flex items-center justify-between gap-x-3 px-6 py-3 even:bg-muted">
-                                    <div className={cn("text-sm font-medium", labelClassName)}>
+                                    <div className={cn("text-sm", labelClassName)}>
                                         {labelFormatter?.(row[dataKey] as string | null) ?? row[dataKey]}
                                     </div>
-                                    <div className="text-sm font-semibold">
+                                    <div className="text-sm font-medium">
                                         {row.totalVisitors}
                                     </div>
                                 </li>

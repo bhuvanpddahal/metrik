@@ -45,8 +45,9 @@ export const ensureExactLengthForChartData = (
     return transformedChartData;
 };
 
-export const getDomainNameFromUrl = (url: string | null) => {
+export const getDomainNameFromUrl = (url: string | null | undefined) => {
     try {
+        if (url === undefined) return "";
         if (!url) return "Direct/None";
 
         const urlObject = new URL(url);

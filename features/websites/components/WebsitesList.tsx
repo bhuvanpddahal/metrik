@@ -37,14 +37,15 @@ const WebsitesList = (
                 >
                     <CardHeader className="flex-row gap-x-3 pb-3">
                         <WebsiteAvatar domain={website.domain} />
-                        <CardTitle>{website.domain}</CardTitle>
+                        <CardTitle className="font-medium">{website.domain}</CardTitle>
                     </CardHeader>
                     <CardContent className="pb-3">
                         <TotalVisitorsChart chartData={website.chartData} />
                     </CardContent>
                     <CardFooter>
-                        <p>
-                            <strong>{website.visitorsCount}</strong> {website.visitorsCount === 1 ? "visitor" : "visitors"}
+                        <p className="text-[0.9375rem]">
+                            <strong>{website.visitorsCount}</strong>{" "}
+                            {website.visitorsCount === 1 ? "visitor" : "visitors"}
                         </p>
                     </CardFooter>
                 </Card>

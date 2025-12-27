@@ -22,7 +22,7 @@ const VisitorProfile = ({ visitor }: VisitorProfileProps) => {
             <div className="mt-4">
                 <Hint side="right" message="Click to copy">
                     <h3
-                        className="w-fit text-lg font-bold px-1 rounded-sm cursor-pointer hover:bg-muted"
+                        className="w-fit text-lg font-medium px-1 rounded-sm cursor-pointer hover:bg-muted"
                         onClick={() => copyToClipboard(visitor.name)}
                     >
                         {visitor.name}

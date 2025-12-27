@@ -32,7 +32,7 @@ const TopPagesCard = ({
             <CardHeader className="p-1 border-b">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="w-fit pr-2 font-semibold">
+                        <Button variant="ghost" className="w-fit pr-2">
                             Page
                             <ChevronDownIcon className="size-4 stroke-[0.8] text-muted-foreground" />
                         </Button>
@@ -60,7 +60,7 @@ const TopPagesCard = ({
                     })}
                 >
                     <ScanIcon className="size-4" />
-                    <div className="text-xs font-semibold mt-0.5">DETAILS</div>
+                    <div className="text-xs">DETAILS</div>
                 </div>
             </CardFooter>
         </Card>

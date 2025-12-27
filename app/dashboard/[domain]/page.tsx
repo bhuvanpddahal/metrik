@@ -4,14 +4,15 @@ import WebsiteDetailsContent from "@/app/dashboard/[domain]/_components/WebsiteD
 import { sharedOpenGraph } from "@/constants/shared-metadata";
 
 interface WebsiteDetailsPageProps {
-    params: {
+    params: Promise<{
         domain: string;
-    };
+    }>;
 }
 
-export const generateMetadata = ({
-    params: { domain }
-}: WebsiteDetailsPageProps): Metadata => {
+export const generateMetadata = async (
+    { params }: WebsiteDetailsPageProps
+): Promise<Metadata> => {
+    const { domain } = await params;
     const decodedDomain = decodeURIComponent(domain);
 
     return {
@@ -24,9 +25,9 @@ export const generateMetadata = ({
     };
 };
 
-const WebsiteDetailsPage = async ({
-    params: { domain }
-}: WebsiteDetailsPageProps) => {
+const WebsiteDetailsPage = async ({ params }: WebsiteDetailsPageProps) => {
+    const { domain } = await params;
+
     return (
         <WebsiteDetailsContent domain={domain} />
     );

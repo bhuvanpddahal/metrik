@@ -20,7 +20,9 @@ interface Window {
     return (
         <div>
             <p className="text-sm text-muted-foreground">
-                Custom goals are goals that you can define yourself. Add this code where the goal conversion occurs. Don&apos;t worry about duplicate conversions.
+                Custom goals are goals that you can define yourself.
+                Add this code where the goal conversion occurs. Don&apos;t
+                worry about duplicate conversions.
             </p>
             <SettingsCard
                 cardClassName="mt-6"
@@ -33,7 +35,9 @@ interface Window {
                         <div className="space-y-1.5">
                             <CardTitle>Custom goal</CardTitle>
                             <CardDescription>
-                                Description is optional but recommended. We&apos;ll use it to provide AI-powered insights to help grow your startup.
+                                Description is optional but recommended. We&apos;ll
+                                use it to provide AI-powered insights to help grow
+                                your startup.
                             </CardDescription>
                         </div>
                     </>

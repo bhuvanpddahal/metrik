@@ -3,10 +3,10 @@
 import { Bar, BarChart, LabelList, XAxis, YAxis } from "recharts";
 
 import {
-    ChartConfig,
+    type ChartConfig,
     ChartContainer,
     ChartTooltip,
-    ChartTooltipContent
+    ChartTooltipContent,
 } from "@/components/ui/Chart";
 import { cn } from "@/lib/utils";
 import type { ChartData } from "../types";
@@ -29,7 +29,7 @@ const DistributionChart = ({
     chartData,
     dataKey,
     labelFormatter,
-    labelClassName = ""
+    labelClassName = "",
 }: DistributionChartProps) => {
     return (
         <ChartContainer config={chartConfig} className="h-[21rem] w-full">
@@ -50,14 +50,16 @@ const DistributionChart = ({
                     hide
                 />
                 <XAxis dataKey="totalVisitors" type="number" hide />
-                <ChartTooltip content={
-                    <ChartTooltipContent
-                        indicator="dot"
-                        color="hsl(var(--primary))"
-                        labelFormatter={labelFormatter}
-                        labelClassName={labelClassName}
-                    />
-                } />
+                <ChartTooltip
+                    content={
+                        <ChartTooltipContent
+                            indicator="dot"
+                            color="hsl(var(--primary))"
+                            labelFormatter={labelFormatter}
+                            labelClassName={labelClassName}
+                        />
+                    }
+                />
                 <Bar
                     dataKey="totalVisitors"
                     layout="vertical"
@@ -66,20 +68,13 @@ const DistributionChart = ({
                 >
                     <LabelList
                         dataKey={dataKey}
-                        position="insideLeft"
-                        offset={18}
-                        className={cn("fill-accent-foreground truncate", labelClassName)}
-                        fontSize={14}
-                        fontWeight={500}
-                        formatter={labelFormatter}
-                    />
-                    <LabelList
-                        dataKey="totalVisitors"
-                        position="right"
-                        offset={18}
-                        className="fill-foreground"
-                        fontSize={14}
-                        fontWeight={600}
+                        content={
+                            <RowContent
+                                chartData={chartData}
+                                formatter={labelFormatter}
+                                className={labelClassName}
+                            />
+                        }
                     />
                 </Bar>
             </BarChart>
@@ -88,3 +83,29 @@ const DistributionChart = ({
 };
 
 export default DistributionChart;
+
+const RowContent = ({
+    y,
+    height,
+    value,
+    index,
+    chartData,
+    formatter,
+    className
+}: any) => {
+    const label = formatter ? formatter(value) : value;
+    const count = chartData[index]?.totalVisitors;
+
+    return (
+        <foreignObject x={0} y={y} width="100%" height={height}>
+            <div className="flex h-full w-full items-center justify-between px-4">
+                <span className={cn("truncate text-sm text-foreground mr-4", className)}>
+                    {label}
+                </span>
+                <span className="text-sm font-medium text-foreground">
+                    {count}
+                </span>
+            </div>
+        </foreignObject>
+    );
+};

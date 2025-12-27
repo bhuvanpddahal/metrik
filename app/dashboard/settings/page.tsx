@@ -6,7 +6,7 @@ import NavContent from "./_components/NavContent";
 const DashboardSettingsPage = () => {
     return (
         <section>
-            <h1 className="text-xl lg:text-2xl font-bold">
+            <h1 className="text-xl lg:text-2xl font-semibold">
                 Settings
             </h1>
             <div className="flex flex-col lg:flex-row gap-x-8 gap-y-5 mt-6">

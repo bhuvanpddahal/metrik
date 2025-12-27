@@ -23,7 +23,7 @@ const DashboardTitle = ({
                 Website
             </Link>
             {visitorsCount > 0 && (
-                <h1>
+                <h1 className="text-[0.9375rem]">
                     You got <strong>{visitorsCount}</strong> {visitorsCount === 1 ? "visitor" : "visitors"} in the last 24 hours.
                 </h1>
             )}
