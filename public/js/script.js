@@ -10,19 +10,29 @@
 
     const VISITOR_COOKIE = "metrik_visitor_id";
     const SESSION_COOKIE = "metrik_session_id";
+    const USER_LOCATION_SESSION = "user_location";
     const specialEventTypes = ["signup", "payment"];
 
     async function getUserLocation() {
+        const cachedLocation = sessionStorage.getItem(USER_LOCATION_SESSION);
+        if (cachedLocation) {
+            return JSON.parse(cachedLocation);
+        }
+
         const response = await fetch("https://ipapi.co/json");
         if (!response.ok) return;
 
         const data = await response.json();
-        return {
+        const locationInfo = {
             country: data.country_name ?? "Unknown",
             countryCode: data.country_code ?? "Unknown",
             region: data.region ?? "Unknown",
             city: data.city ?? "Unknown"
         };
+
+        sessionStorage.setItem(USER_LOCATION_SESSION, JSON.stringify(locationInfo));
+
+        return locationInfo;
     }
 
     function setCookie(cookieName, cookieValue, expirationDays) {
